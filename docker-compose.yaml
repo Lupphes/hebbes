@@ -1,0 +1,51 @@
+version: "3"
+
+networks:
+  net:
+    driver: bridge
+    internal: false
+    ipam:
+      config:
+        - subnet: 172.40.0.0/16
+
+services:
+  # NextJS Application running frontend of the Price Bandit
+  frontend:
+    container_name: frontend
+    restart: unless-stopped
+    networks:
+      - net
+    build:
+      context: ./frontend
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  # Flask Application that runs API for scraper and website
+  backend:
+    container_name: backend
+    restart: unless-stopped
+    networks:
+      - net
+    build:
+      context: ./backend
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "5000:5000"
+    depends_on:
+      - scraper
+
+  # Scrapper tool for the backend
+  scraper:
+    container_name: scraper
+    restart: unless-stopped
+    networks:
+      - net
+    build:
+      context: ./scraper
+    environment:
+      - TZ=${TZ}
