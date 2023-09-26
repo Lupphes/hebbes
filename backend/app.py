@@ -1,14 +1,15 @@
-# Import flask module
-from flask import Flask
+from typing import Union
 
-app = Flask(__name__)
+from fastapi import FastAPI
 
-
-@app.route('/')
-def index():
-    return 'Hello to Flask!'
+app = FastAPI()
 
 
-# main driver function
-if __name__ == "__main__":
-    app.run()
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
+
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Union[str, None] = None):
+    return {"item_id": item_id, "q": q}
