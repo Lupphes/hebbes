@@ -99,3 +99,31 @@ docker-compose down
 Remember to always check the logs or console output to ensure that all services have started correctly and there are no errors.
 
 You can append this section to the end of your `README.md` to guide users or developers on how to launch the project with Docker Compose.
+
+
+## Connecting to TimescaleDB
+
+If you need to connect to the TimescaleDB instance from your local machine using the PostgreSQL client, follow the steps below:
+
+### Prerequisites:
+
+Ensure you have `postgresql-client-common` installed on your machine. If not, on Ubuntu/Debian you can install it using:
+
+```bash
+sudo apt-get install postgresql-client postgresql-client-common
+```
+
+### Connecting:
+
+Using the PostgreSQL client, you can connect with the following command:
+
+```bash
+psql -h localhost -U $POSTGRES_USER -d $POSTGRES_DB -p 5432
+```
+
+When prompted, enter the `POSTGRES_PASSWORD` that you've set in your Docker Compose configuration.
+
+Note: Remember to replace `$POSTGRES_USER`, `$POSTGRES_DB`, and `$POSTGRES_PASSWORD` with the actual values from your Docker Compose 
+file or environment if they're not exported as environment variables on your machine.
+
+Copy everything between the triple backticks, and you'll have the markdown README in your clipboard.
