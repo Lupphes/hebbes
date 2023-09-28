@@ -12,7 +12,7 @@ services:
   # NextJS Application running frontend of the Price Bandit
   frontend:
     container_name: frontend
-    restart: unless-stopped
+    # restart: unless-stopped
     networks:
       - net
     build:
@@ -24,10 +24,10 @@ services:
     depends_on:
       - backend
 
-  # Flask Application that runs API for scraper and website
+  # FastAPI Application that runs API for scraper and website
   backend:
     container_name: backend
-    restart: unless-stopped
+    # restart: unless-stopped
     networks:
       - net
     build:
@@ -38,14 +38,47 @@ services:
       - "5000:5000"
     depends_on:
       - scraper
+      - timescaledb
+      - redis
 
   # Scrapper tool for the backend
   scraper:
     container_name: scraper
-    restart: unless-stopped
+    # restart: unless-stopped
     networks:
       - net
     build:
       context: ./scraper
     environment:
       - TZ=${TZ}
+
+  # TimescaleDB container
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: timescaledb
+    # restart: unless-stopped
+    networks:
+      - net
+    environment:
+      - PUID=${TSDB_ID}
+      - PGID=${TSDB_ID}
+      - TZ=${TZ}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ${VOLUMES_PATH}/timescaledb:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  # Redis container
+  redis:
+    image: redis:latest
+    container_name: redis
+    # restart: unless-stopped
+    networks:
+      - net
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${VOLUMES_PATH}/redis:/bitnami
