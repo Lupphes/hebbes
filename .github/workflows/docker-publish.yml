@@ -1,0 +1,86 @@
+name: Docker
+
+on:
+  schedule:
+    - cron: '25 20 * * *'
+  push:
+    branches: [ "master" ]
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Check PEP 8 compliance in backend
+        working-directory: backend
+        run: |
+          pip install black
+          black --check --config pyproject.toml .
+      
+      - name: Check PEP 8 compliance in scraper
+        working-directory: scraper
+        run: |
+          pip install black
+          black --check --config pyproject.toml .
+
+      - name: Install dependencies and lint (frontend)
+        working-directory: frontend
+        run: |
+          npm ci
+          npx eslint "src/**/*.{js,jsx,ts,tsx}" --quiet
+          npx prettier --check "src/**/*.{ts,tsx,js,jsx,css,md}"
+
+  build-and-push:
+    needs: lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup common variables
+        id: vars
+        run: echo "::set-output name=repo::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
+
+      - name: Login to Docker Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Docker Images
+        run: |
+          for dir in backend frontend scraper; do
+            cd $dir
+            docker build -t ${{ env.REGISTRY }}/${{ steps.vars.outputs.repo }}:${dir}-latest .
+            if [[ ${{ github.event_name }} != 'pull_request' ]]; then
+              docker push ${{ env.REGISTRY }}/${{ steps.vars.outputs.repo }}:${dir}-latest
+            fi
+            cd ..
+          done
+
+  test:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Launch and test services
+        run: |
+          docker-compose up -d
+          # Add your testing commands here
+          docker-compose down
