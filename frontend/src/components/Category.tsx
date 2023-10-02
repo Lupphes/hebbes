@@ -12,6 +12,7 @@
   }
   ```
 */
+'use client';
 import groentefruit from '../../resources/groente fruit.png';
 import vlees from '../../resources/Vlees.png';
 import dairy from '../../resources/Daries.png';
@@ -19,6 +20,8 @@ import bakery from '../../resources/Bakery.png';
 import snacks from '../../resources/Snacks.png';
 import drinks from '../../resources/Drinken.png';
 import Link from 'next/link';
+import { Fragment, MouseEventHandler, useState } from 'react';
+import CategoryPanel from './CategoryPanel';
 
 const callouts = [
   {
@@ -67,7 +70,15 @@ const callouts = [
   },
 ];
 
+const SIDEBAR_STATUS = false;
+
 export default function Category() {
+  const [open, setOpen] = useState(SIDEBAR_STATUS);
+
+  const toggleOpen = () => {
+    setOpen(!open);
+  };
+
   return (
     <div className='bg-gray-100'>
       <div className='lg:max-w-8x1 mx-auto px-4 sm:px-6'>
@@ -98,13 +109,17 @@ export default function Category() {
               </div>
             ))}
           </div>
-          <Link href='#'>
-            <div className='mt-4'>
-              <h1 className='text-2xs font-bold text-gray-600'>
-                More category...
-              </h1>
-            </div>
-          </Link>
+
+          <div className='mt-4'>
+            <button
+              type='button'
+              onClick={toggleOpen}
+              className='mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+            >
+              <h1>More category...</h1>
+            </button>
+          </div>
+          <CategoryPanel setOpen={setOpen} open={open} />
         </div>
       </div>
     </div>

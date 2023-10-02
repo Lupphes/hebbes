@@ -8,7 +8,9 @@ export default function Home() {
       <h2 className='text-2xl font-bold text-gray-900'>
         Welcome to Price Bandit Project!{' '}
       </h2>{' '}
+      <br />
       <Category />
+      <br />
       <Product />
     </main>
   );
