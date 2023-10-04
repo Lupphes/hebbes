@@ -1,0 +1,30 @@
+name: 'Commit Message and PR Check'
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - master
+      - 'releases/*'
+
+jobs:
+  check-commit-message:
+    name: Check Commit Message
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^(feat|fix|chore|docs|style|refactor|perf|test)\(#\d+\): .+$'
+          flags: 'gm'
+          error: 'Your first line has to follow the format: prefix(#GitHub Issue Number): description, e.g., feat(#12): Add new filter functionality.'
