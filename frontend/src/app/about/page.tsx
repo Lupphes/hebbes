@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/navbar';
 
 const AboutPage = () => {
   return (
@@ -41,7 +41,7 @@ const AboutPage = () => {
       </section>
 
       <footer className='bg-gray-800 py-6 text-center text-white'>
-        <p>&copy; 2022 Your Company. All rights reserved.</p>
+        <p>&copy; 2023 Price Bandit. All rights reserved.</p>
       </footer>
     </div>
   );

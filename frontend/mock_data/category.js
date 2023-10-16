@@ -1,9 +1,9 @@
-import groentefruit from '../resources/groente fruit.png';
-import vlees from '../resources/Vlees.png';
-import brood from '../resources/Brood.png';
-import kaas from '../resources/Kaas.png';
-import verse from '../resources/Verse kant-en-klare.png';
-import drank from '../resources/Drinken.png';
+import groentefruit from '@/resources/groente fruit.png';
+import vlees from '@/resources/Vlees.png';
+import brood from '@/resources/Brood.png';
+import kaas from '@/resources/Kaas.png';
+import verse from '@/resources/Verse kant-en-klare.png';
+import drank from '@/resources/Drinken.png';
 
 export const categories = [
   {
