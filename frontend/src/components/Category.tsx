@@ -13,12 +13,12 @@
   ```
 */
 'use client';
-import groentefruit from '../../resources/groente fruit.png';
-import vlees from '../../resources/Vlees.png';
-import dairy from '../../resources/Daries.png';
-import bakery from '../../resources/Bakery.png';
-import snacks from '../../resources/Snacks.png';
-import drinks from '../../resources/Drinken.png';
+import groentefruit from '@/resources/groente fruit.png';
+import vlees from '@/resources/Vlees.png';
+import dairy from '@/resources/Daries.png';
+import bakery from '@/resources/Bakery.png';
+import snacks from '@/resources/Snacks.png';
+import drinks from '@/resources/Drinken.png';
 import Link from 'next/link';
 import { Fragment, MouseEventHandler, useState } from 'react';
 import CategoryPanel from './CategoryPanel';

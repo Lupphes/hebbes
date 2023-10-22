@@ -1,4 +1,4 @@
-import { categories } from '../../mock_data/category';
+import { categories } from '@/mock_data/category';
 
 export default function CategoryList() {
   return (

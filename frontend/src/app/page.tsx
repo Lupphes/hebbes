@@ -1,6 +1,6 @@
-import Navbar from '@/components/navbar';
-import Category from '@/components/category';
-import Product from '@/components/product';
+import Navbar from '@/components/Navbar';
+import Category from '@/components/Category';
+import Product from '@/components/Product';
 export default function Home() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24'>

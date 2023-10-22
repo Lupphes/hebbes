@@ -26,8 +26,11 @@ function Navbar() {
         <Link href='/offers' className='mr-4 font-semibold'>
           Offers
         </Link>
-        <Link href='/about' className='font-semibold'>
+        <Link href='/about' className='mr-4 font-semibold'>
           About
+        </Link>
+        <Link href='/login' className='mr-4 font-semibold'>
+          Login
         </Link>
       </div>
       <div className='flex items-center'>
