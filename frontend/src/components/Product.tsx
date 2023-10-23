@@ -78,7 +78,7 @@ const products = [
 
 export default function Product() {
   return (
-    <div className='bg-gray-100 mt-2'>
+    <div className='mt-2 bg-gray-100'>
       <div className='lg:max-w-8x1 mx-auto px-4 sm:px-6'>
         <div className='mx-auto max-w-2xl py-8 sm:py-12 lg:max-w-none lg:py-24'>
           <h2 className='text-2xl font-bold text-gray-900'>
