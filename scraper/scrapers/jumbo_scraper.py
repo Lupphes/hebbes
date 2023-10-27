@@ -10,150 +10,86 @@ from .base_scraper import BaseScraper
 
 
 class JumboScraper(BaseScraper):
-    BASE_URL = "https://www.jumbo.com/"
+    """Scraper for the JUMBO website."""
+
     SHORT_NAME = "jmb"
     LONG_NAME = "JUMBO"
-    CATEGORIES_SITEMAP_URL = (
-        BASE_URL + "dam/jumbo/sitemaps-non-aem/sitemap_product_listers.xml"
-    )
-    PRODUCTS_SITEMAP_URL = (
-        BASE_URL + "dam/jumbo/sitemaps-non-aem/sitemap_product_detailpages.xml"
-    )
+    BASE_URL = "https://www.jumbo.com/"
+
     HEADERS = {
         "User-Agent": "LuppieApp/1.1.28 Android/14.0 Mobile",
         "Accept": "*/*",
         "Accept-Encoding": "identity",
     }
     API_VERSION = "v17"
-    SCRAPE_CATEGORIES = False
-    SCRAPE_PRODUCTS = True
 
-    def __init__(self):
-        super().__init__(
-            self.BASE_URL,
-            self.CATEGORIES_SITEMAP_URL,
-            self.PRODUCTS_SITEMAP_URL,
+    def __init__(
+        self,
+        scrape_categories: bool = False,
+        scrape_products: bool = False,
+        use_categories: bool = False,
+        categories_sitemap_url: str = None,
+        products_sitemap_url: str = None,
+    ) -> None:
+        """
+        Initialize the JumboScraper instance.
+
+        :param base_url: Base URL for the website.
+        :param scrape_categories: Whether to scrape categories or use the file in the data folder.
+        :param scrape_products: Whether to scrape products or use the file in the data folder.
+        :param use_categories: If True, try to maintain the product structure as store categories suggest,
+                               otherwise, all products will be put into arrays.
+        :param categories_sitemap_url: URL for the categories sitemap. Defaults to a constructed URL based on base_url.
+        :param products_sitemap_url: URL for the products sitemap. Defaults to a constructed URL based on base_url.
+        """
+
+        super().__init__(self.BASE_URL)
+        self.base_url = self.BASE_URL
+        self.scrape_categories = scrape_categories
+        self.scrape_products = scrape_products
+        self.use_categories = use_categories
+        self.categories_sitemap_url = categories_sitemap_url or (
+            self.base_url + "dam/jumbo/sitemaps-non-aem/sitemap_product_listers.xml"
+        )
+        self.products_sitemap_url = products_sitemap_url or (
+            self.base_url + "dam/jumbo/sitemaps-non-aem/sitemap_product_detailpages.xml"
         )
 
-    def _make_request(self, url, params=None, retries=3, delay=None):
-        """A generic function to make a GET request with the common headers and authorization token."""
-        delay = delay or 1
+    def run(self):
+        xml_categories = self.fetch_sitemap(
+            self.categories_sitemap_url, self.categories_file_name
+        )
 
-        for i in range(retries):
-            response = requests.get(
-                url,
-                headers={
-                    **self.HEADERS,
-                },
-                params=params,
-            )
+        xml_products = self.fetch_sitemap(
+            self.products_sitemap_url, self.products_file_name
+        )
 
-            if response.ok:
-                return response.json()
-            elif (
-                response.status_code == 503 and i < retries - 1
-            ):  # Server Error: Service Unavailable
-                print(f"503 error, retrying in {delay} seconds...")
-                time.sleep(delay)
-                delay *= 2  # double the delay
-            elif response.status_code in {401, 403}:  # Unauthorized or Forbidden
-                print("Fetching a new token...")
-                self.access_token = self._get_anonymous_access_token()
-            elif response.status_code == 404:  # Resource Not Found
-                print(f"404 error: Resource not found for url: {url}")
-                return None
-            else:
-                response.raise_for_status()
-
-    def extract_categories(self, xml_content=None, scrape=SCRAPE_CATEGORIES):
-        def process_category(category):
-            """Recursive function to process a category and its subcategories."""
-            category_name = category["title"]
-            subcategories_data = self.get_sub_categories(category)
-            subcategories = {}
-
-            for sub_cat in subcategories_data:
-                sub_cat_name = sub_cat["title"]
-                subcategories[sub_cat_name] = process_category(sub_cat)
-
-            return {**category, "subcategories": subcategories}
-
-        category_tree = {}
-
-        if scrape:
-            categories = self.get_categories()
-
-            for category in tqdm(
-                categories,
-                desc=f"Processing main categories for {self.LONG_NAME}",
-                unit="Category",
-            ):
-                category_name = category["title"]
-                category_tree[category_name] = process_category(category)
-
-            self.save_content_to_file(category_tree, self.CATEGORIES_TREE_FILENAME)
-
+        category_json = None
+        # If required by user create a category structure to which
+        # products will be added, however it will be always be saved
+        if not self.use_categories and not self.scrape_categories:
+            category_json = None
         else:
-            folder = self.get_save_folder()
-            filepath = os.path.join(folder, self.CATEGORIES_TREE_FILENAME)
-            if os.path.exists(filepath):
-                with open(filepath, "r") as file:
-                    category_tree = json.load(file)
-            else:
-                print(f"Error: {filepath} does not exist.")
+            category_json = self.extract_categories()
 
-        self.category_tree = category_tree
-        return self.category_tree
+        data_json = self.extract_products(xml_products, category_json)
+        self.create_base_json(data_json)
 
-    def extract_products(self, xml_content, category_json, scrape=SCRAPE_PRODUCTS):
-        """Extract products from the XML and appends them to the given category_data."""
-
-        if scrape:
-            soup = BeautifulSoup(xml_content, "xml")
-            product_urls = [url_tag.text for url_tag in soup.find_all("loc")]
-
-            for product_url in tqdm(
-                product_urls,
-                desc=f"Scraping Products for {self.LONG_NAME}",
-                unit="product",
-            ):
-                match = re.search(r"-([^-\s]+)$", product_url)
-                if match:
-                    id = match.group(1)
-                else:
-                    id = None
-                    print("Big error")
-                    exit(2)
-
-                product = self.get_product_details(id)["product"]
-                # print(product)
-
-                if not product:
-                    print(f"Failed to retrieve details for product ID: {id}")
-                    continue
-                updated_category_json = self.add_product_to_category(
-                    product, category_json
-                )
-            self.save_content_to_file(updated_category_json, self.SCRAPED_DATA_FILENAME)
-            exit()
-        else:
-            folder = self.get_save_folder()
-            filepath = os.path.join(folder, self.SCRAPED_DATA_FILENAME)
-            if os.path.exists(filepath):
-                with open(filepath, "r") as file:
-                    updated_category_json = json.load(file)
-            else:
-                print(f"Error: {filepath} does not exist.")
-
-        return updated_category_json
+    def _extract_product_id(self, product_url):
+        match = re.search(r"-([^-\s]+)$", product_url)
+        return match.group(1) if match else None
 
     def add_product_to_category(self, product, category_json):
+        """The Jumbo items does not provide exact subcategory. Sad"""
         # Check if the product is delisted
-        availability_reason = product["data"].get("availability", {}).get("reason")
+
+        availability_reason = (
+            product["product"]["data"].get("availability", {}).get("reason")
+        )
         if availability_reason == "DELISTED":
             return category_json
 
-        main_category = product["data"].get("topLevelCategory")
+        main_category = product["product"]["data"].get("topLevelCategory")
 
         if main_category:
             if main_category not in category_json:
@@ -162,7 +98,7 @@ class JumboScraper(BaseScraper):
                 category_json[main_category]["products"] = []
 
             category_json[main_category]["products"].append(
-                self.build_product_data(product)
+                self.build_product_data(product["product"])
             )
         else:
             print(
@@ -181,55 +117,31 @@ class JumboScraper(BaseScraper):
     def build_product_data(self, product):
         """Utility function to construct product data from raw product."""
         image_url = (
-            product["data"]
+            product["product"]["data"]
             .get("imageInfo", {})
             .get("primaryView", [{}])[0]
             .get("url", "No Image URL")
         )
 
-        gtin_matches = re.search(r"(\d{8,14})_1\.png$", image_url)
+        gtin_matches = re.search(
+            r"(\d{8,14})(?:_C1N1|_180|_H1N1|_1\.png|_1_T1_)", image_url
+        )
         gtin = gtin_matches.group(1) if gtin_matches else "Unknown GTIN"
 
         return {
-            "name": product["data"].get("title", "Unknown Name"),
-            "price": product["data"].get("prices", 0.0),
-            "salesUnitSize": product["data"].get("quantity", "Unknown Size"),
+            "name": product["product"]["data"].get("title", "Unknown Name"),
+            "price": product["product"]["data"].get("prices", 0.0),
+            "salesUnitSize": product["product"]["data"].get("quantity", "Unknown Size"),
             "image_url": image_url,
-            "description": product["data"].get("detailsText", "No Description"),
-            "id": product["data"].get("id", "Unknown ID"),
+            "description": product["product"]["data"].get(
+                "detailsText", "No Description"
+            ),
+            "id": product["product"]["data"].get("id", "Unknown ID"),
             "gtin": gtin,
         }
 
-    def create_base_json(self, data_json):
-        pass
-
     def fetch_delivery_cost(self):
         return None
-
-    def get_category_tree(self, category):
-        """
-        Get the category tree for a given category.
-        """
-        subcategories_count = category.get("subCategoriesCount", 0)
-
-        # Base case: if there are no subcategories, return None
-        if subcategories_count == 0:
-            return None
-
-        subcategories = self.get_sub_categories(category)
-
-        category_tree = {}
-        for subcategory in subcategories:
-            # Recursively build the tree for each subcategory
-            subcategory_tree = self.get_category_tree(subcategory)
-
-            # Add the subcategory (and its possible subcategories) to the tree
-            category_tree[subcategory["id"]] = subcategory
-
-            if subcategory_tree:
-                category_tree[subcategory["id"]]["subcategories"] = subcategory_tree
-
-        return category_tree
 
     def search_products(self, query=None, page=0, size=30):
         if (page + 1) * size > 30:
@@ -331,3 +243,19 @@ class JumboScraper(BaseScraper):
         response = self._make_request(url, params={"store_id": store_id})
 
         return response["tabs"] if response and "tabs" in response else None
+
+    def process_category(self, category):
+        subcategories_data = self.get_sub_categories(category)
+        subcategories = {}
+
+        for sub_cat in subcategories_data:
+            sub_cat_name = self.get_category_name(sub_cat)
+            subcategories[sub_cat_name] = self.process_category(sub_cat)
+
+        if not subcategories:
+            return {**category}
+
+        return {**category, "subcategories": subcategories}
+
+    def get_category_name(self, category):
+        return category["title"]

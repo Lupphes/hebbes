@@ -2,19 +2,20 @@ import json
 import os
 import re
 import time
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 import requests
 from .base_scraper import BaseScraper
 from tqdm import tqdm
-from concurrent.futures import ThreadPoolExecutor
 
 
 class AHScraper(BaseScraper):
+    """Scraper for the Alber Heijn website."""
+
     SHORT_NAME = "ah"
     LONG_NAME = "Alber Heijn"
     BASE_URL = "https://www.ah.nl/"
-    CATEGORIES_SITEMAP_URL = BASE_URL + "sitemaps/entities/products/categories.xml"
-    PRODUCTS_SITEMAP_URL = BASE_URL + "sitemaps/entities/products/detail.xml"
+
     HEADERS = {
         "Host": "api.ah.nl",
         "x-dynatrace": "MT_3_4_772337796_1_fae7f753-3422-4a18-83c1-b8e8d21caace_0_1589_109",
@@ -22,55 +23,73 @@ class AHScraper(BaseScraper):
         "User-Agent": "LuppieApp/1.1.28 Android/14.0 Mobile",
         "Content-Type": "application/json; charset=UTF-8",
     }
-    SCRAPE_CATEGORIES = False
-    SCRAPE_PRODUCTS = False
 
-    def __init__(self):
+    def __init__(
+        self,
+        scrape_categories: bool = False,
+        scrape_products: bool = False,
+        use_categories: bool = True,
+        categories_sitemap_url: str = None,
+        products_sitemap_url: str = None,
+    ) -> None:
+        """
+        Initialize the AHScraper instance.
+
+        :param base_url: Base URL for the website.
+        :param scrape_categories: Whether to scrape categories or use the file in the data folder.
+        :param scrape_products: Whether to scrape products or use the file in the data folder.
+        :param use_categories: If True, try to maintain the product structure as store categories suggest,
+                               otherwise, all products will be put into arrays.
+        :param categories_sitemap_url: URL for the categories sitemap.
+        :param products_sitemap_url: URL for the products sitemap.
+        """
+
         self.access_token = self._get_anonymous_access_token()
-        super().__init__(
-            self.BASE_URL,
-            self.CATEGORIES_SITEMAP_URL,
-            self.PRODUCTS_SITEMAP_URL,
+        super().__init__(self.BASE_URL)
+        self.base_url = self.BASE_URL
+        self.scrape_categories = scrape_categories
+        self.scrape_products = scrape_products
+        self.use_categories = use_categories
+        self.categories_sitemap_url = categories_sitemap_url or urljoin(
+            self.base_url, "sitemaps/entities/products/categories.xml"
+        )
+        self.products_sitemap_url = products_sitemap_url or urljoin(
+            self.base_url, "sitemaps/entities/products/detail.xml"
         )
 
-    def _make_request(self, url, params=None, retries=3, delay=None):
-        """A generic function to make a GET request with the common headers and authorization token."""
-        delay = delay or 1
+    def run(self):
+        xml_categories = self.fetch_sitemap(
+            self.categories_sitemap_url, self.categories_file_name
+        )
 
-        for i in range(retries):
-            response = requests.get(
-                url,
-                headers={
-                    **self.HEADERS,
-                    "Authorization": "Bearer {}".format(
-                        self.access_token.get("access_token")
-                    ),
-                },
-                params=params,
-            )
+        xml_products = self.fetch_sitemap(
+            self.products_sitemap_url, self.products_file_name
+        )
 
-            if response.ok:
-                return response.json()
-            elif (
-                response.status_code == 503 and i < retries - 1
-            ):  # Server Error: Service Unavailable
-                print(f"503 error, retrying in {delay} seconds...")
-                time.sleep(delay)
-                delay *= 2  # double the delay
-            elif response.status_code in {401, 403}:  # Unauthorized or Forbidden
-                print("Fetching a new token...")
-                self.access_token = self._get_anonymous_access_token()
-            elif response.status_code == 404:  # Resource Not Found
-                print(f"404 error: Resource not found for url: {url}")
-                return None
-            else:
-                response.raise_for_status()
+        category_json = None
+        # If required by user create a category structure to which
+        # products will be added, however it will be always be saved
+        if not self.use_categories and not self.scrape_categories:
+            category_json = None
+        else:
+            category_json = self.extract_categories()
+
+        data_json = self.extract_products(xml_products, category_json)
+        self.create_base_json(data_json)
+
+    def _get_headers(self):
+        """Override to add the Authorization header for AHScraper."""
+        return {
+            **super()._get_headers(),
+            "Authorization": "Bearer {}".format(self.access_token.get("access_token")),
+        }
 
     def _get_anonymous_access_token(self):
         response = requests.post(
             "https://api.ah.nl/mobile-auth/v1/auth/token/anonymous",
             headers=self.HEADERS,
             json={"clientId": "appie"},
+            timeout=10,
         )
         if not response.ok:
             response.raise_for_status()
@@ -99,9 +118,7 @@ class AHScraper(BaseScraper):
             yield from response["products"]
 
     def get_product_by_barcode(self, barcode):
-        url = "https://api.ah.nl/mobile-services/product/search/v1/gtin/{}".format(
-            barcode
-        )
+        url = f"https://api.ah.nl/mobile-services/product/search/v1/gtin/{barcode}"
         return self._make_request(url)
 
     def get_product_details(self, product):
@@ -111,9 +128,7 @@ class AHScraper(BaseScraper):
         :return: dict containing product information
         """
         product_id = product if not isinstance(product, dict) else product["webshopId"]
-        url = "https://api.ah.nl/mobile-services/product/detail/v4/fir/{}".format(
-            product_id
-        )
+        url = f"https://api.ah.nl/mobile-services/product/detail/v4/fir/{product_id}"
         return self._make_request(url)
 
     def get_categories(self):
@@ -122,9 +137,7 @@ class AHScraper(BaseScraper):
 
     def get_sub_categories(self, category):
         category_id = category if not isinstance(category, dict) else category["id"]
-        url = "https://api.ah.nl/mobile-services/v1/product-shelves/categories/{}/sub-categories".format(
-            category_id
-        )
+        url = f"https://api.ah.nl/mobile-services/v1/product-shelves/categories/{category_id}/sub-categories"
         return self._make_request(url)
 
     def get_bonus_periods(self):
@@ -150,124 +163,25 @@ class AHScraper(BaseScraper):
         }
         return self._make_request(url, params)
 
-    def create_base_json(self, data_json):
-        base = {
-            self.SHORT_NAME: {
-                "name": self.LONG_NAME,
-                "url": self.url,
-                "delivery_cost": self.fetch_delivery_cost(),
-                "categories": data_json,
-            }
-        }
-
-        self.save_content_to_file(base, self.ALL_BASE_DATA_FILENAME)
-
-        return base
-
-    def get_category_tree(self, category_id):
-        """
-        Get the category tree for a given category.
-        """
-        subcategories = self.get_sub_categories(category_id)
-
-        # Base case: if there are no subcategories, return None
-        if not subcategories:
-            return None
-
-        category_tree = {}
-        for subcategory in subcategories["children"]:
-            # Recursively build the tree for each subcategory
-            subcategory_tree = self.get_category_tree(int(subcategory["id"]))
-
-            # Add the subcategory (and its possible subcategories) to the tree
-            category_tree[subcategory["id"]] = subcategory
-
-            if subcategory_tree:
-                category_tree[subcategory["id"]]["subcategories"] = subcategory_tree
-
-        return category_tree
-
-    def extract_categories(self, xml_content=None, scrape=SCRAPE_CATEGORIES):
-        category_tree = {}
-
-        if scrape:
-            categories = self.get_categories()
-
-            for category in tqdm(
-                categories,
-                desc=f"Processing subcategories for {self.LONG_NAME}",
-                unit="Subcategory",
-            ):
-                category_name = category["name"]
-                category_tree[category_name] = {
-                    **category,
-                    "subcategories": self.get_category_tree(category["id"]),
-                }
-
-                self.save_content_to_file(category_tree, self.CATEGORIES_TREE_FILENAME)
-
-        else:
-            folder = self.get_save_folder()
-            filepath = os.path.join(folder, self.CATEGORIES_TREE_FILENAME)
-            if os.path.exists(filepath):
-                with open(filepath, "r") as file:
-                    category_tree = json.load(file)
-            else:
-                print(f"Error: {filepath} does not exist.")
-
-        self.category_tree = category_tree
-        return self.category_tree
-
-    def extract_products(self, xml_content, category_json, scrape=SCRAPE_PRODUCTS):
-        """Extract products from the XML and appends them to the given category_data."""
-
-        if scrape:
-            soup = BeautifulSoup(xml_content, "xml")
-            product_urls = [url_tag.text for url_tag in soup.find_all("loc")]
-
-            for product_url in tqdm(
-                product_urls,
-                desc=f"Scraping Products for {self.LONG_NAME}",
-                unit="product",
-            ):
-                match = re.search(r"/wi(\d+)/", product_url)
-                if match:
-                    id = match.group(1)
-                else:
-                    id = None
-                    print("Big error")
-                    exit(2)
-
-                product = self.get_product_details(id)
-                if not product:
-                    print(f"Failed to retrieve details for product ID: {id}")
-                    continue
-                updated_category_json = self.add_product_to_category(
-                    product, category_json
-                )
-            self.save_content_to_file(updated_category_json, self.SCRAPED_DATA_FILENAME)
-        else:
-            folder = self.get_save_folder()
-            filepath = os.path.join(folder, self.SCRAPED_DATA_FILENAME)
-            if os.path.exists(filepath):
-                with open(filepath, "r") as file:
-                    updated_category_json = json.load(file)
-            else:
-                print(f"Error: {filepath} does not exist.")
-
-        return updated_category_json
+    def _extract_product_id(self, product_url):
+        match = re.search(r"/wi(\d+)/", product_url)
+        return match.group(1) if match else None
 
     def add_product_to_category(self, product, category_json):
         main_category = product["productCard"].get("mainCategory")
         sub_category_id = product["productCard"].get("subCategoryId")
 
-        if main_category and sub_category_id:
+        matched_category = None
+        for _, category_data in category_json.items():
+            if category_data.get("name") == main_category:
+                matched_category = category_data
+                break
+
+        if main_category and sub_category_id and matched_category:
             # Attempt to insert into correct main and subcategory
-            if not self.add_product_to_subcategory(
-                product, category_json.get(main_category, {})
-            ):
+            if not self.add_product_to_subcategory(product, matched_category):
                 print(
-                    f"Couldn't find subcategory with ID {sub_category_id} in main category {main_category}. Adding to 'Uncategorized'."
+                    f"Product ID {product['productId']}: Couldn't find subcategory with ID {sub_category_id} in main category {main_category}. Adding to 'Uncategorized'."
                 )
                 self.add_to_uncategorized(product, category_json)
         else:
@@ -370,3 +284,20 @@ class AHScraper(BaseScraper):
                     current_level = found["categories"]
 
         return root
+
+    def process_category(self, category):
+        subcategories_data = self.get_sub_categories(category)
+        subcategories = {}
+
+        for sub_cat in subcategories_data["children"]:
+            sub_cat_name = self.get_category_name(sub_cat)
+
+            subcategories[sub_cat_name] = self.process_category(sub_cat)
+
+        if not subcategories:
+            return {**category}
+
+        return {**category, "subcategories": subcategories}
+
+    def get_category_name(self, category):
+        return int(category["id"])
