@@ -25,7 +25,7 @@ jobs:
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v2
         with:
-          pattern: '^(feat|fix|chore|docs|style|refactor|perf|test)\(#\d+\): .+$|^build\(deps\): .+$'
+          pattern: '^(feat|fix|chore|docs|style|refactor|perf|test)\(#\d+\): .+|^build\(deps\): .+$'
           allCommitMessages: 'true'
           flags: 'gm'
           error: 'Your first line has to follow the format: prefix(#GitHub Issue Number): description or the dependabot format like "build(deps): ...". For example: feat(#12): Add new filter functionality.'
