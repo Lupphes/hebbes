@@ -1,0 +1,64 @@
+[
+    {
+        "ah": {
+            "name": "Alber Heijn",
+            "url": "https://www.ah.nl/",
+            "delivery_cost": 40,
+            "categories": [
+                {
+                    "name": "aardappel-groente-fruit",
+                    "url": "https://www.ah.nl/producten/aardappel-groente-fruit",
+                    "categories": [
+                        {
+                            "name": "groente",
+                            "url": "https://www.ah.nl/producten/aardappel-groente-fruit/groente",
+                            "categories": [],
+                            "products": [
+                                {
+                                    "name": "Banana",
+                                    "price": 4,
+                                    "size": 5300,
+                                    "image": "url",
+                                    "description": "This is a description",
+                                    "environment": 4,
+                                    "health": 32332
+                                }
+                            ]
+                        }
+                    ],
+                    "products": [
+                        {
+                            "name": "Nutella",
+                            "price": 5,
+                            "size": 500,
+                            "image": "url",
+                            "description": "This is a description",
+                            "environment": 5,
+                            "health": 48
+                        }
+                    ]
+                }
+            ]
+        },
+        "jumbo": {
+            "name": "Jumbo",
+            "url": "https://www.jumbo.com/",
+            "delivery_cost": 60,
+            "categories": {
+                "name": "aardappel-groente-fruit",
+                "url": "https://www.jumbo.com/producten/aardappel-groente-fruit",
+                "products": [
+                    {
+                        "name": "Nutella",
+                        "price": 3,
+                        "size": 600,
+                        "image": "url",
+                        "description": "This is a description",
+                        "environment": 4,
+                        "health": 78
+                    }
+                ]
+            }
+        }
+    }
+]
