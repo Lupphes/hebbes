@@ -29,3 +29,4 @@ jobs:
           checkAllCommitMessages: 'true'
           flags: 'gm'
           error: 'Your first line has to follow the format: prefix(#GitHub Issue Number): description or the dependabot format like "build(deps): ...". For example: feat(#12): Add new filter functionality.'
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
