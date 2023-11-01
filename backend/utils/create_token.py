@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from jose import jwt, JWTError
 
 
-def create_access_token(username, expires_delta):
-    to_encode = {"sub": username}
+def create_access_token(email, expires_delta):
+    to_encode = {"sub": email}
     expire = datetime.utcnow() + timedelta(minutes=expires_delta)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(

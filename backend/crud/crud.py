@@ -9,8 +9,8 @@ def get_user(db: Session, user_id: int):
     return db.query(user.User).filter(user.User.id == user_id).first()
 
 
-def get_user_by_username(db: Session, username: str):
-    return db.query(user.User).filter(user.User.username == username).first()
+def get_user_by_email(db: Session, email: str):
+    return db.query(user.User).filter(user.User.email == email).first()
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
@@ -22,7 +22,7 @@ def register_user(db: Session, userCreate: schemas.UserCreate):
         userCreate.password.encode("utf-8"), bcrypt.gensalt()
     )
     hashed_password = hashed_password.decode("utf-8")
-    db_user = user.User(username=userCreate.username, password=hashed_password)
+    db_user = user.User(email=userCreate.email, password=hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
