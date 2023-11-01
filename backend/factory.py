@@ -38,9 +38,9 @@ def get_db():
 
 @auth.post("/register", response_model=schemas.User)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_username(db, username=user.username)
+    db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="Username already registered")
+        raise HTTPException(status_code=400, detail="Email already registered")
 
     return crud.register_user(db=db, userCreate=user)
 
@@ -53,13 +53,11 @@ def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @auth.post("/login")
 async def login(userLogin: schemas.UserLogin, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_username(db, username=userLogin.username)
+    db_user = crud.get_user_by_email(db, email=userLogin.email)
     if db_user is not None and bcrypt.checkpw(
         userLogin.password.encode("utf-8"), db_user.password.encode("utf-8")
     ):
-        access_token = create_access_token(
-            db_user.username, config.settings.expire_delta
-        )
+        access_token = create_access_token(db_user.email, config.settings.expire_delta)
         response = {"access_token": access_token, "token_type": "bearer"}
         return response
     else:
@@ -97,12 +95,12 @@ def get_current_user(authorization: str = Header(None)):
             algorithms=[config.settings.jwt_algorithm],
         )
         print(payload)
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise HTTPException(
                 status_code=401, detail="Could not validate credentials"
             )
-        return username
+        return email
     except jwt.JWTError as e:
         print(f"JWT Error: {str(e)}")
 
