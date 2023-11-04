@@ -1,12 +1,19 @@
 'use client';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/redux/store';
+import { registerUser } from '@/redux/features/auth/authSlice';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleRegister = () => {
     // Handle registration logic here (e.g., API call to create a new user).
+    const user = { email, password };
+    console.log(user);
+    dispatch(registerUser(user));
   };
 
   return (
@@ -46,29 +53,9 @@ const Register = () => {
                   className='focus:ring-primary-600 focus:border-primary-600 block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm'
                 />
               </div>
-              <div className='flex items-start'>
-                <div className='flex h-5 items-center'>
-                  <input
-                    id='terms'
-                    aria-describedby='terms'
-                    type='checkbox'
-                    className='focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded border border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800'
-                  />
-                </div>
-                <div className='ml-3 text-sm'>
-                  <label className='font-light text-gray-500 dark:text-gray-300'>
-                    I accept the{' '}
-                    <a
-                      className='text-primary-600 dark:text-primary-500 font-medium hover:underline'
-                      href='#'
-                    >
-                      Terms and Conditions
-                    </a>
-                  </label>
-                </div>
-              </div>
               <button
-                type='submit'
+                type='button'
+                onClick={handleRegister}
                 className='mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
               >
                 Create an account
