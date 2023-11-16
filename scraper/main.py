@@ -1,5 +1,5 @@
 from scrapers.base_scraper import BaseScraper
-from scrapers.data_downloader import use_downloaded_data
+from scraper.scrapers.data_unpacker import unpack
 from scrapers import (
     AHScraper,
     ALDIScraper,
@@ -17,7 +17,7 @@ from scrapers import (
 )
 
 
-def main(scrape=True):
+def main(scrape=True, data_folder="./data"):
     if scrape:
         AHScraper().run()
         ALDIScraper().run()
@@ -32,10 +32,9 @@ def main(scrape=True):
         # SPARScraper().run()
         # VomarScraper().run()
     else:
-        data = use_downloaded_data()
+        data = unpack(data_folder=data_folder)
 
-    base_urls = [cls.BASE_URL for cls in BaseScraper.__subclasses__()]
-    Unification("data", base_urls, "https://www.ah.nl/")
+    Unification(data_folder, "www.ah.nl")
 
 
 if __name__ == "__main__":

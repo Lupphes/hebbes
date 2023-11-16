@@ -1,0 +1,33 @@
+[
+  {
+    "pbId": "fijefe",
+    "name": "name",
+    "link": "https://",
+    "piture_link": "",
+    "brand": "",
+    "saleUnitSize": {
+      "units": "kg",
+      "amount": 334,
+      "label": "843hueoiwhufr32oie"
+    },
+    "description": "fhehufeu",
+    "gln": "gln",
+    "gtin": "gln",
+    "specifics": {
+      "health": {},
+      "envinronemt": {}
+    },
+    "category": {
+      "pbMainId": "",
+      "pbSubId": "",
+      "mainCategoryName": "fheufe",
+      "subCategoryId": ""
+    },
+    "stores": {
+      "ah": {
+        "id": "fnhejufe2773",
+        "price": 34
+      }
+    }
+  }
+]

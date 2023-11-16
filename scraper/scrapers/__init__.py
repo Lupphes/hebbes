@@ -13,4 +13,4 @@ from .spar_scraper import SPARScraper
 from .vomar_scraper import VomarScraper
 from .unify_scrapers import Unification
 
-from .data_downloader import use_downloaded_data
+from .data_unpacker import unpack
