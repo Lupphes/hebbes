@@ -65,6 +65,25 @@ class BaseScraper:
         """Get the default headers for requests."""
         return self.HEADERS
 
+    @abstractmethod
+    def extract_categories(
+        self,
+        scrape=True,
+    ):
+        pass
+
+    @abstractmethod
+    def extract_products(
+        self,
+        xml_content,
+        scrape=True,
+    ):
+        pass
+
+    @abstractmethod
+    def categorize_products(self, category_json, product_json):
+        pass
+
     def get_save_folder(self):
         """Get the save folder name based on the base URL."""
         return os.path.join(self.main_folder, urlparse(self.base_url).netloc)

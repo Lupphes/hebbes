@@ -19,17 +19,17 @@ from scrapers import (
 def main(scrape=True, data_folder="./data"):
     if scrape:
         AHScraper().run()
-        # ALDIScraper().run()
-        # CoopScraper().run()
+        ALDIScraper().run()
+        CoopScraper().run()
         JumboScraper().run()
-        # DekaMarktScraper().run()
-        # DirkScraper().run()
-        # HoogvlietScraper().run()
-        # JanLindersScraper().run()
-        # PicnicScraper().run()
-        # PlusScraper().run()
-        # SPARScraper().run()
-        # VomarScraper().run()
+        DekaMarktScraper().run()
+        DirkScraper().run()
+        HoogvlietScraper().run()
+        JanLindersScraper().run()
+        # PicnicScraper().run() # No robots.txt
+        PlusScraper().run()
+        SPARScraper().run()
+        VomarScraper().run()
     else:
         data = unpack(data_folder=data_folder)
 

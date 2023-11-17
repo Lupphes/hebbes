@@ -15,20 +15,21 @@ class ALDIScraper(BaseScraper):
         self,
         scrape_categories: bool = False,
         scrape_products: bool = False,
-        use_categories: bool = False,
-        categories_sitemap_url: str = None,
-        products_sitemap_url: str = None,
+        use_categories: bool = True,
+        categories_sitemap_url: str | None = None,
+        products_sitemap_url: str | None = None,
+        data_folder="./data",
     ) -> None:
         """
-        Initialize the AHScraper instance.
+        Initialize the ALDIScraper instance.
 
-        :param base_url: Base URL for the website.
         :param scrape_categories: Whether to scrape categories or use the file in the data folder.
         :param scrape_products: Whether to scrape products or use the file in the data folder.
         :param use_categories: If True, try to maintain the product structure as store categories suggest,
-                            otherwise, all products will be put into arrays.
+                               otherwise, all products will be put into arrays.
         :param categories_sitemap_url: URL for the categories sitemap.
         :param products_sitemap_url: URL for the products sitemap.
+        :param data_folder: Data folder where everything will be saved.
         """
 
         super().__init__(self.BASE_URL)
@@ -45,31 +46,28 @@ class ALDIScraper(BaseScraper):
 
     def run(self):
         category_prefix = urljoin(self.BASE_URL, "/producten/")
-        categories_xml_content = self.fetch_content(self.categories_sitemap_url)
-        categories_xml_filtered = self.filter_xml_by_prefix(
-            categories_xml_content, category_prefix
+        xml_categories_content = self.fetch_content(self.categories_sitemap_url)
+        xml_categories = self.filter_xml_by_prefix(
+            xml_categories_content, category_prefix
         )
-        self.save_content_to_file(
-            categories_xml_filtered, self.sitemap_categories_filename
-        )
+        self.save_content_to_file(xml_categories, self.sitemap_categories_filename)
 
         product_prefix = urljoin(self.BASE_URL, "/product/")
-        product_xml_content = self.fetch_content(self.products_sitemap_url)
-        products_xml_filtered = self.filter_xml_by_prefix(
-            product_xml_content, product_prefix
+        xml_product_content = self.fetch_content(self.products_sitemap_url)
+        xml_products = self.filter_xml_by_prefix(xml_product_content, product_prefix)
+        self.save_content_to_file(xml_products, self.sitemap_products_filename)
+
+        category_json = self.extract_categories(scrape=self.scrape_categories)
+
+        product_json = self.extract_products(
+            xml_products,
+            scrape=self.scrape_products,
         )
-        self.save_content_to_file(products_xml_filtered, self.sitemap_products_filename)
 
-        category_json = None
-        # If required by user create a category structure to which
-        # products will be added, however it will be always be saved
-        # if not self.use_categories and not self.scrape_categories:
-        #     category_json = None
-        # else:
-        #     category_json = self.extract_categories()
+        if self.use_categories:
+            self.categorize_products(category_json, product_json)
 
-        # data_json = self.extract_products(products_xml_filtered, category_json)
-        # self.create_base_json(data_json)
+        self.create_base_json(product_json, self.SHORT_NAME, self.LONG_NAME)
 
     def filter_xml_by_prefix(self, xml_content, prefix):
         soup = BeautifulSoup(xml_content, "xml")
@@ -84,3 +82,19 @@ class ALDIScraper(BaseScraper):
 
     def fetch_delivery_cost(self):
         return None
+
+    def extract_categories(
+        self,
+        scrape=True,
+    ):
+        pass
+
+    def extract_products(
+        self,
+        xml_content,
+        scrape=True,
+    ):
+        pass
+
+    def categorize_products(self, category_json, product_json):
+        pass
