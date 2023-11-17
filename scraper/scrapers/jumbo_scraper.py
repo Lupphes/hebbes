@@ -26,7 +26,7 @@ class JumboScraper(BaseScraper):
     def __init__(
         self,
         scrape_categories: bool = False,
-        scrape_products: bool = True,
+        scrape_products: bool = False,
         use_categories: bool = True,
         categories_sitemap_url: str | None = None,
         products_sitemap_url: str | None = None,
@@ -79,41 +79,6 @@ class JumboScraper(BaseScraper):
         match = re.search(r"-([^-\s]+)$", product_url)
         return match.group(1) if match else None
 
-    def add_product_to_category(self, product, category_json):
-        """The Jumbo items does not provide exact subcategory. Sad"""
-        # Check if the product is delisted
-
-        availability_reason = (
-            product["product"]["data"].get("availability", {}).get("reason")
-        )
-        if availability_reason == "DELISTED":
-            return category_json
-
-        main_category = product["product"]["data"].get("topLevelCategory")
-
-        if main_category:
-            if main_category not in category_json:
-                category_json[main_category] = {}
-            if "products" not in category_json[main_category]:
-                category_json[main_category]["products"] = []
-
-            category_json[main_category]["products"].append(
-                self.build_product_data(product["product"])
-            )
-        else:
-            print(
-                f"Product ID {product['data'].get('id', 'Unknown ID')} is missing mainCategory. Adding to 'Uncategorized'."
-            )
-            self.add_to_uncategorized(product, category_json)
-
-        return category_json
-
-    def add_to_uncategorized(self, product, category_json):
-        """Utility function to add product to 'Uncategorized' category."""
-        if "Uncategorized" not in category_json:
-            category_json["Uncategorized"] = []
-        category_json["Uncategorized"].append(self.build_product_data(product))
-
     def build_product_data(self, product):
         """Utility function to construct product data from raw product."""
         image_url = (
@@ -131,9 +96,9 @@ class JumboScraper(BaseScraper):
         product_info = product["product"]["data"]
         return {
             "name": product_info.get("title", "null"),
-            "link": f"https://www.ah.nl/producten/product/wi107/{product.get("id", "null"),}",
+            "link": "null",
             "piture_links": product_info.get("imageInfo", "null"),
-            "brand": product_info['brandInfo'].get("brandDescription", "null"),
+            "brand": product_info.get("brandInfo", {}).get("brandDescription", "null"),
             "measurements": {
                 "units": "null",
                 "amount": "null",
@@ -146,14 +111,16 @@ class JumboScraper(BaseScraper):
             "category": {
                 "top_category_name": product_info.get("topLevelCategory", "null"),
                 "sub_category_name": "null",
-                "sub_category_id": product["productCard"].get("subCategoryId", "null"),
+                "sub_category_id": "null",
                 "top_category_id": product_info.get("topLevelCategoryId", "null"),
             },
             "stores": {
                 self.SHORT_NAME: {
                     "webshopId": product_info.get("id", "null"),
-                    "price": product_info.get("prices", "null"),
-                    "discount_info": "null", 
+                    "price": product_info.get("prices", {})
+                    .get("price", {})
+                    .get("amount", "null"),
+                    "discount_info": [],
                 }
             },
         }
@@ -274,14 +241,24 @@ class JumboScraper(BaseScraper):
             raise Exception
 
         for sub_cat in subcategory_data:
-            sub_cat_name = sub_cat["title"]
+            sub_cat_name = sub_cat["catId"]
 
             subcategory[sub_cat_name] = self.process_category(sub_cat)
 
-        if not subcategory:
-            return {**category}
+        parsed_category = {
+            "id": category.get("catId", "null"),
+            "name": category.get("title", "null").lower().replace(" ", "-"),
+            "label": category.get("title", "null"),
+            "piture_links": [
+                category.get("backgroundImageUrl", "null"),
+                category.get("foregroundImageUrl", "null"),
+            ],
+        }
 
-        return {**category, "subcategories": subcategory}
+        if not subcategory:
+            return {**parsed_category}
+
+        return {**parsed_category, "subcategory": subcategory}
 
     def extract_categories(
         self,
@@ -296,7 +273,7 @@ class JumboScraper(BaseScraper):
                 desc=f"Processing main categories for {self.LONG_NAME}",
                 unit="Category",
             ):
-                category_name = category["id"]
+                category_name = category["catId"]
                 category_tree[category_name] = self.process_category(category)
 
             self.save_content_to_file(category_tree, self.category_filename)
@@ -344,4 +321,16 @@ class JumboScraper(BaseScraper):
         return products
 
     def categorize_products(self, category_json, product_json):
-        pass
+        key = {}
+        for category_data in category_json.values():
+            category_name = category_data.get("name")
+            category_id = category_data.get("id")
+            if category_name is not None and category_id is not None:
+                key[category_name] = category_id
+
+        print(key)
+
+        print(
+            "Jumbo API does not provide detailed categorization. Categorization is done with top categories."
+        )
+        self.save_content_to_file(product_json, "cat_" + self.product_filename)

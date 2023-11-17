@@ -21,7 +21,7 @@ def main(scrape=True, data_folder="./data"):
         AHScraper().run()
         # ALDIScraper().run()
         # CoopScraper().run()
-        # JumboScraper().run()
+        JumboScraper().run()
         # DekaMarktScraper().run()
         # DirkScraper().run()
         # HoogvlietScraper().run()
@@ -33,7 +33,9 @@ def main(scrape=True, data_folder="./data"):
     else:
         data = unpack(data_folder=data_folder)
 
-    # Unification(data_folder, "www.ah.nl")
+    uni = Unification(data_folder, "www.ah.nl")
+    updated_products = uni.update_product_stores()
+    uni.save_updated_products(updated_products)
 
 
 if __name__ == "__main__":

@@ -105,7 +105,7 @@ class AHScraper(BaseScraper):
         # Doesn't work well
         """
         response = self.search_products(page=0, **kwargs)
-        
+
         if response is None:
             raise Exception
         yield from response["products"]
@@ -177,24 +177,26 @@ class AHScraper(BaseScraper):
     def add_product_to_subcategory(self, sub_category_id, category_data, previous_path):
         if "id" in category_data and category_data["id"] == sub_category_id:
             return {
-                "sub_category_name": category_data['name'],
+                "sub_category_name": category_data["name"],
                 "sub_category_id": sub_category_id,
-                "category_path": f"{previous_path}"
+                "category_path": previous_path,
             }
         elif "subcategory" in category_data:
             for subcat_key, subcat_value in category_data["subcategory"].items():
-                result = self.add_product_to_subcategory(sub_category_id, subcat_value, f"{previous_path}|{subcat_key}")
+                new_path = previous_path + [int(subcat_key)]
+                result = self.add_product_to_subcategory(
+                    sub_category_id, subcat_value, new_path
+                )
                 if result:
                     return result
         return None
-
 
     def build_product_data(self, product):
         """Utility function to construct product data from raw product."""
         product_info = product["productCard"]
         return {
             "name": product_info.get("title", "null"),
-            "link": f"https://www.ah.nl/producten/product/wi107/{product.get("productId", "null"),}",
+            "link": f'https://www.ah.nl/producten/product/wi{product.get("productId", "null")}',
             "piture_links": product_info.get("images", "null"),
             "brand": product_info.get("brand", "null"),
             "measurements": {
@@ -212,16 +214,19 @@ class AHScraper(BaseScraper):
             "gtin": product.get("tradeItem", {}).get("gtin", "null"),
             "specific": {"health": {}, "envinronemt": {}},
             "category": {
-                "top_category_name": product["productCard"].get("mainCategory", "null"),
-                "sub_category_name": product["productCard"].get("subCategory", "null"),
-                "sub_category_id": product["productCard"].get("subCategoryId", "null"),
-                "top_category_id":  "null"
+                "top_category_name": product_info.get("mainCategory", "null"),
+                "sub_category_name": product_info.get("subCategory", "null"),
+                "sub_category_id": product_info.get("subCategoryId", "null"),
+                "top_category_id": "null",
             },
             "stores": {
                 self.SHORT_NAME: {
                     "webshopId": product.get("productId", "null"),
-                    "price": product_info['currentPrice'] if 'currentPrice' in product_info and product_info['currentPrice'] is not None else product_info.get("priceBeforeBonus", "null"),
-                    "discount_info": product_info.get("discountLabels", "null"), 
+                    "price": product_info["currentPrice"]
+                    if "currentPrice" in product_info
+                    and product_info["currentPrice"] is not None
+                    else product_info.get("priceBeforeBonus", "null"),
+                    "discount_info": product_info.get("discountLabels", "null"),
                 }
             },
         }
@@ -232,7 +237,7 @@ class AHScraper(BaseScraper):
     def process_category(self, category):
         subcategory_data = self.get_sub_categories(category)
         subcategory = {}
-        
+
         if subcategory_data is None:
             raise Exception
 
@@ -320,37 +325,74 @@ class AHScraper(BaseScraper):
             category_id = category_data.get("id")
             if category_name is not None and category_id is not None:
                 key[category_name] = category_id
-        
+
+        missing_top_category_count = 0
+        missing_but_categorized_count = 0
+        missing_and_uncategorized_count = 0
+        successful_categorization_count = 0
+        uncategorized_count = 0
+
         for product in tqdm(
-                product_json,
-                desc=f"Categorizing products for {self.LONG_NAME}",
-                unit="product",
-            ):
+            product_json,
+            desc=f"Categorizing products for {self.LONG_NAME}",
+            unit="product",
+        ):
             top_category = product["category"].get("top_category_name")
             sub_category_id = product["category"].get("sub_category_id")
-            
+
             if sub_category_id:
                 if top_category in key:
                     top_category_id = str(key[top_category])
-                    updated = self.add_product_to_subcategory(sub_category_id, category_json[top_category_id], top_category_id)
-                else:
-                    print(
-                        f"Product ({product['name']}|{product.get("productId", "missing")}) is missing top_category_name, but have sub_category_id {sub_category_id}"
+                    updated = self.add_product_to_subcategory(
+                        sub_category_id,
+                        category_json[top_category_id],
+                        [int(top_category_id)],
                     )
-                    updated = self.add_product_to_subcategory(sub_category_id, category_json, "")
+                else:
+                    missing_top_category_count += 1
+                    updated = self.add_product_to_subcategory(
+                        sub_category_id, category_json, []
+                    )
+                    if updated is None:
+                        missing_and_uncategorized_count += 1
+                    else:
+                        missing_but_categorized_count += 1
                 if updated is None:
-                    product["category"]['top_category_name'] = "Uncategorized"
-                    product["category"]['sub_category_name'] = "Uncategorized"
-                    product["category"]['sub_category_id'] = "null"
-                    product["category"]['category_path'] = "null"
+                    product["category"]["top_category_name"] = "Uncategorized"
+                    product["category"]["sub_category_name"] = "Uncategorized"
+                    product["category"]["sub_category_id"] = "null"
+                    product["category"]["category_path"] = "null"
+                    uncategorized_count += 1
                     continue
                 product["category"] = updated
-                product["category"]['top_category_name'] = top_category
+                product["category"]["top_category_name"] = top_category
+                successful_categorization_count += 1
             else:
-                product["category"]['top_category_name'] = "Uncategorized"
-                product["category"]['sub_category_name'] = "Uncategorized"
-                product["category"]['sub_category_id'] = "null"
-                product["category"]['category_path'] = "null"
+                if top_category:
+                    product["category"]["top_category_name"] = "Uncategorized"
+                product["category"]["sub_category_name"] = "Uncategorized"
+                product["category"]["sub_category_id"] = "null"
+                product["category"]["category_path"] = "null"
+                missing_top_category_count += 1
+                uncategorized_count += 1
 
-        
+        total_products = len(product_json)
+        print(f"Summary for {self.LONG_NAME}:")
+        print(f"Total products processed: {total_products}")
+        print(
+            f"Successful categorizations: {successful_categorization_count} out of {total_products} ({total_products - successful_categorization_count})"
+        )
+        print(
+            f"Uncategorized products: {uncategorized_count} out of {total_products}  ({total_products - uncategorized_count})"
+        )
+        print(
+            f"Products missing top category: {missing_top_category_count} out of {total_products}  ({total_products - missing_top_category_count})"
+        )
+        print(
+            f"Missing top category but categorized: {missing_but_categorized_count} out of {missing_top_category_count}  ({total_products - missing_but_categorized_count})"
+        )
+        print(
+            f"Missing top category and uncategorized: {missing_and_uncategorized_count} out of {missing_top_category_count}  ({total_products - missing_and_uncategorized_count})"
+        )
+
         self.save_content_to_file(product_json, "cat_" + self.product_filename)
