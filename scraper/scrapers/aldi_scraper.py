@@ -49,14 +49,16 @@ class ALDIScraper(BaseScraper):
         categories_xml_filtered = self.filter_xml_by_prefix(
             categories_xml_content, category_prefix
         )
-        self.save_content_to_file(categories_xml_filtered, self.categories_file_name)
+        self.save_content_to_file(
+            categories_xml_filtered, self.sitemap_categories_filename
+        )
 
         product_prefix = urljoin(self.BASE_URL, "/product/")
         product_xml_content = self.fetch_content(self.products_sitemap_url)
         products_xml_filtered = self.filter_xml_by_prefix(
             product_xml_content, product_prefix
         )
-        self.save_content_to_file(products_xml_filtered, self.products_file_name)
+        self.save_content_to_file(products_xml_filtered, self.sitemap_products_filename)
 
         category_json = None
         # If required by user create a category structure to which

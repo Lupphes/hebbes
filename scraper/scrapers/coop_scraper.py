@@ -41,11 +41,11 @@ class CoopScraper(BaseScraper):
 
     def run(self):
         xml_categories = self.fetch_sitemap(
-            self.categories_sitemap_url, self.categories_file_name
+            self.categories_sitemap_url, self.sitemap_categories_filename
         )
 
         xml_products = self.fetch_sitemap(
-            self.products_sitemap_url, self.products_file_name
+            self.products_sitemap_url, self.sitemap_products_filename
         )
 
         category_json = None

@@ -26,21 +26,22 @@ class JumboScraper(BaseScraper):
     def __init__(
         self,
         scrape_categories: bool = False,
-        scrape_products: bool = False,
-        use_categories: bool = False,
-        categories_sitemap_url: str = None,
-        products_sitemap_url: str = None,
+        scrape_products: bool = True,
+        use_categories: bool = True,
+        categories_sitemap_url: str | None = None,
+        products_sitemap_url: str | None = None,
+        data_folder="./data",
     ) -> None:
         """
         Initialize the JumboScraper instance.
 
-        :param base_url: Base URL for the website.
         :param scrape_categories: Whether to scrape categories or use the file in the data folder.
         :param scrape_products: Whether to scrape products or use the file in the data folder.
         :param use_categories: If True, try to maintain the product structure as store categories suggest,
                                otherwise, all products will be put into arrays.
-        :param categories_sitemap_url: URL for the categories sitemap. Defaults to a constructed URL based on base_url.
-        :param products_sitemap_url: URL for the products sitemap. Defaults to a constructed URL based on base_url.
+        :param categories_sitemap_url: URL for the categories sitemap.
+        :param products_sitemap_url: URL for the products sitemap.
+        :param data_folder: Data folder where everything will be saved.
         """
 
         super().__init__(self.BASE_URL)
@@ -56,24 +57,23 @@ class JumboScraper(BaseScraper):
         )
 
     def run(self):
-        xml_categories = self.fetch_sitemap(
-            self.categories_sitemap_url, self.categories_file_name
+        xml_categories = self.fetch_content(self.categories_sitemap_url)
+        self.save_content_to_file(xml_categories, self.sitemap_categories_filename)
+
+        xml_products = self.fetch_content(self.products_sitemap_url)
+        self.save_content_to_file(xml_products, self.sitemap_products_filename)
+
+        category_json = self.extract_categories(scrape=self.scrape_categories)
+
+        product_json = self.extract_products(
+            xml_products,
+            scrape=self.scrape_products,
         )
 
-        xml_products = self.fetch_sitemap(
-            self.products_sitemap_url, self.products_file_name
-        )
+        if self.use_categories:
+            self.categorize_products(category_json, product_json)
 
-        category_json = None
-        # If required by user create a category structure to which
-        # products will be added, however it will be always be saved
-        if not self.use_categories and not self.scrape_categories:
-            category_json = None
-        else:
-            category_json = self.extract_categories()
-
-        data_json = self.extract_products(xml_products, category_json)
-        self.create_base_json(data_json)
+        self.create_base_json(product_json, self.SHORT_NAME, self.LONG_NAME)
 
     def _extract_product_id(self, product_url):
         match = re.search(r"-([^-\s]+)$", product_url)
@@ -128,16 +128,34 @@ class JumboScraper(BaseScraper):
         )
         gtin = gtin_matches.group(1) if gtin_matches else "Unknown GTIN"
 
+        product_info = product["product"]["data"]
         return {
-            "name": product["product"]["data"].get("title", "Unknown Name"),
-            "price": product["product"]["data"].get("prices", 0.0),
-            "salesUnitSize": product["product"]["data"].get("quantity", "Unknown Size"),
-            "image_url": image_url,
-            "description": product["product"]["data"].get(
-                "detailsText", "No Description"
-            ),
-            "id": product["product"]["data"].get("id", "Unknown ID"),
+            "name": product_info.get("title", "null"),
+            "link": f"https://www.ah.nl/producten/product/wi107/{product.get("id", "null"),}",
+            "piture_links": product_info.get("imageInfo", "null"),
+            "brand": product_info['brandInfo'].get("brandDescription", "null"),
+            "measurements": {
+                "units": "null",
+                "amount": "null",
+                "label": product_info.get("quantity", "null"),
+            },
+            "description": product_info.get("detailsText", "null"),
+            "gln": "null",
             "gtin": gtin,
+            "specific": {"health": {}, "envinronemt": {}},
+            "category": {
+                "top_category_name": product_info.get("topLevelCategory", "null"),
+                "sub_category_name": "null",
+                "sub_category_id": product["productCard"].get("subCategoryId", "null"),
+                "top_category_id": product_info.get("topLevelCategoryId", "null"),
+            },
+            "stores": {
+                self.SHORT_NAME: {
+                    "webshopId": product_info.get("id", "null"),
+                    "price": product_info.get("prices", "null"),
+                    "discount_info": "null", 
+                }
+            },
         }
 
     def fetch_delivery_cost(self):
@@ -163,11 +181,15 @@ class JumboScraper(BaseScraper):
         """
         size = kwargs.pop("size", None) or 30
         response = self.search_products(page=0, size=size, **kwargs)
+        if response is None:
+            raise Exception()
         yield from response["products"]["data"]
 
         for page in range(1, ceil(response["products"]["total"] / size)):
             try:
                 response = self.search_products(page=page, **kwargs)
+                if response is None:
+                    raise Exception()
             except ValueError as e:
                 print("Pagination limit reached, capping response: {}".format(e))
                 return
@@ -245,17 +267,81 @@ class JumboScraper(BaseScraper):
         return response["tabs"] if response and "tabs" in response else None
 
     def process_category(self, category):
-        subcategories_data = self.get_sub_categories(category)
-        subcategories = {}
+        subcategory_data = self.get_sub_categories(category)
+        subcategory = {}
 
-        for sub_cat in subcategories_data:
-            sub_cat_name = self.get_category_name(sub_cat)
-            subcategories[sub_cat_name] = self.process_category(sub_cat)
+        if subcategory_data is None:
+            raise Exception
 
-        if not subcategories:
+        for sub_cat in subcategory_data:
+            sub_cat_name = sub_cat["title"]
+
+            subcategory[sub_cat_name] = self.process_category(sub_cat)
+
+        if not subcategory:
             return {**category}
 
-        return {**category, "subcategories": subcategories}
+        return {**category, "subcategories": subcategory}
 
-    def get_category_name(self, category):
-        return category["title"]
+    def extract_categories(
+        self,
+        scrape=True,
+    ):
+        category_tree = {}
+
+        if scrape:
+            categories = self.get_categories()
+            for category in tqdm(
+                categories,
+                desc=f"Processing main categories for {self.LONG_NAME}",
+                unit="Category",
+            ):
+                category_name = category["id"]
+                category_tree[category_name] = self.process_category(category)
+
+            self.save_content_to_file(category_tree, self.category_filename)
+        else:
+            category_tree = self.load_content_from_file(self.category_filename)
+
+        return category_tree
+
+    def extract_products(
+        self,
+        xml_content,
+        scrape=True,
+    ):
+        """Extract products from the XML and appends them to the given category_data."""
+
+        if scrape:
+            soup = BeautifulSoup(xml_content, "xml")
+            product_urls = [url_tag.text for url_tag in soup.find_all("loc")]
+            products = []
+
+            for product_url in tqdm(
+                product_urls,
+                desc=f"Scraping products for {self.LONG_NAME}",
+                unit="product",
+            ):
+                product_id = self._extract_product_id(product_url)
+
+                if not product_id:
+                    print("Error: Unable to extract product ID.")
+                    continue
+
+                product = self.get_product_details(product_id)
+
+                if not product:
+                    print(f"Failed to retrieve details for product ID: {id}")
+                    continue
+
+                product_data = self.build_product_data(product)
+                products.append(product_data)
+
+            self.save_content_to_file(products, self.product_filename)
+        else:
+            products = self.load_content_from_file(self.product_filename)
+
+        return products
+
+    def categorize_products(self, category_json, product_json):
+        pass

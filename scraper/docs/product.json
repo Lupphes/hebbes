@@ -1,11 +1,11 @@
 [
   {
-    "pbId": "fijefe",
+    "pb_id": "fijefe",
     "name": "name",
     "link": "https://",
-    "piture_link": "",
+    "piture_links": [],
     "brand": "",
-    "saleUnitSize": {
+    "measurements": {
       "units": "kg",
       "amount": 334,
       "label": "843hueoiwhufr32oie"
@@ -13,20 +13,24 @@
     "description": "fhehufeu",
     "gln": "gln",
     "gtin": "gln",
-    "specifics": {
+    "specific": {
       "health": {},
       "envinronemt": {}
     },
     "category": {
-      "pbMainId": "",
-      "pbSubId": "",
-      "mainCategoryName": "fheufe",
-      "subCategoryId": ""
+      "pb_top_id": "",
+      "pb_sub_id": "",
+      "top_category_name": "fheufe",
+      "sub_category_name": "fheufe",
+      "sub_category_id": 324242,
+      "top_category_id": 343434334,
+      "category_path": "path|like|this"
     },
     "stores": {
       "ah": {
         "id": "fnhejufe2773",
-        "price": 34
+        "price": 34,
+        "discount_info": {}
       }
     }
   }

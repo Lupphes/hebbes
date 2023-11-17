@@ -3,7 +3,7 @@ import json
 
 
 class Unification:
-    def __init__(self, data_folder, domain_list, main_category_settings):
+    def __init__(self, data_folder, main_domain):
         self.data_folder = data_folder
         self.domain_list = domain_list
         self.main_category_settings = main_category_settings
