@@ -1,0 +1,792 @@
+[
+  {
+    "productId": 73,
+    "productCard": {
+      "webshopId": 73,
+      "hqId": 44858,
+      "title": "AH Franse baguettes",
+      "salesUnitSize": "2 stuks",
+      "images": [
+        {
+          "width": 48,
+          "height": 48,
+          "url": "https://static.ah.nl/dam/product/AHI_43545239383738313133?revLabel=1&rendition=48x48_GIF&fileType=binary"
+        },
+        {
+          "width": 80,
+          "height": 80,
+          "url": "https://static.ah.nl/dam/product/AHI_43545239383738313133?revLabel=1&rendition=80x80_JPG&fileType=binary"
+        },
+        {
+          "width": 708,
+          "height": 708,
+          "url": "https://static.ah.nl/dam/product/AHI_43545239383738313133?revLabel=1&rendition=LowRes_JPG&fileType=binary"
+        },
+        {
+          "width": 200,
+          "height": 200,
+          "url": "https://static.ah.nl/dam/product/AHI_43545239383738313133?revLabel=1&rendition=200x200_JPG_Q85&fileType=binary"
+        },
+        {
+          "width": 400,
+          "height": 400,
+          "url": "https://static.ah.nl/dam/product/AHI_43545239383738313133?revLabel=1&rendition=400x400_JPG_Q85&fileType=binary"
+        },
+        {
+          "width": 800,
+          "height": 800,
+          "url": "https://static.ah.nl/dam/product/AHI_43545239383738313133?revLabel=1&rendition=800x800_JPG_Q90&fileType=binary"
+        }
+      ],
+      "priceBeforeBonus": 0.75,
+      "orderAvailabilityStatus": "IN_ASSORTMENT",
+      "mainCategory": "Bakkerij en banket",
+      "subCategory": "Afbakstokbrood",
+      "subCategoryId": 1589,
+      "brand": "AH",
+      "shopType": "AH",
+      "availableOnline": true,
+      "isPreviouslyBought": false,
+      "descriptionHighlights": "<p>Bak thuis zelf vers AH Baguettes af als knapperig onderdeel van elke maaltijd. Lekker om te beleggen bij ontbijt of lunch, maar ook handig bij een feestje, soep, BBQ, gourmet of kaasfondue</p><p><ul><li>Volgens traditioneel Frans recept</li><li>Altijd vers op tafel, op elk moment van de dag</li><li>Prijsfavorieten: topkwaliteit en altijd laaggeprijsd</li></ul></p>",
+      "propertyIcons": ["goedkoopje", "vegan", "afbakken"],
+      "properties": {
+        "sp_exclude_intolerance_geen_gluten": ["Geen gluten"],
+        "sp_exclude_intolerance_geen_lactose": ["Geen lactose"],
+        "sp_include_intolerance_geen_kreeftachtigen": [
+          "Geen kreeftachtigen (schaaldieren)"
+        ],
+        "sp_include_intolerance_geen_soja": ["Geen soja"],
+        "da_sugar_added_or_no_sugar_added": ["Geen toegevoegde suikers"],
+        "sp_include_intolerance_geen_vis": ["Geen vis"],
+        "sp_include_dieet_laag_suiker": ["Laag suiker"],
+        "sp_include_dieet_vegetarisch": ["Vegetarisch"],
+        "sp_include_intolerance_geen_lupine": ["Geen lupine"],
+        "sp_include_intolerance_geen_pindas": ["Geen pinda's"],
+        "np_verpakking": ["heel"],
+        "sp_exclude_intolerance_geen_melk": ["Geen melk"],
+        "da_a_type_of_preparation_cookware": ["Oven"],
+        "da_product_bake_off": ["Ja"],
+        "da_processing_type": ["Voorgebakken"],
+        "sp_include_intolerance_geen_mosterd": ["Geen mosterd"],
+        "da_available_in_store": ["true"],
+        "nutriscore": ["C"],
+        "sp_include_intolerance_geen_sulfiet": ["Geen sulfiet"],
+        "sp_exclude_intolerance_geen_sesam": ["Geen sesam"],
+        "sp_include_dieet_veganistisch": ["Veganistisch"],
+        "da_salted_or_not_salted": ["Gezouten"],
+        "da_excluded_assortment": ["false"],
+        "sp_include_dieet_laag_vet": ["Laag vet"],
+        "sp_exclude_dieet_laag_zout": ["Laag zout"],
+        "da_free_of_sugar": ["Nee"],
+        "da_store_department": ["Houdbaar"],
+        "sp_include_intolerance_geen_schelpdieren": [
+          "Geen schelpdieren (schaaldieren)"
+        ],
+        "np_goedkoopje": ["prijsfavoriet"],
+        "da_type_of_processed_food": ["Voorgebakken"],
+        "sp_include_intolerance_geen_eieren": ["Geen eieren"],
+        "sp_include_intolerance_geen_noten": ["Geen noten"],
+        "sp_include_intolerance_geen_selderij": ["Geen selderij"],
+        "np_soort": ["wit"],
+        "np_verbluffen": ["verbluffend goedkoop"],
+        "da_type_of_grain": ["Tarwe"],
+        "da_regionalism": ["Frans"]
+      },
+      "nix18": false,
+      "isStapelBonus": false,
+      "extraDescriptions": [],
+      "isBonus": false,
+      "descriptionFull": "Lekker om te beleggen bij ontbijt of lunch, maar ook handig bij een feestje, soep, BBQ, gourmet of kaasfondue<p>Dit product is een Prijsfavoriet. Dat zijn onze eigen-merkproducten van topkwaliteit en ze zijn altijd voordelig. Je herkent ze aan het blauwe duimpje.</p>",
+      "isOrderable": true,
+      "isInfiniteBonus": false,
+      "isSample": false,
+      "isVirtualBundle": false,
+      "isFavorite": false,
+      "discountLabels": []
+    },
+    "tradeItem": {
+      "gln": "3014955600106",
+      "gtin": "08710400021681",
+      "additionalTradeItemIdentification": [
+        {
+          "value": "364056500",
+          "typeCode": {
+            "value": "SUPPLIER_ASSIGNED",
+            "label": "Toegekend door de leverancier"
+          }
+        }
+      ],
+      "allergenInformation": [
+        {
+          "items": [
+            {
+              "typeCode": {
+                "value": "AC",
+                "label": "Schaaldieren"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AE",
+                "label": "Eieren"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AF",
+                "label": "Vis"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AM",
+                "label": "Melk"
+              },
+              "levelOfContainmentCode": {
+                "value": "MAY_CONTAIN",
+                "label": "Kan bevatten"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AN",
+                "label": "Noten"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AP",
+                "label": "Pinda's"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AS",
+                "label": "Sesamzaad"
+              },
+              "levelOfContainmentCode": {
+                "value": "MAY_CONTAIN",
+                "label": "Kan bevatten"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AU",
+                "label": "Sulfieten"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AW",
+                "label": "Glutenbevattende Granen"
+              },
+              "levelOfContainmentCode": {
+                "value": "CONTAINS",
+                "label": "Bevat"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "AY",
+                "label": "Soja"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "BC",
+                "label": "Selderij"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "BM",
+                "label": "Mosterd"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "GB",
+                "label": "Gerst"
+              },
+              "levelOfContainmentCode": {
+                "value": "MAY_CONTAIN",
+                "label": "Kan bevatten"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "GK",
+                "label": "Khorasantarwe"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "GO",
+                "label": "Haver"
+              },
+              "levelOfContainmentCode": {
+                "value": "MAY_CONTAIN",
+                "label": "Kan bevatten"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "GS",
+                "label": "Spelt"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "ML",
+                "label": "Lactose"
+              },
+              "levelOfContainmentCode": {
+                "value": "MAY_CONTAIN",
+                "label": "Kan bevatten"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "NL",
+                "label": "Lupine"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "NR",
+                "label": "Rogge"
+              },
+              "levelOfContainmentCode": {
+                "value": "MAY_CONTAIN",
+                "label": "Kan bevatten"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SA",
+                "label": "Amandel"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SC",
+                "label": "Cashewnoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SH",
+                "label": "Hazelnoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SM",
+                "label": "Macadamianoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SP",
+                "label": "Pecannoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SR",
+                "label": "Paranoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "ST",
+                "label": "Pistachenoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "SW",
+                "label": "Walnoot"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "UM",
+                "label": "Weekdieren"
+              },
+              "levelOfContainmentCode": {
+                "value": "FREE_FROM",
+                "label": "Vrij van"
+              }
+            },
+            {
+              "typeCode": {
+                "value": "UW",
+                "label": "Tarwe"
+              },
+              "levelOfContainmentCode": {
+                "value": "CONTAINS",
+                "label": "Bevat"
+              }
+            }
+          ],
+          "statement": "tarwe"
+        }
+      ],
+      "certificationInformation": [],
+      "consumerInstructions": {
+        "storageInstructions": [
+          "Geschikt om thuis in te vriezen op de dag van aankoop. Binnen 1 maanden gebruiken. Voor gebruik ontdooien.",
+          "Ten minste houdbaar tot en met: zie bovenzijde. Kijk, ruik en proef na deze datum. Koel, donker en droog bewaren."
+        ],
+        "usageInstructions": [],
+        "bacteriaWarningLogoPoultry": false
+      },
+      "foodAndBeverageIngredientStatement": "Ingrediënten: tarwebloem, water, gist, gefermenteerd tarwemeel, tarwemoutmeel, zout, antioxidant (ascorbinezuur [E300]).\nWaarvan toegevoegde suikers 0.00g per 100 gram en waarvan toegevoegd zout 0.90g per 100 gram",
+      "foodAndBeveragePreparationServing": {
+        "preparationServing": [
+          {
+            "instructions": "verwijder de verpakking. Oven (220°C): bak de stokbroden in 10-12 minuten af in het midden van een voorverwarmde oven."
+          }
+        ],
+        "servingQuantityInformation": {
+          "numberOfServingsPerPackage": 30.0
+        }
+      },
+      "gdsnClassification": {},
+      "healthRelatedInformation": {
+        "compulsoryAdditiveLabelInformation": [
+          "Verpakt onder beschermende atmosfeer."
+        ],
+        "healthClaimDescription": []
+      },
+      "marketingInformationModule": {
+        "tradeItemFeatureBenefit": [
+          "Klaar in 10-12 minuten",
+          "Altijd vers op tafel, op elk moment van de dag"
+        ],
+        "tradeItemMarketingMessage": "Bak thuis zelf verse Franse baguettes af als knapperig onderdeel van elke maaltijd. Lekker bij het ontbijt of de lunch, maar ook bij een feestje of BBQ."
+      },
+      "nutritionalInformation": {
+        "nutrientHeaders": [
+          {
+            "dailyValueIntakeReference": [
+              "Referentie-inname van een gemiddelde volwassene is 8400 kJ / 2000 kcal"
+            ],
+            "nutrientBasisQuantity": {
+              "value": 100.0,
+              "measurementUnitCode": {
+                "value": "g",
+                "label": "Gram"
+              }
+            },
+            "nutrientBasisQuantityDescription": ["10 gram"],
+            "nutrientDetail": [
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "ENER-",
+                  "label": "Energie"
+                },
+                "quantityContained": [
+                  {
+                    "value": 1023.0,
+                    "measurementUnitCode": {
+                      "value": "kJ",
+                      "label": "Kilojoule"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "ENER-",
+                  "label": "Energie"
+                },
+                "quantityContained": [
+                  {
+                    "value": 241.0,
+                    "measurementUnitCode": {
+                      "value": "kcal",
+                      "label": "Kilocalorie"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "FAT",
+                  "label": "Vet"
+                },
+                "quantityContained": [
+                  {
+                    "value": 1.0,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "FASAT",
+                  "label": "waarvan verzadigd"
+                },
+                "quantityContained": [
+                  {
+                    "value": 0.2,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "X_FUNS",
+                  "label": "waarvan onverzadigd"
+                },
+                "quantityContained": [
+                  {
+                    "value": 0.8,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "CHOAVL",
+                  "label": "Koolhydraten"
+                },
+                "quantityContained": [
+                  {
+                    "value": 50.0,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "SUGAR-",
+                  "label": "waarvan suikers"
+                },
+                "quantityContained": [
+                  {
+                    "value": 3.3,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "FIBTG",
+                  "label": "Voedingsvezel"
+                },
+                "quantityContained": [
+                  {
+                    "value": 1.7,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "PRO-",
+                  "label": "Eiwitten"
+                },
+                "quantityContained": [
+                  {
+                    "value": 7.2,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              },
+              {
+                "measurementPrecisionCode": {
+                  "value": "APPROXIMATELY",
+                  "label": "Ongeveer"
+                },
+                "nutrientSource": [],
+                "nutrientTypeCode": {
+                  "value": "SALTEQ",
+                  "label": "Zout"
+                },
+                "quantityContained": [
+                  {
+                    "value": 0.9,
+                    "measurementUnitCode": {
+                      "value": "g",
+                      "label": "Gram"
+                    }
+                  }
+                ]
+              }
+            ],
+            "preparationStateCode": {
+              "value": "UNPREPARED",
+              "label": "Onbereide"
+            }
+          }
+        ],
+        "nutritionalClaim": ["[logo] Weinig vezels"]
+      },
+      "packagingMarking": {
+        "localPackagingMarkedLabelAccreditationCodeReference": [
+          {
+            "value": "AH_VEGAN",
+            "label": "Veganistisch"
+          }
+        ],
+        "labelAccreditationCode": []
+      },
+      "placeOfItemActivity": {
+        "placeOfProductActivity": {
+          "productActivityDetails": [],
+          "provenanceStatement": []
+        }
+      },
+      "referencedFileDetailInformation": [],
+      "regulatoryInformation": [],
+      "safetyDataSheetInformation": [{}],
+      "salesInformation": {
+        "consumerSalesConditionCode": []
+      },
+      "contactInformation": [
+        {
+          "contactAddress": "ZI Gréveaux les Guides - 59750 FEIGNIES",
+          "contactName": "MENISSEZ",
+          "targetMarketCommunicationChannel": [],
+          "contactTypeCode": {
+            "value": "BZL",
+            "label": "Licentiehouder"
+          }
+        },
+        {
+          "contactAddress": "Provincialeweg 11, 1506 MA ZAANDAM, Nederland",
+          "contactName": "Albert Heijn B.V.",
+          "targetMarketCommunicationChannel": [
+            {
+              "communicationChannel": [
+                {
+                  "code": {
+                    "value": "WEBSITE",
+                    "label": "Website"
+                  },
+                  "value": "ah.nl"
+                },
+                {
+                  "code": {
+                    "value": "WEBSITE",
+                    "label": "Website"
+                  },
+                  "value": "ah.be"
+                }
+              ]
+            }
+          ],
+          "contactTypeCode": {
+            "value": "CXC",
+            "label": "Consumentenondersteuning"
+          }
+        }
+      ],
+      "description": {
+        "regulatedProductName": ["Voorgebakken witte tarwestokbroden"]
+      },
+      "lifespan": {
+        "itemPeriodSafeToUseAfterOpening": []
+      },
+      "measurements": {
+        "netContent": [
+          {
+            "value": 300.0,
+            "measurementUnitCode": {
+              "value": "g",
+              "label": "Gram"
+            }
+          }
+        ],
+        "weight": {}
+      }
+    },
+    "properties": {
+      "da_processing_type": ["Voorgebakken"],
+      "da_store_department": ["Houdbaar"],
+      "da_free_of_sugar": ["Nee"],
+      "da_a_type_of_preparation_cookware": ["Oven"],
+      "da_regionalism": ["Frans"],
+      "da_salted_or_not_salted": ["Gezouten"],
+      "da_sugar_added_or_no_sugar_added": ["Geen toegevoegde suikers"],
+      "da_type_of_processed_food": ["Voorgebakken"],
+      "da_type_of_grain": ["Tarwe"],
+      "da_product_bake_off": ["Ja"],
+      "nutriscore": ["C"],
+      "sp_include_dieet_veganistisch": ["Veganistisch"],
+      "sp_include_dieet_vegetarisch": ["Vegetarisch"],
+      "sp_include_dieet_laag_suiker": ["Laag suiker"],
+      "sp_include_dieet_laag_vet": ["Laag vet"],
+      "sp_exclude_dieet_laag_zout": ["Laag zout"],
+      "sp_exclude_intolerance_geen_gluten": ["Geen gluten"],
+      "sp_exclude_intolerance_geen_lactose": ["Geen lactose"],
+      "sp_include_intolerance_geen_selderij": ["Geen selderij"],
+      "sp_include_intolerance_geen_eieren": ["Geen eieren"],
+      "sp_include_intolerance_geen_vis": ["Geen vis"],
+      "sp_include_intolerance_geen_lupine": ["Geen lupine"],
+      "sp_exclude_intolerance_geen_melk": ["Geen melk"],
+      "sp_include_intolerance_geen_mosterd": ["Geen mosterd"],
+      "sp_include_intolerance_geen_pindas": ["Geen pinda's"],
+      "sp_exclude_intolerance_geen_sesam": ["Geen sesam"],
+      "sp_include_intolerance_geen_soja": ["Geen soja"],
+      "sp_include_intolerance_geen_sulfiet": ["Geen sulfiet"],
+      "sp_include_intolerance_geen_noten": ["Geen noten"],
+      "sp_include_intolerance_geen_kreeftachtigen": [
+        "Geen kreeftachtigen (schaaldieren)"
+      ],
+      "sp_include_intolerance_geen_schelpdieren": [
+        "Geen schelpdieren (schaaldieren)"
+      ]
+    },
+    "disclaimerText": "Bij Albert Heijn doen we er alles aan om te zorgen dat de prijs- en productinformatie van de producten die we verkopen zo accuraat mogelijk is. Echter, omdat producten regelmatig worden verbeterd, kan productinformatie zoals ingrediënten, voedingswaarden, dieet- of allergie-informatie geregeld veranderen. We raden je daarom aan om altijd eerst de verpakking te lezen alvorens het product te nuttigen. Zijn er vragen of opmerkingen dan kan altijd contact opgenomen worden met onze klantenservice."
+  }
+]
