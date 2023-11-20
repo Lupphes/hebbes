@@ -38,27 +38,22 @@ function Navbar() {
   return (
     <nav className='fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-gray-800 p-4 text-white'>
       <div className='flex items-center'>
-        <Link href='/main' className='mr-4 font-semibold'>
-          Home
-        </Link>
-        <Link href='/explore' className='mr-4 font-semibold'>
-          Explore
-        </Link>
-        <Link href='/offers' className='mr-4 font-semibold'>
-          Offers
-        </Link>
-        <Link href='/about' className='mr-4 font-semibold'>
-          About
-        </Link>
         {store.getState().auth.token ? (
-          <button
-            onClick={(e: React.MouseEvent<Element, MouseEvent>) =>
-              handleLogout(e)
-            }
-            className='mr-4 font-semibold'
-          >
-            Logout
-          </button>
+           <><Link href='/main' className='mr-4 font-semibold'>
+            Home
+          </Link><Link href='/explore' className='mr-4 font-semibold'>
+              Explore
+            </Link><Link href='/offers' className='mr-4 font-semibold'>
+              Offers
+            </Link><Link href='/about' className='mr-4 font-semibold'>
+              About
+            </Link><button
+              onClick={(e: React.MouseEvent<Element, MouseEvent>) => handleLogout(e)}
+              className='mr-4 font-semibold'
+            >
+              Logout
+            </button></>
+          
         ) : (
           <Link href='/login' className='mr-4 font-semibold'>
             Login
