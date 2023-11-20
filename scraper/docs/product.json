@@ -2,7 +2,6 @@
   {
     "pb_id": "fijefe",
     "name": "name",
-    "link": "https://",
     "piture_links": [],
     "brand": "",
     "measurements": {
@@ -29,6 +28,7 @@
     "stores": {
       "ah": {
         "id": "fnhejufe2773",
+        "link": "https://",
         "price": 34,
         "discount_info": {}
       }

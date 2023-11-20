@@ -96,7 +96,6 @@ class JumboScraper(BaseScraper):
         product_info = product["product"]["data"]
         return {
             "name": product_info.get("title", "null"),
-            "link": "null",
             "piture_links": product_info.get("imageInfo", "null"),
             "brand": product_info.get("brandInfo", {}).get("brandDescription", "null"),
             "measurements": {
@@ -117,6 +116,7 @@ class JumboScraper(BaseScraper):
             "stores": {
                 self.SHORT_NAME: {
                     "webshopId": product_info.get("id", "null"),
+                    "link": "null",
                     "price": product_info.get("prices", {})
                     .get("price", {})
                     .get("amount", "null"),

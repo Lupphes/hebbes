@@ -196,7 +196,6 @@ class AHScraper(BaseScraper):
         product_info = product["productCard"]
         return {
             "name": product_info.get("title", "null"),
-            "link": f'https://www.ah.nl/producten/product/wi{product.get("productId", "null")}',
             "piture_links": product_info.get("images", "null"),
             "brand": product_info.get("brand", "null"),
             "measurements": {
@@ -222,6 +221,7 @@ class AHScraper(BaseScraper):
             "stores": {
                 self.SHORT_NAME: {
                     "webshopId": product.get("productId", "null"),
+                    "link": f'https://www.ah.nl/producten/product/wi{product.get("productId", "null")}',
                     "price": product_info["currentPrice"]
                     if "currentPrice" in product_info
                     and product_info["currentPrice"] is not None
