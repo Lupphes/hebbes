@@ -10,19 +10,19 @@ networks:
 
 services:
   # NextJS Application running frontend of the Price Bandit
-  # frontend:
-  #   container_name: frontend
-  #   # restart: unless-stopped
-  #   networks:
-  #     - net
-  #   build:
-  #     context: ./frontend
-  #   environment:
-  #     - TZ=${TZ}
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
+  frontend:
+    container_name: frontend
+    # restart: unless-stopped
+    networks:
+      - net
+    build:
+      context: ./frontend
+    environment:
+      - TZ=${TZ}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
 
   # FastAPI Application that runs API for scraper and website
   backend:

@@ -2,6 +2,7 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, APIRouter, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
+
 from fastapi.middleware.cors import CORSMiddleware
 from db import config
 import bcrypt
@@ -23,6 +24,7 @@ user.Base.metadata.create_all(bind=engine)
 
 
 auth = APIRouter()
+api = APIRouter()
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
@@ -57,6 +59,7 @@ async def login(userLogin: schemas.UserLogin, db: Session = Depends(get_db)):
         userLogin.password.encode("utf-8"), db_user.password.encode("utf-8")
     ):
         access_token = create_access_token(db_user.email, config.settings.expire_delta)
+
         response = {
             "access_token": access_token,
             "token_type": "bearer",
@@ -96,7 +99,7 @@ def get_current_user(authorization: str = Header(None)):
             token,
             public_key,
             algorithms=[config.settings.jwt_algorithm],
-        )
+        print(payload)
         email: str = payload.get("sub")
         if email is None:
             raise HTTPException(
@@ -114,6 +117,7 @@ def protected_route(current_user: str = Depends(get_current_user)):
 
 def createApp():
     app = FastAPI()
+
     origins = ["http://localhost:3000"]
     app.add_middleware(
         CORSMiddleware,
@@ -122,7 +126,9 @@ def createApp():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
     app.include_router(auth, prefix="/auth")
+    app.include_router(api, prefix="/api")
     return app
 
 
