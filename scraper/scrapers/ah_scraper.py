@@ -149,7 +149,6 @@ class AHScraper(BaseScraper):
         """
         response = self._make_request(
             "https://api.ah.nl/mobile-services/bonuspage/v1/metadata",
-            self.HEADERS,
             self.get_anonymous_access_token,
         )
         if response is None:

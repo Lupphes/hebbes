@@ -190,12 +190,12 @@ class BaseScraper:
             elif _get_anonymous_access_token and response.status_code in {
                 401,
                 403,
+                500,
+                504,
             }:  # Unauthorized or Forbidden
                 print("Fetching a new token...")
                 self.access_token = _get_anonymous_access_token()
             elif response.status_code == 404:  # Resource Not Found
                 print(f"404 error: Resource not found for url: {url}")
-                return None
             else:
                 response.raise_for_status()
-        raise Exception()
