@@ -3,21 +3,42 @@ import { Fragment } from 'react';
 import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
 import { BellIcon } from '@heroicons/react/24/outline';
+import { useDispatch } from 'react-redux/es/exports';
+import { AppDispatch } from '@/redux/store';
+import { logOut } from '@/redux/features/auth/authSlice';
+import { useRouter } from 'next/navigation';
+
+import store from '@/redux/store';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 function Navbar() {
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
   const userNavigation = [
     { name: 'Offer', href: '#' },
     { name: 'Feed', href: '#' },
     { name: 'Activity', href: '#' },
   ];
+
+  const handleLogout = (e: React.MouseEvent<Element, MouseEvent>) => {
+    // Handle login logic here (e.g., API call to authenticate the user).
+    e.preventDefault();
+    try {
+      dispatch(logOut());
+      router.push('/login');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <nav className='fixed left-0 right-0 top-0 z-10 flex items-center justify-between bg-gray-800 p-4 text-white'>
       <div className='flex items-center'>
-        <Link href='/' className='mr-4 font-semibold'>
+        <Link href='/main' className='mr-4 font-semibold'>
           Home
         </Link>
         <Link href='/explore' className='mr-4 font-semibold'>
@@ -29,9 +50,20 @@ function Navbar() {
         <Link href='/about' className='mr-4 font-semibold'>
           About
         </Link>
-        <Link href='/login' className='mr-4 font-semibold'>
-          Login
-        </Link>
+        {store.getState().auth.token ? (
+          <button
+            onClick={(e: React.MouseEvent<Element, MouseEvent>) =>
+              handleLogout(e)
+            }
+            className='mr-4 font-semibold'
+          >
+            Logout
+          </button>
+        ) : (
+          <Link href='/login' className='mr-4 font-semibold'>
+            Login
+          </Link>
+        )}
       </div>
       <div className='flex items-center'>
         <input

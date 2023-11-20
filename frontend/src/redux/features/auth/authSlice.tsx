@@ -3,8 +3,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import api from '@/api/axios';
 
 type User = {
+  id?: number;
   email?: string;
   password?: string;
+};
+
+type LoggedIn = {
+  access_token: string;
+  token_type: string;
+  user: User;
 };
 
 type InitialState = {
@@ -23,23 +30,22 @@ export const registerUser = createAsyncThunk<User, Partial<User>>(
   'registeruser',
   async (user) => {
     try {
-      console.log(user);
       const response = await api.post('/auth/register', user);
       return response.data;
     } catch (err) {
-      return { error: 'Error calling Auth API' };
+      throw Error('Error calling registering');
     }
   }
 );
 
-export const loginUser = createAsyncThunk<User, Partial<User>>(
+export const loginUser = createAsyncThunk<LoggedIn, Partial<User>>(
   'loginuser',
   async (user) => {
     try {
       const response = await api.post('/auth/login', user);
       return response.data;
     } catch (err) {
-      return { error: 'Error calling Auth API' };
+      throw Error('Error calling logging in');
     }
   }
 );
@@ -49,12 +55,8 @@ export const auth = createSlice({
   initialState: initialState,
   reducers: {
     logOut: () => {
+      localStorage.clear();
       return initialState;
-    },
-    setCredentials: (state, action) => {
-      const { user, access_token } = action.payload;
-      state.user = user;
-      state.token = access_token;
     },
   },
   extraReducers: (builder) => {
@@ -66,19 +68,25 @@ export const auth = createSlice({
         console.log(action.payload);
         state.loading = false;
       })
-      .addCase(registerUser.rejected, (state) => {})
+      .addCase(registerUser.rejected, (state) => {
+        state.loading = true;
+      })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.user = action.payload.user;
+        state.token = action.payload.access_token;
+        localStorage.setItem('access_token', action.payload.access_token);
         state.loading = false;
       })
-      .addCase(loginUser.rejected, (state) => {});
+      .addCase(loginUser.rejected, (state) => {
+        state.loading = true;
+      });
   },
 });
 
-export const { logOut, setCredentials } = auth.actions;
+export const { logOut } = auth.actions;
 export default auth.reducer;
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;

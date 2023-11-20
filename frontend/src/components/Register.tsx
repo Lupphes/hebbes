@@ -3,17 +3,20 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
 import { registerUser } from '@/redux/features/auth/authSlice';
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
 
   const handleRegister = () => {
     // Handle registration logic here (e.g., API call to create a new user).
     const user = { email, password };
-    console.log(user);
-    dispatch(registerUser(user));
+    dispatch(registerUser(user))
+      .unwrap()
+      .then(() => router.push('/login'));
   };
 
   return (

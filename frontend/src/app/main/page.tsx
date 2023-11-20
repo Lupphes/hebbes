@@ -1,8 +1,18 @@
+'use client';
 import Navbar from '@/components/Navbar';
 import Category from '@/components/Category';
-import Product from '@/components/Product';
+import { redirect } from 'next/navigation';
 
-export default function Home() {
+import Product from '@/components/Product';
+import { useLayoutEffect } from 'react';
+
+const MainPage = () => {
+  useLayoutEffect(() => {
+    const isAuth = localStorage.getItem('access_token');
+    if (!isAuth) {
+      redirect('/login');
+    }
+  }, []);
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24'>
       <Navbar />
@@ -13,4 +23,6 @@ export default function Home() {
       <Product />
     </main>
   );
-}
+};
+
+export default MainPage;

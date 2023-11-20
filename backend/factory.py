@@ -114,7 +114,7 @@ def protected_route(current_user: str = Depends(get_current_user)):
 
 def createApp():
     app = FastAPI()
-    origins = ["http://localhost:3001"]
+    origins = ["http://localhost:3000"]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,

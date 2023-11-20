@@ -1,7 +1,15 @@
-import React from 'react';
+'use client';
 import Navbar from '../../components/Navbar';
+import { useLayoutEffect } from 'react';
+import { redirect } from 'next/navigation';
 
 const AboutPage = () => {
+  useLayoutEffect(() => {
+    const isAuth = localStorage.getItem('access_token');
+    if (!isAuth) {
+      redirect('/login');
+    }
+  }, []);
   return (
     <div className='min-h-screen bg-gray-100'>
       <Navbar />

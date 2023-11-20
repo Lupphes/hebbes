@@ -1,11 +1,15 @@
 import axios from 'axios';
-import { setCredentials, logOut } from '@/redux/features/auth/authSlice';
+let token = null;
+if (typeof window !== 'undefined') {
+  // Perform localStorage action
+  token = localStorage.getItem('access_token');
+}
 
 const api = axios.create({
   baseURL: 'http://localhost:5000', // Replace with your API's base URL
   withCredentials: true,
   headers: {
-    Authorization: 'Bearer',
+    Authorization: 'Bearer ' + token,
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
