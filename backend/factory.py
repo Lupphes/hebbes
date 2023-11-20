@@ -99,8 +99,8 @@ def get_current_user(authorization: str = Header(None)):
             token,
             public_key,
             algorithms=[config.settings.jwt_algorithm],
-        print(payload)
-        email: str = payload.get("sub")
+        )
+        email = payload.get("sub")
         if email is None:
             raise HTTPException(
                 status_code=401, detail="Could not validate credentials"
