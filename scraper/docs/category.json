@@ -1,0 +1,67 @@
+{
+  "6401": {
+    "id": 6401,
+    "name": "Aardappel, groente, fruit",
+    "label": "aardappel-groente-fruit",
+    "piture_links": [
+      {
+        "height": 400,
+        "width": 600,
+        "url": "https://static.ah.nl/binaries/ah/content/gallery/ahmobile/product-categories/nl/2023/week-46/agf-categorietegel-app.png"
+      }
+    ],
+    "subcategory": {
+      "1125": {
+        "id": 1125,
+        "name": "Groente",
+        "label": "groente",
+        "piture_links": [
+          {
+            "height": 48,
+            "width": 48,
+            "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=48x48_GIF&fileType=binary"
+          },
+          {
+            "height": 80,
+            "width": 80,
+            "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=80x80_JPG&fileType=binary"
+          },
+          {
+            "height": 708,
+            "width": 708,
+            "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=LowRes_JPG&fileType=binary"
+          },
+          {
+            "height": 200,
+            "width": 200,
+            "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=200x200_JPG_Q85&fileType=binary"
+          },
+          {
+            "height": 400,
+            "width": 400,
+            "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=400x400_JPG_Q85&fileType=binary"
+          },
+          {
+            "height": 800,
+            "width": 800,
+            "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=800x800_JPG_Q90&fileType=binary"
+          }
+        ],
+        "subcategory": {
+          "5897": {
+            "id": 5897,
+            "name": "Komkommer, tomaat, avocado",
+            "label": "komkommer-tomaat-avocado",
+            "piture_links": [
+              {
+                "height": 48,
+                "width": 48,
+                "url": "https://static.ah.nl/dam/product/AHI_43545239393130333237?revLabel=1&rendition=48x48_GIF&fileType=binary"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

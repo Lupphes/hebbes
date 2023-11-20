@@ -13,4 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Default command (this can be changed based on how you intend to run the scraper)
-CMD ["python", "scraper.py"]
+CMD ["python", "main.py"]
