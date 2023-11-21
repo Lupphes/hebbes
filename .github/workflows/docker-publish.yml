@@ -2,12 +2,12 @@ name: Docker
 
 on:
   schedule:
-    - cron: '25 20 * * *'
+    - cron: "25 20 * * *"
   push:
-    branches: [ "master" ]
-    tags: [ 'v*.*.*' ]
+    branches: ["master"]
+    tags: ["v*.*.*"]
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
 
 env:
   REGISTRY: ghcr.io
@@ -20,13 +20,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - name: Check PEP 8 compliance in backend
         working-directory: backend
         run: |
           pip install black
           black --check --config pyproject.toml .
-      
+
       - name: Check PEP 8 compliance in scraper
         working-directory: scraper
         run: |
