@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from typing import Union
+from db.database import Base, engine
+from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
 
 price_bandit = FastAPI()
+
+generate_and_retrieve_rsa_keys_serialized()
+Base.metadata.create_all(bind=engine)
 
 
 @price_bandit.get("/")

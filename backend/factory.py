@@ -7,19 +7,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.db.settings import settings
 import bcrypt
 
-from backend.db.database import SessionLocal, engine
+from backend.db.database import SessionLocal
 
 from utils.create_token import create_access_token
 from jose import jwt
 from jose.exceptions import JWTError
 
 from crud import crud
-from models import user
 from schemas import schemas
-
-
-user.Base.metadata.create_all(bind=engine)
-
 
 auth = APIRouter()
 api = APIRouter()

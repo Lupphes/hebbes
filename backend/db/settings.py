@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 class Settings(BaseSettings):
-    JWT_ALGORITHM: str = "HS256"
+    JWT_ALGORITHM: str = "RS256"
     POSTGRES_USER: str = "timescale"
     POSTGRES_PASSWORD: str = Field(default="default_password")
     POSTGRES_DB: str = "timescale"

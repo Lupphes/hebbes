@@ -160,6 +160,6 @@ cython_debug/
 #.idea/
 
 # Backend keys
-*.priv
-jwt-key.priv
-jwt-key.pub
+jwt_private_key.pem
+jwt_public_key.pem
+*.pem
