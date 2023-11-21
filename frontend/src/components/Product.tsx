@@ -75,7 +75,7 @@ const products = [
   },
   // More products...
 ];
-
+import Image from 'next/image';
 export default function Product() {
   return (
     <div className='mt-2 bg-gray-100'>
@@ -95,7 +95,7 @@ export default function Product() {
               return (
                 <a key={product.id} href={product.href} className='group'>
                   <div className='aspect-h-1 aspect-w-1 xl:aspect-h-8 xl:aspect-w-7 w-full overflow-hidden rounded-lg bg-gray-200'>
-                    <img
+                    <Image
                       src={product.imageSrc}
                       alt={product.imageAlt}
                       className='h-full w-full object-cover object-center group-hover:opacity-75'

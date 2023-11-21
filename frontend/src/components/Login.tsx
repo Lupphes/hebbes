@@ -1,3 +1,4 @@
+// Import statements
 'use client';
 import { loginUser } from '@/redux/features/auth/authSlice';
 import { useEffect, useState } from 'react';
@@ -7,14 +8,16 @@ import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showModal, setShowModal] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+
+  // State variables with explicit types
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const router = useRouter();
 
-  const handleLogin = async (e: React.MouseEvent<Element, MouseEvent>) => {
-    // Handle login logic here (e.g., API call to authenticate the user).
+  const handleLogin = async (e: React.MouseEvent) => {
     e.preventDefault();
     const user = { email, password };
     try {
@@ -22,7 +25,11 @@ const Login = () => {
         .unwrap()
         .then(() => router.push('/main'));
     } catch (err) {
-      setErrorMsg(err);
+      if (err instanceof Error) {
+        setErrorMsg(err.message);
+      } else {
+        setErrorMsg('An unknown error occurred');
+      }
       setShowModal(true);
     }
   };
@@ -107,9 +114,7 @@ const Login = () => {
                   </a>
                 </div>
                 <button
-                  onClick={(e: React.MouseEvent<Element, MouseEvent>) =>
-                    handleLogin(e)
-                  }
+                  onClick={handleLogin}
                   className='mb-2 mr-2 rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
                 >
                   Sign in

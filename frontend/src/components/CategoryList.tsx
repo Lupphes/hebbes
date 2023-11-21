@@ -1,4 +1,5 @@
 import { categories } from '@/mock_data/category';
+import Image from 'next/image';
 
 export default function CategoryList() {
   return (
@@ -6,7 +7,7 @@ export default function CategoryList() {
       {categories.map((category) => (
         <li key={category.name} className='flex justify-between gap-x-6 py-5'>
           <div className='flex min-w-0 gap-x-4'>
-            <img
+            <Image
               className='h-12 w-12 flex-none rounded-full bg-gray-50'
               src={category.imageUrl}
               alt=''
