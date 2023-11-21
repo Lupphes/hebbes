@@ -1,6 +1,7 @@
+from fastapi import FastAPI
 from typing import Union
 
-from factory import price_bandit
+price_bandit = FastAPI()
 
 
 @price_bandit.get("/")
@@ -14,4 +15,6 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 
 if __name__ == "__main__":
-    price_bandit.run()
+    import uvicorn
+
+    uvicorn.run("app:price_bandit", host="0.0.0.0", port=8000, reload=True)

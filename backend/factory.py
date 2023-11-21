@@ -1,24 +1,22 @@
-from typing import Annotated
+import os
 from fastapi import Depends, FastAPI, APIRouter, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 
 from fastapi.middleware.cors import CORSMiddleware
-from db import config
+from backend.db.settings import settings
 import bcrypt
 
-from werkzeug.security import check_password_hash
-
-from db.config import SessionLocal, engine
+from backend.db.database import SessionLocal, engine
 
 from utils.create_token import create_access_token
-from jose import jwt, JWTError
+from jose import jwt
+from jose.exceptions import JWTError
 
 from crud import crud
 from models import user
 from schemas import schemas
 
-from models.user import User
 
 user.Base.metadata.create_all(bind=engine)
 
@@ -58,7 +56,11 @@ async def login(userLogin: schemas.UserLogin, db: Session = Depends(get_db)):
     if db_user is not None and bcrypt.checkpw(
         userLogin.password.encode("utf-8"), db_user.password.encode("utf-8")
     ):
-        access_token = create_access_token(db_user.email, config.settings.expire_delta)
+        # Assuming db_user is an instance of a SQLAlchemy model and has an email attribute
+        if db_user.email is not None and isinstance(db_user.email, str):
+            access_token = create_access_token(db_user.email, settings.EXPIRE_DELTA)
+        else:
+            raise Exception()
 
         response = {
             "access_token": access_token,
@@ -91,14 +93,15 @@ def get_current_user(authorization: str = Header(None)):
     if authorization is None:
         raise HTTPException(status_code=401, detail="Missing authorization header")
     try:
-        public_key = open("jwt-key.pub").read()
         token = authorization.split("Bearer ")[1]
         if token in blacklisted_tokens:
             raise HTTPException(status_code=401, detail="Token revoked")
+
+        # Use the same secret key for decoding the JWT
         payload = jwt.decode(
             token,
-            public_key,
-            algorithms=[config.settings.jwt_algorithm],
+            os.environ["JWT_SECRET_KEY"],
+            algorithms=[os.environ["JWT_ALGORITHM"]],
         )
         email = payload.get("sub")
         if email is None:
@@ -106,8 +109,8 @@ def get_current_user(authorization: str = Header(None)):
                 status_code=401, detail="Could not validate credentials"
             )
         return email
-    except jwt.JWTError as e:
-        print(f"JWT Error: {str(e)}")
+    except JWTError as e:
+        raise HTTPException(status_code=401, detail=f"JWT Error: {str(e)}")
 
 
 @auth.get("/protected")
