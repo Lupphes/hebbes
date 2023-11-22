@@ -23,6 +23,7 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+      - timescaledb
 
   # FastAPI Application that runs API for scraper and website
   backend:
@@ -34,6 +35,12 @@ services:
       context: ./backend
     environment:
       - TZ=${TZ}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - JWT_ALGORITHM=${JWT_ALGORITHM}
+      - POSTGRES_URL=${POSTGRES_URL}
+      - EXPIRE_DELTA=${EXPIRE_DELTA}
     ports:
       - "5000:5000"
     depends_on:
@@ -54,12 +61,13 @@ services:
 
   # TimescaleDB container
   timescaledb:
-    image: timescale/timescaledb:latest-pg15
+    image: timescale/timescaledb-ha:pg15-latest
     container_name: timescaledb
     # restart: unless-stopped
     networks:
       - net
     environment:
+      - TIMESCALEDB_TELEMETRY=off
       - PUID=${TSDB_ID}
       - PGID=${TSDB_ID}
       - TZ=${TZ}
@@ -67,9 +75,11 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - ${VOLUMES_PATH}/timescaledb:/var/lib/postgresql/data
+      - ${VOLUMES_PATH}/timescaledb/:/home/postgres/pgdata/data
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    depends_on:
+      - scraper
 
   # Redis container
   redis:
@@ -81,4 +91,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ${VOLUMES_PATH}/redis:/bitnami
+      - ${VOLUMES_PATH}/redis/:/bitnami
+    depends_on:
+      - scraper
+      - timescaledb

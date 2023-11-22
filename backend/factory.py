@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 
 from fastapi.middleware.cors import CORSMiddleware
+from backend.db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
 from backend.db.settings import settings
 import bcrypt
 
@@ -92,11 +93,11 @@ def get_current_user(authorization: str = Header(None)):
         if token in blacklisted_tokens:
             raise HTTPException(status_code=401, detail="Token revoked")
 
-        # Use the same secret key for decoding the JWT
+        private_key, _ = generate_and_retrieve_rsa_keys_serialized()
         payload = jwt.decode(
             token,
-            os.environ["JWT_SECRET_KEY"],
-            algorithms=[os.environ["JWT_ALGORITHM"]],
+            private_key,
+            algorithms=os.environ.get("JWT_ALGORITHM", "RS256"),
         )
         email = payload.get("sub")
         if email is None:
