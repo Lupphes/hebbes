@@ -17,7 +17,10 @@ def createApp():
     app = FastAPI()
     generate_and_retrieve_rsa_keys_serialized()
     print(Base.metadata)
-    Base.metadata.create_all(engine, checkfirst=True)
+    try:
+        Base.metadata.create_all(engine, checkfirst=True)
+    except Exception as e:
+        print(f"Error creating tables: {e}")
 
     # Middleware and router setup
     origins = ["http://localhost:3000"]
