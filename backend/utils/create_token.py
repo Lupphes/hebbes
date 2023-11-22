@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from jose import jwt
 import os
 
-from backend.db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
+from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
 
 
 def create_access_token(email: str, expires_delta: int) -> str:

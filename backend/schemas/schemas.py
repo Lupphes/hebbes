@@ -20,7 +20,7 @@ class User(UserBase):
     id: int = Field(description="The unique identifier of the user")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):

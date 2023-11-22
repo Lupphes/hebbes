@@ -1,23 +1,35 @@
 from fastapi import FastAPI
-from typing import Union
-from db.database import Base, engine
+from fastapi.middleware.cors import CORSMiddleware
+
+from db.database import Base, SessionLocal, engine
 from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
 
-price_bandit = FastAPI()
-
-generate_and_retrieve_rsa_keys_serialized()
-Base.metadata.create_all(bind=engine)
+from routes.auth import router as auth_router
+from routes.hello import router as hello_router
 
 
-@price_bandit.get("/")
-def read_root():
-    return {"Hello": "World"}
+def createApp():
+    app = FastAPI()
+    generate_and_retrieve_rsa_keys_serialized()
+    Base.metadata.create_all(bind=engine)
+
+    # Middleware and router setup
+    origins = ["http://localhost:3000"]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(auth_router, prefix="/auth")
+    app.include_router(hello_router, prefix="/hello")
+
+    return app
 
 
-@price_bandit.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
+price_bandit = createApp()
 
 if __name__ == "__main__":
     import uvicorn
