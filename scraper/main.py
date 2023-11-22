@@ -43,3 +43,4 @@ if __name__ == "__main__":
     main(
         scrape=True, data_folder="./data"
     )  # Set to True to scrape, False to use downloaded data
+    print("Main scraping done!")

@@ -1,25 +1,30 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field, StringConstraints
+from typing import Annotated
 
 
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr = Field(..., description="The user's email address")
 
 
 class UserCreate(UserBase):
-    password: str
+    password: Annotated[str, StringConstraints(min_length=8)] = Field(
+        description="The user's password (minimum 8 characters)"
+    )
 
 
 class UserLogin(UserBase):
-    password: str
+    password: str = Field(description="The user's password for login")
 
 
 class User(UserBase):
-    id: int
+    id: int = Field(description="The unique identifier of the user")
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):
-    access_token: str
-    token_type: str
+    access_token: str = Field(description="The JWT access token")
+    token_type: str = Field(
+        default="bearer", description="The type of the token (typically 'bearer')"
+    )

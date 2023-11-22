@@ -1,16 +1,19 @@
-from db import config
 from datetime import datetime, timedelta
+from jose import jwt
+import os
 
-from jose import jwt, JWTError
+from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
 
 
-def create_access_token(email, expires_delta):
-    to_encode = {"sub": email}
+def create_access_token(email: str, expires_delta: int) -> str:
     expire = datetime.utcnow() + timedelta(minutes=expires_delta)
-    to_encode.update({"exp": expire})
+    expire_timestamp = int(expire.timestamp())
+
+    private_key, _ = generate_and_retrieve_rsa_keys_serialized()
+    to_encode = {"sub": email, "exp": expire_timestamp}
     encoded_jwt = jwt.encode(
         to_encode,
-        config.settings.jwt_secret_key,
-        algorithm=config.settings.jwt_algorithm,
+        private_key,
+        algorithm=os.environ.get("JWT_ALGORITHM", "RS256"),
     )
     return encoded_jwt
