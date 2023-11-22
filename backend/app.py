@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from db.database import Base, SessionLocal, engine
+from db.database import Base, engine
+from models.user import User
+from models.category import Category
+from models.company import Company
+from models.item_category import ItemCategory
+from models.item_company import ItemCompany
 from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
 
 from routes.auth import router as auth_router
@@ -11,7 +16,8 @@ from routes.hello import router as hello_router
 def createApp():
     app = FastAPI()
     generate_and_retrieve_rsa_keys_serialized()
-    Base.metadata.create_all(bind=engine)
+    print(Base.metadata)
+    Base.metadata.create_all(engine, checkfirst=True)
 
     # Middleware and router setup
     origins = ["http://localhost:3000"]
