@@ -8,6 +8,7 @@ from models.company import Company
 from models.item_category import ItemCategory
 from models.item_company import ItemCompany
 from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
+from data_population import databasePopulation
 
 from routes.auth import router as auth_router
 from routes.hello import router as hello_router
@@ -39,6 +40,8 @@ def createApp():
 
 
 price_bandit = createApp()
+
+databasePopulation()
 
 if __name__ == "__main__":
     import uvicorn
