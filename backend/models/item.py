@@ -14,6 +14,6 @@ class Item(Base):
     saleUnitSize_label = Column(String(255))
     measurements = Column(JSON)
     specific = Column(JSON)
-    description = Column(String(300))
+    description = Column(String)
     gln = Column(String(255))
     gtin = Column(String(255))

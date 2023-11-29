@@ -12,6 +12,7 @@ from data_population import databasePopulation
 
 from routes.auth import router as auth_router
 from routes.hello import router as hello_router
+from routes.db_populate import router as db_router
 
 
 def createApp():
@@ -34,6 +35,7 @@ def createApp():
     )
 
     app.include_router(auth_router, prefix="/auth")
+    app.include_router(db_router, prefix="/db")
     app.include_router(hello_router, prefix="/hello")
 
     return app
@@ -41,7 +43,6 @@ def createApp():
 
 price_bandit = createApp()
 
-databasePopulation()
 
 if __name__ == "__main__":
     import uvicorn
