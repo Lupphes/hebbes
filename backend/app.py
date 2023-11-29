@@ -4,15 +4,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from db.database import Base, engine
 from models.user import User
 from models.category import Category
-from models.company import Company
-from models.item_category import ItemCategory
-from models.item_company import ItemCompany
+from models.stores import Store
+from models.item_category import item_category_association
+from models.item_store import item_store_association
 from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
-from data_population import databasePopulation
 
 from routes.auth import router as auth_router
 from routes.hello import router as hello_router
-from routes.db_populate import router as db_router
+from routes.item import router as db_router
 
 
 def createApp():

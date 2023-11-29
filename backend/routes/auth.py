@@ -11,7 +11,7 @@ import bcrypt
 from sqlalchemy.orm import Session
 
 
-from crud import crud
+from crud import crud_user
 from schemas import schemas
 
 router = APIRouter()
@@ -19,22 +19,22 @@ router = APIRouter()
 
 @router.post("/register", response_model=schemas.User)
 def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=user.email)
+    db_user = crud_user.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
 
-    return crud.register_user(db=db, userCreate=user)
+    return crud_user.register_user(db=db, userCreate=user)
 
 
 @router.get("/users", response_model=list[schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    users = crud.get_users(db, skip=skip, limit=limit)
+    users = crud_user.get_users(db, skip=skip, limit=limit)
     return users
 
 
 @router.post("/login")
 async def login(userLogin: schemas.UserLogin, db: Session = Depends(get_db)):
-    db_user = crud.get_user_by_email(db, email=userLogin.email)
+    db_user = crud_user.get_user_by_email(db, email=userLogin.email)
     if db_user is not None and bcrypt.checkpw(
         userLogin.password.encode("utf-8"), db_user.password.encode("utf-8")
     ):
