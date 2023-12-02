@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, StringConstraints
-from typing import Annotated
+from typing import List, Optional, Annotated
+from datetime import datetime
 
 
 class UserBase(BaseModel):
@@ -18,6 +19,8 @@ class UserLogin(UserBase):
 
 class User(UserBase):
     id: int = Field(description="The unique identifier of the user")
+    is_active: Optional[bool] = Field(default=True, description="Is the user active")
+    created_at: Optional[datetime] = Field(description="User creation time")
 
     class Config:
         from_attributes = True
@@ -28,3 +31,42 @@ class Token(BaseModel):
     token_type: str = Field(
         default="bearer", description="The type of the token (typically 'bearer')"
     )
+
+
+class PictureLink(BaseModel):
+    width: int
+    height: int
+    url: str
+
+
+class Category(BaseModel):
+    id: int
+    name: str
+    pictures: Optional[List[PictureLink]] = None
+    subcategory: Optional["Category"] = None
+
+    class Config:
+        from_attributes = True
+
+
+class Store(BaseModel):
+    id: int = Field(description="The unique identifier of the store")
+    name: str
+    link: str
+    price: Optional[float]
+    discount_info: List[Optional[dict]]
+
+
+class ItemResponse(BaseModel):
+    id: int
+    name: str
+    brand: str
+    description: str
+    gln: str
+    gtin: str
+    measurements_units: str
+    measurements_amount: str
+    measurements_label: str
+    picture_link: Optional[PictureLink]
+    categories: List[Category]
+    stores: List[Store]
