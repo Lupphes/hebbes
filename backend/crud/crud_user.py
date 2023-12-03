@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 import bcrypt
 import json
 
-from models import user, category, item, stores, item_category
+from models import user, category, item, stores
 from schemas import schemas
 
 

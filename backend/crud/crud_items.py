@@ -1,16 +1,19 @@
 from sqlalchemy.orm import Session, joinedload
 import json
 
-from models import category, item, stores
+from models.item import PictureLink, Item
+from models.stores import Store
+from models.category import Category
+from utils.build_category import build_category_hierarchy_from_path
 
 
 def get_top_100_items(db: Session, skip: int = 0, limit: int = 100):
     return (
-        db.query(item.Item)
+        db.query(Item)
         .options(
-            joinedload(item.Item.picture_link),
-            joinedload(item.Item.categories),
-            joinedload(item.Item.stores),
+            joinedload(Item.picture_link),
+            joinedload(Item.categories).joinedload(Category.subcategories),
+            joinedload(Item.stores),
         )
         .offset(skip)
         .limit(limit)
@@ -20,17 +23,22 @@ def get_top_100_items(db: Session, skip: int = 0, limit: int = 100):
 
 def populate_tables(db: Session):
     file_path = "mock_data/merged_product.json"
-    all_added = False
+    category_tree_path = "mock_data/category_tree_full.json"
+
     with open(file_path, "r") as file:
         data = json.load(file)
 
+    with open(category_tree_path, "r") as file:
+        category_tree = json.load(file)
+
     for item_data in data:
-        # Create Category instance
-        new_category = category.Category(
-            sub_category_name=item_data["category"]["sub_category_name"],
-            top_category_name=item_data["category"]["top_category_name"],
+        # Build Category Hierarchy
+        category_hierarchy = build_category_hierarchy_from_path(
+            item_data["category"]["category_path"], category_tree, db
         )
-        new_item = item.Item(
+
+        # Create Item instance
+        new_item = Item(
             name=item_data["name"],
             brand=item_data["brand"],
             description=item_data["description"],
@@ -39,29 +47,35 @@ def populate_tables(db: Session):
             measurements_units=item_data["measurements"]["units"],
             measurements_amount=item_data["measurements"]["amount"],
             measurements_label=item_data["measurements"]["label"],
-            categories=[new_category],
+            categories=[category_hierarchy] if category_hierarchy else [],
         )
-        if item_data["piture_links"]:
-            new_item.picture_link = item.PictureLink(
-                width=item_data["piture_links"][0][
-                    "width"
-                ],  # Assuming there is at least one element in the array
-                height=item_data["piture_links"][0]["height"],
-                url=item_data["piture_links"][0]["url"],
+
+        # Add PictureLink instances to Item
+        for picture in item_data.get(
+            "piture_links", []
+        ):  # Check the spelling of 'piture_links'
+            new_picture_link = PictureLink(
+                width=picture["width"], height=picture["height"], url=picture["url"]
             )
+            db.add(new_picture_link)
+            new_item.picture_link = new_picture_link
+
         db.add(new_item)
+
+        # Add Store instances to Item
         for store_name, store_data in item_data["stores"].items():
             price = (
                 float(store_data["price"]) if store_data["price"] != "null" else None
             )
-            new_store = stores.Store(
+            new_store = Store(
                 name=store_name,
                 link=store_data["link"],
                 price=price,
-                discount_info=store_data.get("discount_info"),
+                discount_info=store_data.get("discount_info", []),
             )
+            db.add(new_store)
             new_item.stores.append(new_store)
-        all_added = True
+
     db.commit()
     db.close()
-    return all_added
+    return True

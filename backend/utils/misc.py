@@ -1,3 +1,4 @@
+from sqlalchemy import Column
 from db.database import SessionLocal
 
 blacklisted_tokens = set()

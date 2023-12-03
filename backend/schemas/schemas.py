@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, StringConstraints
 from typing import List, Optional, Annotated
+from datetime import datetime
 
 
 class UserBase(BaseModel):
@@ -18,6 +19,8 @@ class UserLogin(UserBase):
 
 class User(UserBase):
     id: int = Field(description="The unique identifier of the user")
+    is_active: Optional[bool] = Field(default=True, description="Is the user active")
+    created_at: Optional[datetime] = Field(description="User creation time")
 
     class Config:
         from_attributes = True
@@ -37,11 +40,17 @@ class PictureLink(BaseModel):
 
 
 class Category(BaseModel):
-    sub_category_name: str
-    top_category_name: str
+    id: int
+    name: str
+    pictures: Optional[List[PictureLink]] = None
+    subcategory: Optional["Category"] = None
+
+    class Config:
+        from_attributes = True
 
 
 class Store(BaseModel):
+    id: int = Field(description="The unique identifier of the store")
     name: str
     link: str
     price: Optional[float]
@@ -58,6 +67,6 @@ class ItemResponse(BaseModel):
     measurements_units: str
     measurements_amount: str
     measurements_label: str
-    picture_links: PictureLink
+    picture_link: Optional[PictureLink]
     categories: List[Category]
     stores: List[Store]

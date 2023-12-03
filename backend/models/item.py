@@ -1,14 +1,15 @@
 from db.database import Base
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Table
-from sqlalchemy.orm import relationship, declarative_base
-from models.item_category import item_category_association
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from models.item_store import item_store_association
+from .category import item_category_association
 
 
 class PictureLink(Base):
     __tablename__ = "picture_links"
     id = Column(Integer, primary_key=True)
     item_id = Column(Integer, ForeignKey("items.id"), nullable=True)
+    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
     width = Column(Integer, nullable=True)
     height = Column(Integer, nullable=True)
     url = Column(String, nullable=True)
