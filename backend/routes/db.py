@@ -20,15 +20,15 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = get_top_100_items(db, skip=skip, limit=limit)
     items_response = [
         ItemResponse(
-            id=item.id,
-            name=item.name,
-            brand=item.brand,
-            description=item.description,
-            gln=item.gln,
-            gtin=item.gtin,
-            measurements_units=item.measurements_units,
-            measurements_amount=item.measurements_amount,
-            measurements_label=item.measurements_label,
+            id=item.id,  # type: ignore
+            name=item.name,  # type: ignore
+            brand=item.brand,  # type: ignore
+            description=item.description,  # type: ignore
+            gln=item.gln,  # type: ignore
+            gtin=item.gtin,  # type: ignore
+            measurements_units=item.measurements_units,  # type: ignore
+            measurements_amount=item.measurements_amount,  # type: ignore
+            measurements_label=item.measurements_label,  # type: ignore
             picture_link=PictureLink(
                 width=item.picture_link.width
                 if item.picture_link and item.picture_link.width is not None

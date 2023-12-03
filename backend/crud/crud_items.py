@@ -4,10 +4,10 @@ import json
 from models.item import PictureLink, Item
 from models.stores import Store
 from models.category import Category
-from utils.build_category import build_category_hierarchy_from_path
+from utils.build_category import create_category_objects
 
 
-def get_top_100_items(db: Session, skip: int = 0, limit: int = 100):
+def get_top_100_items(db: Session, skip: int = 0, limit: int = 300):
     return (
         db.query(Item)
         .options(
@@ -33,10 +33,9 @@ def populate_tables(db: Session):
 
     for item_data in data:
         # Build Category Hierarchy
-        category_hierarchy = build_category_hierarchy_from_path(
+        category_hierarchy = create_category_objects(
             item_data["category"]["category_path"], category_tree, db
         )
-
         # Create Item instance
         new_item = Item(
             name=item_data["name"],
@@ -47,7 +46,7 @@ def populate_tables(db: Session):
             measurements_units=item_data["measurements"]["units"],
             measurements_amount=item_data["measurements"]["amount"],
             measurements_label=item_data["measurements"]["label"],
-            categories=[category_hierarchy] if category_hierarchy else [],
+            categories=category_hierarchy if category_hierarchy else [],
         )
 
         # Add PictureLink instances to Item
@@ -75,7 +74,6 @@ def populate_tables(db: Session):
             )
             db.add(new_store)
             new_item.stores.append(new_store)
-
     db.commit()
     db.close()
     return True

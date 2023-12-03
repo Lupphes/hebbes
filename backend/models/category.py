@@ -1,6 +1,7 @@
 from db.database import Base
+from sqlalchemy import Column, Integer, String
 from sqlalchemy import Column, ForeignKey, Integer, String, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 
 item_category_association = Table(
@@ -16,9 +17,14 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=True)
     parent_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
-    subcategories = relationship("Category", backref="parent", remote_side=[id])
+    subcategories = relationship(
+        "Category", backref=backref("parent", remote_side=[id])
+    )
     pictures = relationship("PictureLink", backref="category")
 
     items = relationship(
         "Item", secondary=item_category_association, back_populates="categories"
     )
+
+    def __str__(self):
+        return f"Category(id={self.id}, name={self.name}, parent_id={self.parent_id}, subcategories={self.subcategories})"

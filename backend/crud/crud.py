@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
 import bcrypt
-import json
 
-from models import user, category, item, stores
+from models import user
 from schemas import schemas
 
 

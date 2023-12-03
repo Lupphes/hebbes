@@ -3,7 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from db.database import Base, engine
 from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
-
+from models.user import User
+from models.category import Category
+from models.stores import Store
+from models.item import Item
 from routes.auth import router as auth_router
 from routes.hello import router as hello_router
 from routes.db import router as db_router
@@ -40,5 +43,13 @@ price_bandit = createApp()
 
 if __name__ == "__main__":
     import uvicorn
+    import logging
 
+    # ....CODE....
+    logging.basicConfig()
+    logging.getLogger("sqlalchemy").setLevel(logging.ERROR)
+    uvicorn_error = logging.getLogger("uvicorn.error")
+    uvicorn_error.disabled = True
+    uvicorn_access = logging.getLogger("uvicorn.access")
+    uvicorn_access.disabled = True
     uvicorn.run("app:price_bandit", host="0.0.0.0", port=5000, reload=True)
