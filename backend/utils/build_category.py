@@ -75,47 +75,42 @@ def create_category_objects(ids, category_tree, db):
         return []
 
     category_objects = []
-    parent_id = ids[0]
-    parent_data = find_category_by_id(category_tree, parent_id)
+    current_category = None
 
-    if not parent_data:
-        # If no category data is found for the parent id, return an empty list
-        return []
-
-    parent_category = Category(id=parent_data["id"], name=parent_data["name"])
-
-    for pic in parent_data.get("images", []):
-        new_pic = PictureLink(
-            width=pic.get("width"), height=pic.get("height"), url=pic.get("url")
-        )
-        parent_category.pictures.append(new_pic)
-
-    category_objects.append(parent_category)
-    current_category = parent_category
-
-    for category_id in ids[1:]:
-        category_data = find_category_by_id(parent_data["subcategories"], category_id)
+    for category_id in ids:
+        category_data = find_category_by_id(category_tree, category_id)
         if category_data:
-            existing_category = db.query(Category).filter_by(id=category_id).first()
-            if existing_category:
-                # Update existing category with new data
-                continue
-            else:
-                category = Category(id=category_data["id"], name=category_data["name"])
-                category_objects.append(category)
+            category = db.query(Category).filter_by(id_category=category_id).first()
+            if not category:
+                # If a category with this id_category does not exist, create a new one
+                category = Category(id_category=category_data["id"], name=category_data["name"])
+                print("category ", category)
 
-                if current_category is not None:
-                    current_category.subcategories.append(category)
+                images = category_data.get("images", [])
+                new_pic = None
+                if len(images) >= 3:
+                    pic = images[2]
+                    new_pic = PictureLink(
+                        width=pic.get("width"),
+                        height=pic.get("height"),
+                        url=pic.get("url"),
+                    )
+                elif len(images) == 1:
+                    pic = images[0]
+                    new_pic = PictureLink(
+                        width=pic.get("width"),
+                        height=pic.get("height"),
+                        url=pic.get("url"),
+                    )
+                category.pictures.append(new_pic)
+                db.add(category)
+                db.commit()
 
-                    for pic in category_data.get("images", []):
-                        new_pic = PictureLink(
-                            width=pic.get("width"),
-                            height=pic.get("height"),
-                            url=pic.get("url"),
-                        )
-                        category.pictures.append(new_pic)
-                    db.add(category)
-                    current_category = category
-                    parent_data = category_data
+            if current_category is not None:
+                # If there is a current category, add the new category as its subcategory
+                current_category.subcategories.append(category)
+
+            category_objects.append(category)
+            current_category = category
 
     return category_objects

@@ -50,13 +50,11 @@ def populate_tables(db: Session):
         )
 
         # Add PictureLink instances to Item
-        for picture in item_data.get(
-            "piture_links", []
-        ):  # Check the spelling of 'piture_links'
+        pictures = item_data.get("piture_links", [])
+        if len(pictures) >= 3:
             new_picture_link = PictureLink(
-                width=picture["width"], height=picture["height"], url=picture["url"]
+                width=pictures[3]["width"], height=pictures[3]["height"], url=pictures[3]["url"]
             )
-            db.add(new_picture_link)
             new_item.picture_link = new_picture_link
 
         db.add(new_item)

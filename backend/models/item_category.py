@@ -7,5 +7,5 @@ item_category_association = Table(
     "item_category_association",
     Base.metadata,
     Column("item_id", Integer, ForeignKey("items.id")),
-    Column("category_id", Integer, ForeignKey("categories.id")),
+    Column("category_id", Integer, ForeignKey("categories.id_category")),
 )

@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from db.database import Base, engine
 from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
+from models.item_category import item_category_association
+from models.item_store import item_store_association
 from models.user import User
 from models.category import Category
 from models.stores import Store
