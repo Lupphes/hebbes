@@ -51,11 +51,11 @@ const StoreListingContainer: NextPage<SingleProductList> = ({ singleProducts }) 
                       src={product.imageSrc}
                     />
                   
-                  <div className="absolute top-[0px] left-[0px] text-smi text-black flex items-center justify-center w-[55.6px] h-[28.2px]">
+                  <div className="absolute top-[35%] left-[0px] text-smi text-black flex items-center justify-center w-[55.6px] h-[28.2px]">
                     {product.price ? `€ ${product.price}`: null}
                   </div>
-                  <div className="absolute top-[27px] left-[0px] text-2xs flex items-center justify-center w-[55.6px] h-[18.4px]">
-                    {!product.price ? ("No option") : (index == indexOfCheapest ? `Cheapest` : null)}
+                  <div className="absolute top-[55%] left-[0px] text-2xs text-darkolivegreen-100 flex items-center justify-center w-[55.6px] h-[18.4px]">
+                    {(index == indexOfCheapest ? `Cheapest` : null)}
                   </div>
                   
                   <img
