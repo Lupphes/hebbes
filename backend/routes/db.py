@@ -1,10 +1,10 @@
 from utils.misc import get_db
 from fastapi import Depends, APIRouter
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
-from schemas.schemas import ItemResponse, ItemResponse, PictureLink, Store, Category
+from schemas.schemas import ItemResponse, ItemResponse, PictureLinkBase, Store, Category
 
-from crud.crud_items import populate_tables, get_top_100_items
+from crud.crud_items import populate_tables, get_items
 
 
 router = APIRouter()
@@ -15,9 +15,9 @@ def populate_items(db: Session = Depends(get_db)):
     return populate_tables(db=db)
 
 
-@router.get("/items", response_model=List[ItemResponse])
-def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = get_top_100_items(db, skip=skip, limit=limit)
+@router.get("/items",  response_model=List[ItemResponse])
+def read_items(id: Optional[int] = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    items = get_items(db, id=id, skip=skip, limit=limit)
     items_response = [
         ItemResponse(
             id=item.id,  # type: ignore
@@ -29,7 +29,10 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
             measurements_units=item.measurements_units,  # type: ignore
             measurements_amount=item.measurements_amount,  # type: ignore
             measurements_label=item.measurements_label,  # type: ignore
-            picture_link=PictureLink(
+            picture_link=PictureLinkBase(
+                id=item.picture_link.id,
+                item_id=item.picture_link.item_id,
+                category_id=item.picture_link.category_id,
                 width=item.picture_link.width
                 if item.picture_link and item.picture_link.width is not None
                 else 0,
@@ -40,9 +43,22 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
                 if item.picture_link and isinstance(item.picture_link.url, str)
                 else "",
             ),
-            categories=[Category(id=cat.id, name=cat.name) for cat in item.categories]
-            if item.categories
-            else [],
+            categories=[
+                Category(
+                    id=cat.id,
+                    id_category=cat.id_category,
+                    name=cat.name,
+                    parent_id=cat.parent_id,
+                    pictures=[PictureLinkBase(
+                        id=picture.id,
+                        item_id=picture.item_id,
+                        category_id=picture.category_id,
+                        width=picture.width,
+                        height=picture.height,
+                        url=picture.url,
+                    ) for picture in cat.pictures]
+                ) for cat in item.categories
+            ] if item.categories else [],
             stores=[
                 Store(
                     id=store.id,

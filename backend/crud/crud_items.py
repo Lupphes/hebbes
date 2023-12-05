@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy.orm import Session, joinedload
 import json
 
@@ -7,18 +8,18 @@ from models.category import Category
 from utils.build_category import create_category_objects
 
 
-def get_top_100_items(db: Session, skip: int = 0, limit: int = 300):
-    return (
-        db.query(Item)
-        .options(
+def get_items(db: Session, id: Optional[int] =None, skip: int = 0, limit: int = 100):
+    query = db.query(Item).options(
             joinedload(Item.picture_link),
-            joinedload(Item.categories).joinedload(Category.subcategories),
+            joinedload(Item.categories).joinedload(Category.pictures),
             joinedload(Item.stores),
         )
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
+    if id is not None:
+        # If an id is provided, filter the query by id
+        query = query.filter(Item.id == id)
+    
+    return query.offset(skip).limit(limit).all()
+    
 
 
 def populate_tables(db: Session):

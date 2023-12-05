@@ -33,7 +33,10 @@ class Token(BaseModel):
     )
 
 
-class PictureLink(BaseModel):
+class PictureLinkBase(BaseModel):
+    id: Optional[int]
+    item_id: Optional[int]
+    category_id: Optional[int]
     width: int
     height: int
     url: str
@@ -42,12 +45,13 @@ class PictureLink(BaseModel):
 class Category(BaseModel):
     id: int
     name: str
-    pictures: Optional[List[PictureLink]] = None
-    subcategory: Optional["Category"] = None
+    parent_id: Optional[int]
+
+    pictures: List[PictureLinkBase] = []
 
     class Config:
         from_attributes = True
-
+        orm_mode = True
 
 class Store(BaseModel):
     id: int = Field(description="The unique identifier of the store")
@@ -67,6 +71,10 @@ class ItemResponse(BaseModel):
     measurements_units: str
     measurements_amount: str
     measurements_label: str
-    picture_link: Optional[PictureLink]
+    picture_link: Optional[PictureLinkBase]
     categories: List[Category]
     stores: List[Store]
+
+    class Config:
+        from_attributes = True
+        orm_mode = True
