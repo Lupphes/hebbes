@@ -70,10 +70,10 @@ const Header: NextPage<HeaderType> = ({
       style={frameStyle}
     >
       <header className="bg-text-white-op-100 w-[1440px] h-[100px] flex flex-row items-center justify-start pt-[31px] px-[41.323890686035156px] pb-7 box-border gap-[71px] lg:w-auto lg:[align-self:unset] lg:h-auto lg:flex-col lg:gap-[12px] lg:items-center lg:justify-center md:w-auto md:[align-self:unset] md:h-auto md:flex-col md:gap-[15px] md:items-center md:justify-center md:pb-[29px] md:box-border sm:flex-col">
-        <div className="w-[424px] h-6 flex flex-row items-center justify-start gap-[68px] sm:hidden sm:w-auto sm:[align-self:unset] sm:flex-row sm:items-center sm:justify-center">
+        <div className="w-[424px] h-6 flex flex-row items-center justify-start sm:w-auto sm:[align-self:unset] sm:flex-row sm:items-center sm:justify-center">
           <Button
             className="relative"
-            sx={{ width: 48.3 }}
+            sx={{ width: 'calc(25% - 10px)' }} // Adjust the percentage as needed
             color="success"
             variant="outlined"
           >
@@ -81,7 +81,7 @@ const Header: NextPage<HeaderType> = ({
           </Button>
           <Button
             className="relative"
-            sx={{ width: 46.3 }}
+            sx={{ width: 'calc(25% - 10px)' }}
             color="success"
             variant="outlined"
           >
@@ -89,7 +89,7 @@ const Header: NextPage<HeaderType> = ({
           </Button>
           <Button
             className="relative cursor-pointer"
-            sx={{ width: 49.3 }}
+            sx={{ width: 'calc(25% - 10px)' }}
             color="success"
             variant="outlined"
             onClick={onAboutClick}
@@ -98,7 +98,7 @@ const Header: NextPage<HeaderType> = ({
           </Button>
           <Button
             className="relative cursor-pointer"
-            sx={{ width: 74.5 }}
+            sx={{ width: 'calc(25% - 10px)' }}
             color="success"
             variant="outlined"
             onClick={onPremiumClick}
