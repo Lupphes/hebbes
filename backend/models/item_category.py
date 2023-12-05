@@ -1,11 +1,10 @@
 from db.database import Base
-from sqlalchemy import Column, ForeignKey, Integer, Table
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, ForeignKey, Table
 
 
 item_category_association = Table(
     "item_category_association",
     Base.metadata,
-    Column("item_id", Integer, ForeignKey("items.id")),
-    Column("category_id", Integer, ForeignKey("categories.id_category")),
+    Column("item_id", Integer, ForeignKey("item.id")),
+    Column("category_id", Integer, ForeignKey("category.id")),
 )

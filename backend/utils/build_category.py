@@ -1,6 +1,4 @@
-from models.category import Category
-from models.item import PictureLink
-
+from models import Category, Picture
 
 UNCATEGORIZED_ID = 9999  # Assuming 9999 as the ID for 'Uncategorized'
 
@@ -35,24 +33,26 @@ def create_category_objects(ids, category_tree, db):
     for category_id in ids:
         category_data = find_category_by_id(category_tree, category_id)
         if category_data:
-            category = db.query(Category).filter_by(id_category=category_id).first()
+            category = db.query(Category).filter_by(category_id=category_id).first()
             if not category:
-                # If a category with this id_category does not exist, create a new one
-                category = Category(id_category=category_data["id"], name=category_data["name"])
+                # If a category with this category_id does not exist, create a new one
+                category = Category(
+                    category_id=category_data["id"], name=category_data["name"]
+                )
                 print("category ", category)
 
                 images = category_data.get("images", [])
                 new_pic = None
                 if len(images) >= 3:
                     pic = images[2]
-                    new_pic = PictureLink(
+                    new_pic = Picture(
                         width=pic.get("width"),
                         height=pic.get("height"),
                         url=pic.get("url"),
                     )
                 elif len(images) == 1:
                     pic = images[0]
-                    new_pic = PictureLink(
+                    new_pic = Picture(
                         width=pic.get("width"),
                         height=pic.get("height"),
                         url=pic.get("url"),

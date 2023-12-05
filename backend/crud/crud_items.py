@@ -1,25 +1,23 @@
-from typing import Optional
+from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
 import json
 
-from models.item import PictureLink, Item
-from models.stores import Store
-from models.category import Category
+from models import Category, Store, Item, Picture
 from utils.build_category import create_category_objects
 
 
-def get_items(db: Session, id: Optional[int] =None, skip: int = 0, limit: int = 100):
+def get_items(
+    db: Session, id: Optional[int] = None, skip: int = 0, limit: int = 100
+) -> List[Item]:
     query = db.query(Item).options(
-            joinedload(Item.picture_link),
-            joinedload(Item.categories).joinedload(Category.pictures),
-            joinedload(Item.stores),
-        )
+        joinedload(Item.picture),
+        joinedload(Item.categories).joinedload(Category.pictures),
+        joinedload(Item.stores),
+    )
     if id is not None:
-        # If an id is provided, filter the query by id
         query = query.filter(Item.id == id)
-    
+
     return query.offset(skip).limit(limit).all()
-    
 
 
 def populate_tables(db: Session):
@@ -50,13 +48,15 @@ def populate_tables(db: Session):
             categories=category_hierarchy if category_hierarchy else [],
         )
 
-        # Add PictureLink instances to Item
+        # Add Picture instances to Item
         pictures = item_data.get("piture_links", [])
         if len(pictures) >= 3:
-            new_picture_link = PictureLink(
-                width=pictures[3]["width"], height=pictures[3]["height"], url=pictures[3]["url"]
+            new_picture_link = Picture(
+                width=pictures[3]["width"],
+                height=pictures[3]["height"],
+                url=pictures[3]["url"],
             )
-            new_item.picture_link = new_picture_link
+            new_item.picture = new_picture_link
 
         db.add(new_item)
 

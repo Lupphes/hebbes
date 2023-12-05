@@ -3,21 +3,21 @@ from typing import List, Optional, Annotated
 from datetime import datetime
 
 
-class UserBase(BaseModel):
+class UserBaseSchema(BaseModel):
     email: EmailStr = Field(..., description="The user's email address")
 
 
-class UserCreate(UserBase):
+class UserCreateSchema(UserBaseSchema):
     password: Annotated[str, StringConstraints(min_length=8)] = Field(
         description="The user's password (minimum 8 characters)"
     )
 
 
-class UserLogin(UserBase):
+class UserLoginSchema(UserBaseSchema):
     password: str = Field(description="The user's password for login")
 
 
-class User(UserBase):
+class UserSchema(UserBaseSchema):
     id: int = Field(description="The unique identifier of the user")
     is_active: Optional[bool] = Field(default=True, description="Is the user active")
     created_at: Optional[datetime] = Field(description="User creation time")
@@ -26,14 +26,14 @@ class User(UserBase):
         from_attributes = True
 
 
-class Token(BaseModel):
+class TokenSchema(BaseModel):
     access_token: str = Field(description="The JWT access token")
     token_type: str = Field(
         default="bearer", description="The type of the token (typically 'bearer')"
     )
 
 
-class PictureLinkBase(BaseModel):
+class PictureSchema(BaseModel):
     id: Optional[int]
     item_id: Optional[int]
     category_id: Optional[int]
@@ -42,18 +42,19 @@ class PictureLinkBase(BaseModel):
     url: str
 
 
-class Category(BaseModel):
+class CategorySchema(BaseModel):
     id: int
+    category_id: Optional[int]  # Adjusted to reflect the SQLAlchemy model
     name: str
     parent_id: Optional[int]
 
-    pictures: List[PictureLinkBase] = []
+    pictures: List[PictureSchema] = []
 
     class Config:
-        from_attributes = True
         orm_mode = True
 
-class Store(BaseModel):
+
+class StoreSchema(BaseModel):
     id: int = Field(description="The unique identifier of the store")
     name: str
     link: str
@@ -61,7 +62,7 @@ class Store(BaseModel):
     discount_info: List[Optional[dict]]
 
 
-class ItemResponse(BaseModel):
+class ItemSchema(BaseModel):
     id: int
     name: str
     brand: str
@@ -71,9 +72,9 @@ class ItemResponse(BaseModel):
     measurements_units: str
     measurements_amount: str
     measurements_label: str
-    picture_link: Optional[PictureLinkBase]
-    categories: List[Category]
-    stores: List[Store]
+    picture_link: Optional[PictureSchema]
+    categories: List[CategorySchema]
+    stores: List[StoreSchema]
 
     class Config:
         from_attributes = True

@@ -2,7 +2,13 @@ from utils.misc import get_db
 from fastapi import Depends, APIRouter
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from schemas.schemas import ItemResponse, ItemResponse, PictureLinkBase, Store, Category
+from schemas.schemas import (
+    ItemSchema,
+    ItemSchema,
+    PictureSchema,
+    StoreSchema,
+    CategorySchema,
+)
 
 from crud.crud_items import populate_tables, get_items
 
@@ -15,52 +21,63 @@ def populate_items(db: Session = Depends(get_db)):
     return populate_tables(db=db)
 
 
-@router.get("/items",  response_model=List[ItemResponse])
-def read_items(id: Optional[int] = None, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+@router.get("/items", response_model=List[ItemSchema])
+def read_items(
+    id: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+):
     items = get_items(db, id=id, skip=skip, limit=limit)
     items_response = [
-        ItemResponse(
-            id=item.id,  # type: ignore
-            name=item.name,  # type: ignore
-            brand=item.brand,  # type: ignore
-            description=item.description,  # type: ignore
-            gln=item.gln,  # type: ignore
-            gtin=item.gtin,  # type: ignore
-            measurements_units=item.measurements_units,  # type: ignore
-            measurements_amount=item.measurements_amount,  # type: ignore
-            measurements_label=item.measurements_label,  # type: ignore
-            picture_link=PictureLinkBase(
-                id=item.picture_link.id,
-                item_id=item.picture_link.item_id,
-                category_id=item.picture_link.category_id,
-                width=item.picture_link.width
-                if item.picture_link and item.picture_link.width is not None
+        ItemSchema(
+            id=item.id,
+            name=item.name,
+            brand=item.brand,
+            description=item.description,
+            gln=item.gln,
+            gtin=item.gtin,
+            measurements_units=item.measurements_units,
+            measurements_amount=item.measurements_amount,
+            measurements_label=item.measurements_label,
+            picture_link=PictureSchema(
+                id=item.picture.id,
+                item_id=item.picture.item_id,
+                category_id=item.picture.category_id,
+                width=item.picture.width
+                if item.picture and item.picture.width is not None
                 else 0,
-                height=item.picture_link.height
-                if item.picture_link and item.picture_link.height is not None
+                height=item.picture.height
+                if item.picture and item.picture.height is not None
                 else 0,
-                url=item.picture_link.url
-                if item.picture_link and isinstance(item.picture_link.url, str)
+                url=item.picture.url
+                if item.picture and isinstance(item.picture.url, str)
                 else "",
             ),
             categories=[
-                Category(
+                CategorySchema(
                     id=cat.id,
-                    id_category=cat.id_category,
+                    category_id=cat.category_id,
                     name=cat.name,
                     parent_id=cat.parent_id,
-                    pictures=[PictureLinkBase(
-                        id=picture.id,
-                        item_id=picture.item_id,
-                        category_id=picture.category_id,
-                        width=picture.width,
-                        height=picture.height,
-                        url=picture.url,
-                    ) for picture in cat.pictures]
-                ) for cat in item.categories
-            ] if item.categories else [],
+                    pictures=[
+                        PictureSchema(
+                            id=picture.id,
+                            item_id=picture.item_id,
+                            category_id=picture.category_id,
+                            width=picture.width,
+                            height=picture.height,
+                            url=picture.url,
+                        )
+                        for picture in cat.pictures
+                    ],
+                )
+                for cat in item.categories
+            ]
+            if item.categories
+            else [],
             stores=[
-                Store(
+                StoreSchema(
                     id=store.id,
                     name=store.name,
                     link=store.link,

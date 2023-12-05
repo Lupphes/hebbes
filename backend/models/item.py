@@ -1,38 +1,37 @@
+from typing import TYPE_CHECKING, List
 from db.database import Base
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import relationship, mapped_column, Mapped
+
+from models.item_category import item_category_association
 from models.item_store import item_store_association
-from .category import item_category_association
 
-
-class PictureLink(Base):
-    __tablename__ = "picture_links"
-    id = Column(Integer, primary_key=True)
-    item_id = Column(Integer, ForeignKey("items.id"), nullable=True)
-    category_id = Column(Integer, ForeignKey("categories.id"), nullable=True)
-    width = Column(Integer, nullable=True)
-    height = Column(Integer, nullable=True)
-    url = Column(String, nullable=True)
+if TYPE_CHECKING:
+    from .picture import Picture
+    from .store import Store
+    from .category import Category
 
 
 class Item(Base):
-    __tablename__ = "items"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255))
-    picture_link = relationship("PictureLink", uselist=False)
+    __tablename__ = "item"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(255))
+    brand: Mapped[str] = mapped_column(String(50))
+    description: Mapped[str] = mapped_column(String)
+    gln: Mapped[str] = mapped_column(String(14))
+    gtin: Mapped[str] = mapped_column(String(14))
 
-    brand = Column(String(50))
+    measurements_units: Mapped[str] = mapped_column(String)
+    measurements_amount: Mapped[str] = mapped_column(String)
+    measurements_label: Mapped[str] = mapped_column(String)
 
-    measurements_units = Column(String)
-    measurements_amount = Column(String)
-    measurements_label = Column(String)
-
-    description = Column(String)
-    gln = Column(String(255))
-    gtin = Column(String(255))
-    categories = relationship(
-        "Category", secondary=item_category_association, back_populates="items"
+    picture: Mapped["Picture"] = relationship(
+        "Picture", uselist=False, back_populates="item"
     )
-    stores = relationship(
+    stores: Mapped[List["Store"]] = relationship(
         "Store", secondary=item_store_association, back_populates="items"
+    )
+    categories: Mapped[List["Category"]] = relationship(
+        "Category", secondary=item_category_association, back_populates="items"
     )
