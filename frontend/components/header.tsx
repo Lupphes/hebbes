@@ -7,6 +7,8 @@ import {
   Icon,
   IconButton,
 } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+
 
 type HeaderType = {
   home?: string;
@@ -64,6 +66,8 @@ const Header: NextPage<HeaderType> = ({
     };
   }, [rectangleIconWidth, rectangleIconHeight]);
 
+  const isMobile = useMediaQuery("(max-width: 425px)");
+
   return (
     <div
       className="w-[1440px] overflow-hidden flex flex-col items-center justify-start text-left text-29xl text-black font-poppins"
@@ -106,7 +110,7 @@ const Header: NextPage<HeaderType> = ({
             Premium
           </Button>
         </div>
-        <div className="w-[703px] flex flex-col items-center justify-center sm:w-[400px]">
+        <div className="w-[703px] flex flex-col items-center justify-center md:w-[95%] sm:w-[95%]">
           <TextField
             className="[border:none] bg-[transparent] self-stretch relative"
             color="success"
