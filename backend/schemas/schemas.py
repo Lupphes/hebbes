@@ -44,7 +44,7 @@ class PictureSchema(BaseModel):
 
 class CategorySchema(BaseModel):
     id: int
-    category_id: Optional[int]  # Adjusted to reflect the SQLAlchemy model
+    category_id: Optional[int]
     name: str
     parent_id: Optional[int]
 

@@ -1,5 +1,5 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, aliased
 import json
 
 from models import Category, Store, Item, Picture
@@ -7,15 +7,31 @@ from utils.build_category import create_category_objects
 
 
 def get_items(
-    db: Session, id: Optional[int] = None, skip: int = 0, limit: int = 100
+    db: Session,
+    id: Optional[int] = None,
+    category_id: Optional[int] = None,
+    store_id: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 100,
 ) -> List[Item]:
     query = db.query(Item).options(
         joinedload(Item.picture),
         joinedload(Item.categories).joinedload(Category.pictures),
         joinedload(Item.stores),
     )
+
     if id is not None:
         query = query.filter(Item.id == id)
+
+    if category_id is not None:
+        category_alias = aliased(Category)
+        query = query.join(category_alias, Item.categories).filter(
+            category_alias.id == category_id
+        )
+
+    if store_id is not None:
+        store_alias = aliased(Store)
+        query = query.join(store_alias, Item.stores).filter(store_alias.id == store_id)
 
     return query.offset(skip).limit(limit).all()
 

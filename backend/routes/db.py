@@ -24,11 +24,15 @@ def populate_items(db: Session = Depends(get_db)):
 @router.get("/items", response_model=List[ItemSchema])
 def read_items(
     id: Optional[int] = None,
+    category_id: Optional[int] = None,
+    store_id: Optional[int] = None,
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
 ):
-    items = get_items(db, id=id, skip=skip, limit=limit)
+    items = get_items(
+        db, id=id, category_id=category_id, store_id=store_id, skip=skip, limit=limit
+    )
     items_response = [
         ItemSchema(
             id=item.id,
