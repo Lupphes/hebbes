@@ -7,6 +7,14 @@ import Discounts from "./discounts";
 const HomeFrame: NextPage = () => {
   const router = useRouter();
 
+  const onHomeClick = useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  const onDiscountsClick = useCallback(() => {
+    router.push("/"); // TODO: change to hot items
+  }, [router]);
+
   const onAboutClick = useCallback(() => {
     router.push("/price-bandit");
   }, [router]);
@@ -19,6 +27,8 @@ const HomeFrame: NextPage = () => {
     <div className="w-[1440px] h-[860px] overflow-hidden shrink-0 flex flex-col items-center justify-center gap-[41px] text-left text-29xl text-black font-poppins">
       <Header
         home="Home"
+        onHomeClick={onHomeClick}
+        onDiscountsClick={onDiscountsClick}
         onAboutClick={onAboutClick}
         onPremiumClick={onPremiumClick}
       />

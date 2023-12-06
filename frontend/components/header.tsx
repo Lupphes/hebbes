@@ -24,6 +24,8 @@ type HeaderType = {
   rectangleIconHeight?: CSSProperties["height"];
 
   /** Action props */
+  onHomeClick?: () => void;
+  onDiscountsClick?: () => void;
   onAboutClick?: () => void;
   onPremiumClick?: () => void;
 };
@@ -38,6 +40,8 @@ const Header: NextPage<HeaderType> = ({
   frameLeft,
   rectangleIconWidth,
   rectangleIconHeight,
+  onHomeClick,
+  onDiscountsClick,
   onAboutClick,
   onPremiumClick,
 }) => {
@@ -73,13 +77,14 @@ const Header: NextPage<HeaderType> = ({
       className="w-[1440px] overflow-hidden flex flex-col items-center justify-start text-left text-29xl text-black font-poppins"
       style={frameStyle}
     >
-      <header className="bg-text-white-op-100 w-[1440px] h-[100px] flex flex-row items-center justify-start pt-[31px] px-[41.323890686035156px] pb-7 box-border gap-[71px] lg:w-auto lg:[align-self:unset] lg:h-auto lg:flex-col lg:gap-[12px] lg:items-center lg:justify-center md:w-auto md:[align-self:unset] md:h-auto md:flex-col md:gap-[15px] md:items-center md:justify-center md:pb-[29px] md:box-border sm:flex-col">
+      <header className="bg-text-white-op-100 w-[1440px] h-[80px] flex flex-row items-center justify-start pt-[31px] px-[41.323890686035156px] pb-7 box-border gap-[71px] lg:w-auto lg:[align-self:unset] lg:h-auto lg:flex-col lg:gap-[12px] lg:items-center lg:justify-center md:w-auto md:[align-self:unset] md:h-auto md:flex-col md:gap-[15px] md:items-center md:justify-center md:pb-[29px] md:box-border sm:flex-col">
         <div className="w-[424px] h-6 flex flex-row items-center justify-start sm:w-auto sm:[align-self:unset] sm:flex-row sm:items-center sm:justify-center">
           <Button
             className="relative"
-            sx={{ width: 'calc(25% - 10px)' }} // Adjust the percentage as needed
+            sx={{ width: 'calc(25% - 10px)' }}
             color="success"
             variant="outlined"
+            onClick={onHomeClick}
           >
             Home
           </Button>
@@ -88,8 +93,9 @@ const Header: NextPage<HeaderType> = ({
             sx={{ width: 'calc(25% - 10px)' }}
             color="success"
             variant="outlined"
+            onClick={onDiscountsClick}
           >
-            Items
+            Discounts
           </Button>
           <Button
             className="relative cursor-pointer"
@@ -124,20 +130,20 @@ const Header: NextPage<HeaderType> = ({
           src="/group-1.svg"
         />
       </header>
-      <div className="w-[1440px] h-[316px] flex flex-col items-center justify-end">
+      <div className="h-[300px] flex flex-col items-center justify-end">
         <img
-          className="relative w-[1440px] h-[322px] object-cover"
+          className="relative h-[320px] object-cover"
           alt=""
           src="/rectangle-1@2x.png"
           style={rectangleIconStyle}
         />
-        <div className="w-[200px] h-[277px] flex flex-col items-center justify-start gap-[6px] mt-[-297px]">
+        <div className="flex flex-col items-center justify-start mt-[-316px]">
           <img
-            className="relative w-[200px] h-[198.1px] object-cover"
+            className="relative w-[200px] object-cover"
             alt=""
             src="/meubel-house-logos05@2x.png"
           />
-          <div className="relative font-medium">{home}</div>
+          <div className="relative h-auto font-medium">{home}</div>
         </div>
       </div>
     </div>
