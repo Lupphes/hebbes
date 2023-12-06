@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field, StringConstraints
-from typing import List, Optional, Annotated
+from typing import Dict, List, Optional, Annotated
 from datetime import datetime
 
 
@@ -55,14 +55,28 @@ class CategorySchema(BaseModel):
         orm_mode = True
 
 
+class ItemNested(BaseModel):
+    id: int
+    name: str
+    description: str
+    picture: Optional[PictureSchema]
+
 class StoreSchema(BaseModel):
     id: int = Field(description="The unique identifier of the store")
     name: str
-    link: str
-    price: Optional[float]
+    store_link: Optional[str]
+    items: List[ItemNested] = []
+    class Config:
+        orm_mode = True
+class ItemInfoSchema(BaseModel):
+    id: int
+    item_id: Optional[int]
+    store_id: Optional[int]
+    product_link: str
+    price: float
     discount_info: List[Optional[dict]]
-
-
+    class Config:
+        orm_mode = True
 class ItemSchema(BaseModel):
     id: int
     name: str
@@ -75,8 +89,7 @@ class ItemSchema(BaseModel):
     measurements_label: str
     picture_link: Optional[PictureSchema]
     categories: List[CategorySchema]
-    stores: List[StoreSchema]
-
+    item_info: Dict[str, ItemInfoSchema]
     class Config:
         from_attributes = True
         orm_mode = True

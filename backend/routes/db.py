@@ -1,8 +1,10 @@
 from fastapi import Depends, APIRouter, HTTPException
+from fastapi.encoders import jsonable_encoder
+
 from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
 from schemas.schemas import (
-    ItemSchema,
+    ItemInfoSchema,
     ItemSchema,
     PictureSchema,
     StoreSchema,
@@ -34,8 +36,21 @@ def read_items(
     items = get_items(
         db, id=id, category_id=category_id, store_id=store_id, skip=skip, limit=limit
     )
-    items_response = [
-        ItemSchema(
+    items_response = []
+    for item in items:
+        item_info_dict = {}
+        for info in item.item_infos:
+            store_name = db.query(Store).filter(Store.id == info.store_id).first().name
+            item_info_dict[store_name] = ItemInfoSchema(
+                id=info.id,
+                item_id=info.item_id,
+                store_id=info.store_id,
+                product_link=info.product_link,
+                price=info.price,
+                discount_info=info.discount_info,
+            )
+
+        item_schema = ItemSchema(
             id=item.id,
             name=item.name,
             brand=item.brand,
@@ -81,19 +96,9 @@ def read_items(
             ]
             if item.categories
             else [],
-            stores=[
-                StoreSchema(
-                    id=store.id,
-                    name=store.name,
-                    link=store.link,
-                    price=store.price,
-                    discount_info=store.discount_info,
-                )
-                for store in item.stores
-            ],
+            item_info=item_info_dict
         )
-        for item in items
-    ]
+        items_response.append(item_schema)
     return items_response
 
 
@@ -134,7 +139,7 @@ def read_subcategories(
     return subcategories
 
 
-@router.get("/stores")
+@router.get("/stores", response_model=List[StoreSchema])
 def read_stores(
     id: Optional[int] = None,
     skip: int = 0,
@@ -142,10 +147,11 @@ def read_stores(
     db: Session = Depends(get_db),
 ):
     if id is not None:
-        stores = db.query(Store).filter(Store.id == id).offset(skip).limit(limit).all()
+        stores = db.query(Store).filter(Store.id == id).options(joinedload(Store.items)).offset(skip).limit(limit).all()
     else:
-        stores = db.query(Store).offset(skip).limit(limit).all()
-
+        stores = db.query(Store).options(joinedload(Store.items)).offset(skip).limit(limit).all()
+    for store in stores:
+        store.items = store.items[:20]
     return stores
 
 

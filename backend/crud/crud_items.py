@@ -2,7 +2,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload, aliased
 import json
 
-from models import Category, Store, Item, Picture
+from models import Category, Store, Item, Picture, ItemInfo
 from utils.build_category import create_category_objects
 
 
@@ -17,7 +17,8 @@ def get_items(
     query = db.query(Item).options(
         joinedload(Item.picture),
         joinedload(Item.categories).joinedload(Category.pictures),
-        joinedload(Item.stores),
+        joinedload(Item.item_infos),
+        joinedload(Item.stores)
     )
 
     if id is not None:
@@ -81,14 +82,22 @@ def populate_tables(db: Session):
             price = (
                 float(store_data["price"]) if store_data["price"] != "null" else None
             )
-            new_store = Store(
-                name=store_name,
-                link=store_data["link"],
+            store = db.query(Store).filter_by(name=store_name).first()
+            if store is None:
+                store = Store(
+                    name=store_name,
+                )
+            db.add(store)
+            db.flush()
+            new_item.stores.append(store)
+            new_item_info = ItemInfo(
+                store_id=store.id,
+                product_link=store_data["link"],
                 price=price,
                 discount_info=store_data.get("discount_info", []),
             )
-            db.add(new_store)
-            new_item.stores.append(new_store)
+            db.add(new_item_info)
+            new_item.item_infos.append(new_item_info)
     db.commit()
     db.close()
     return True

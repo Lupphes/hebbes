@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .picture import Picture
     from .store import Store
     from .category import Category
-
+    from .item_info import ItemInfo
 
 class Item(Base):
     __tablename__ = "item"
@@ -28,6 +28,9 @@ class Item(Base):
 
     picture: Mapped["Picture"] = relationship(
         "Picture", uselist=False, back_populates="item"
+    )
+    item_infos: Mapped[List["ItemInfo"]] = relationship(
+        "ItemInfo", back_populates="item"
     )
     stores: Mapped[List["Store"]] = relationship(
         "Store", secondary=item_store_association, back_populates="items"
