@@ -47,6 +47,7 @@ class CategorySchema(BaseModel):
     category_id: Optional[int]
     name: str
     parent_id: Optional[int]
+    subcategories: List["CategorySchema"] = []
 
     pictures: List[PictureSchema] = []
 

@@ -1,7 +1,6 @@
-from utils.misc import get_db
-from fastapi import Depends, APIRouter
+from fastapi import Depends, APIRouter, HTTPException
 from typing import List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from schemas.schemas import (
     ItemSchema,
     ItemSchema,
@@ -11,12 +10,14 @@ from schemas.schemas import (
 )
 
 from crud.crud_items import populate_tables, get_items
-
+from utils.category_tools import get_subcategories, get_all_subcategories
+from utils.misc import get_db
+from models import Store, Category
 
 router = APIRouter()
 
 
-@router.get("/populate_tables")
+@router.get("/populate")
 def populate_items(db: Session = Depends(get_db)):
     return populate_tables(db=db)
 
@@ -94,3 +95,60 @@ def read_items(
         for item in items
     ]
     return items_response
+
+
+@router.get("/categories", response_model=List[CategorySchema])
+def read_categories(
+    skip: int = 0,
+    limit: int = 100,
+    depth: Optional[int] = 3,
+    db: Session = Depends(get_db),
+):
+    query = (
+        db.query(Category)
+        .options(joinedload(Category.subcategories))
+        .filter(Category.parent_id == None)
+    )
+
+    categories = query.offset(skip).limit(limit).all()
+
+    actual_depth = depth if depth is not None else 3
+    for category in categories:
+        category.subcategories = get_subcategories(db, category.id, actual_depth)
+
+    return categories
+
+
+@router.get("/subcategories/{parent_id}", response_model=List[CategorySchema])
+def read_subcategories(
+    parent_id: int,
+    depth: Optional[int] = 3,
+    db: Session = Depends(get_db),
+):
+    parent_category = db.query(Category).filter(Category.id == parent_id).first()
+    if not parent_category:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    actual_depth = depth if depth is not None else 3
+    subcategories = get_subcategories(db, parent_id, actual_depth)
+    return subcategories
+
+
+@router.get("/stores")
+def read_stores(
+    id: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+):
+    if id is not None:
+        stores = db.query(Store).filter(Store.id == id).offset(skip).limit(limit).all()
+    else:
+        stores = db.query(Store).offset(skip).limit(limit).all()
+
+    return stores
+
+
+@router.get("/search")
+def search(db: Session = Depends(get_db)):
+    return True
