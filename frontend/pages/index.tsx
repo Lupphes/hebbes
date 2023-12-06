@@ -17,7 +17,7 @@ const Home: NextPage = () => {
   }, [router]);
 
   return (
-    <div className="relative bg-text-white-op-100 w-full h-[1796px] overflow-hidden flex flex-col items-center justify-start gap-[81px]">
+    <div className="relative bg-text-white-op-100 w-full overflow-hidden flex flex-col items-center justify-start gap-[81px]">
       <HomeFrame />
       <section className="w-[1440px] overflow-hidden flex flex-col items-center justify-start">
         <Explain />

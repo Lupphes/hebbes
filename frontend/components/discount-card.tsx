@@ -9,11 +9,12 @@ interface DiscountCardProps {
 
 const DiscountCard: React.FC<DiscountCardProps> = ({ title, subtitle, imageUrl }) => {
   return (
-    <div className="relative w-[382px] h-[328px]">
-      <div className="absolute top-[0px] left-[0px] w-[382px] h-[328px] overflow-hidden flex flex-col items-start justify-end">
+    <div className="relative
+                    w-[382px] h-[328px]">
+      <div className="absolute top-[0px] left-[0px] w-[300px] h-[300px] overflow-hidden flex flex-col items-start justify-end">
         <div className="relative rounded-3xs bg-silver w-[381.8px] h-[328px]" />
         <img
-          className="relative rounded-3xs w-[382px] h-[328px] object-cover mt-[-328px]"
+          className="relative rounded-3xs w-[300px] h-[300px] object-cover mt-[-300px]"
           alt=""
           src={imageUrl}
         />

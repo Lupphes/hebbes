@@ -24,7 +24,7 @@ const HomeFrame: NextPage = () => {
   }, [router]);
 
   return (
-    <div className="w-[1440px] h-[860px] overflow-hidden shrink-0 flex flex-col items-center justify-center gap-[41px] text-left text-29xl text-black font-poppins">
+    <div className="h-auto overflow-hidden shrink-0 flex flex-col items-center justify-center gap-[41px] text-left text-29xl text-black font-poppins">
       <Header
         home="Home"
         onHomeClick={onHomeClick}

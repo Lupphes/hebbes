@@ -4,10 +4,19 @@ import DiscountCard from './discount-card';
 
 const Discounts: NextPage = () => {
   return (
-    <div className="w-[1240px] overflow-hidden flex flex-col items-start justify-center text-left text-13xl text-black font-poppins md:w-auto md:flex-col md:items-center sm:flex-col">
+    <div className="w-[1240px] overflow-hidden flex flex-col
+                    items-start justify-center text-left text-13xl
+                    text-black font-poppins
+                    lg:flex-col lg:items-center lg:justify-center
+                    md:w-auto md:flex-col md:items-center
+                    sm:flex-col">
       <div className="w-full h-auto flex flex-col items-center justify-center gap-[27px]">
         <div className="font-medium inline-block h-12 ml-2.5">This Week at Price Bandit!</div>
-        <div className="w-full h-auto overflow-hidden shrink-0 flex flex-row items-center justify-center lg:h-[1200px] md:flex-col md:gap-[0px] md:items-center md:justify-center text-whitesmoke">
+        <div className="w-full h-auto overflow-hidden shrink-0 flex flex-row items-center
+                        justify-center
+                        lg:h-auto lg:flex-row lg:gap-[3px] lg:items-center lg:justify-center
+                        md:flex-col md:gap-[3px] md:items-center md:justify-center
+                        text-whitesmoke">
           {/* First Card */}
           <DiscountCard
             title="Big Deals!"
