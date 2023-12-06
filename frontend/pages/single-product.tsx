@@ -9,6 +9,16 @@ import { useRouter } from "next/router";
 
 const SingleProduct: NextPage = () => {
   const router = useRouter();
+  const singleProducts = [
+    // your array of products here
+    {
+      price: "2.55",
+      imageSrc: "/asgaard-sofa-312@2x.png",
+    },
+    {
+      price: "2.20",
+      imageSrc: "/asgaard-sofa-312@2x.png",
+    }];
 
   const onAboutClick = useCallback(() => {
     router.push("/price-bandit");
@@ -21,7 +31,7 @@ const SingleProduct: NextPage = () => {
         <MainHeader />
       </div>
       <div className="w-[1440px] h-[871px] flex flex-col items-center justify-start gap-[81px]">
-        <SingleProductContainer />
+        <SingleProductContainer singleProducts={singleProducts}/>
         <Ad
           adBannerText="Place your ad here"
           size32050OrientationhorizHeight="116px"
