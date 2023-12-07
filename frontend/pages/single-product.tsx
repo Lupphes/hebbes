@@ -20,16 +20,36 @@ const SingleProduct: NextPage = () => {
       imageSrc: "/asgaard-sofa-312@2x.png",
     }];
 
+  const onHomeClick = useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  const onDiscountsClick = useCallback(() => {
+    router.push("/"); // TODO: change to hot items
+  }, [router]);
+
+  const onAboutClick = useCallback(() => {
+    router.push("/price-bandit");
+  }, [router]);
+
+  const onPremiumClick = useCallback(() => {
+    router.push("/price-bandit");
+  }, [router]);
+
+
   const onAboutClick = useCallback(() => {
     router.push("/price-bandit");
   }, [router]);
 
   return (
     <div className="relative bg-text-white-op-100 w-full h-[1917px] overflow-hidden flex flex-col items-center justify-start gap-[45px]">
-      <div className="w-[1440px] h-[100px] overflow-hidden shrink-0 flex flex-col items-center justify-start">
-        <HeaderTop />
-        <MainHeader />
-      </div>
+      <Header
+        home="Single Product"
+        onHomeClick={onHomeClick}
+        onDiscountsClick={onDiscountsClick}
+        onAboutClick={onAboutClick}
+        onPremiumClick={onPremiumClick}
+      />
       <div className="w-[1440px] h-[871px] flex flex-col items-center justify-start gap-[81px]">
         <SingleProductContainer singleProducts={singleProducts}/>
         <Ad

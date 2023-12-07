@@ -8,30 +8,29 @@ import ContainerFrame from "../components/container-frame";
 const PriceBandit: NextPage = () => {
   const router = useRouter();
 
-  const onAboutClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+  const onHomeClick = useCallback(() => {
+      router.push("/");
+    }, [router]);
 
-  const onPremiumClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onDiscountsClick = useCallback(() => {
+      router.push("/"); // TODO: change to hot items
+    }, [router]);
 
-  const onAbout1Click = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onAboutClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
+    const onPremiumClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
 
   return (
     <div className="relative bg-text-white-op-100 w-full h-[2360px]">
       <Header
         home="About Price Bandit"
-        frameWidth="1440px"
-        frameAlignSelf="unset"
-        frameOverflow="unset"
-        framePosition="absolute"
-        frameTop="0px"
-        frameLeft="0px"
-        rectangleIconWidth="1452px"
-        rectangleIconHeight="328px"
+        onHomeClick={onHomeClick}
+        onDiscountsClick={onDiscountsClick}
         onAboutClick={onAboutClick}
         onPremiumClick={onPremiumClick}
       />
@@ -83,7 +82,7 @@ const PriceBandit: NextPage = () => {
                     </button>
                     <button
                       className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
-                      onClick={onAbout1Click}
+                      onClick={onAboutClick}
                     >
                       About
                     </button>

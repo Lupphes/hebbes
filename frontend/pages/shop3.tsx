@@ -15,20 +15,32 @@ import AdCard from "../components/ad-card";
 const Shop3: NextPage = () => {
   const router = useRouter();
 
-  const onAbout1Click = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+  const onHomeClick = useCallback(() => {
+      router.push("/");
+    }, [router]);
 
-  const onPremium1Click = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onDiscountsClick = useCallback(() => {
+      router.push("/"); // TODO: change to hot items
+    }, [router]);
 
-  const onAboutClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onAboutClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
+    const onPremiumClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
 
   return (
     <div className="relative bg-text-white-op-100 w-full h-[4021px] overflow-hidden">
+      <Header
+        home="Search"
+        onHomeClick={onHomeClick}
+        onDiscountsClick={onDiscountsClick}
+        onAboutClick={onAboutClick}
+        onPremiumClick={onPremiumClick}
+      />
       <section className="absolute top-[3166px] left-[0px] w-[1440px] overflow-hidden flex flex-col items-center justify-start text-left text-13xl text-black font-poppins">
         <div className="self-stretch relative h-[300px]">
           <div className="absolute top-[0px] left-[0px] bg-darkolivegreen-100 w-[1440px] h-[300px]" />
