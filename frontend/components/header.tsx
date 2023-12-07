@@ -70,14 +70,12 @@ const Header: NextPage<HeaderType> = ({
     };
   }, [rectangleIconWidth, rectangleIconHeight]);
 
-  const isMobile = useMediaQuery("(max-width: 425px)");
-
   return (
     <div
       className="w-[1440px] overflow-hidden flex flex-col items-center justify-start text-left text-29xl text-black font-poppins"
       style={frameStyle}
     >
-      <header className="bg-text-white-op-100 w-[1440px] h-[80px] flex flex-row items-center justify-start pt-[31px] px-[41.323890686035156px] pb-7 box-border gap-[71px] lg:w-auto lg:[align-self:unset] lg:h-auto lg:flex-col lg:gap-[12px] lg:items-center lg:justify-center md:w-auto md:[align-self:unset] md:h-auto md:flex-col md:gap-[15px] md:items-center md:justify-center md:pb-[29px] md:box-border sm:flex-col">
+      <header className="bg-text-white-op-100 w-[1440px] h-[80px] flex flex-row items-center justify-center pt-[31px] px-[41.323890686035156px] pb-7 box-border gap-[71px] lg:w-auto lg:[align-self:unset] lg:h-auto lg:flex-col lg:gap-[12px] lg:items-center lg:justify-center md:w-auto md:[align-self:unset] md:h-auto md:flex-col md:gap-[15px] md:items-center md:justify-center md:pb-[29px] md:box-border sm:flex-col">
         <div className="w-[424px] h-6 flex flex-row items-center justify-start sm:w-auto sm:[align-self:unset] sm:flex-row sm:items-center sm:justify-center">
           <Button
             className="relative"
