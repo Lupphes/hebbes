@@ -8,30 +8,29 @@ import LoginCardForm from "../components/login-card-form";
 const Login: NextPage = () => {
   const router = useRouter();
 
-  const onAboutClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+  const onHomeClick = useCallback(() => {
+      router.push("/");
+    }, [router]);
 
-  const onPremiumClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onDiscountsClick = useCallback(() => {
+      router.push("/"); // TODO: change to hot items
+    }, [router]);
 
-  const onAbout1Click = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onAboutClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
+    const onPremiumClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
 
   return (
     <div className="relative bg-text-white-op-100 w-full overflow-hidden flex flex-col items-center justify-start">
       <Header
         home="Log In"
-        frameWidth="unset"
-        frameAlignSelf="stretch"
-        frameOverflow="hidden"
-        framePosition="unset"
-        frameTop="unset"
-        frameLeft="unset"
-        rectangleIconWidth="1440px"
-        rectangleIconHeight="322px"
+        onHomeClick={onHomeClick}
+        onDiscountsClick={onDiscountsClick}
         onAboutClick={onAboutClick}
         onPremiumClick={onPremiumClick}
       />

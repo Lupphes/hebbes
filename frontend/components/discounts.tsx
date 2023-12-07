@@ -4,7 +4,7 @@ import DiscountCard from './discount-card';
 
 const Discounts: NextPage = () => {
   return (
-    <div className="w-[1240px] overflow-hidden flex flex-col
+    <div className="flex flex-col
                     items-start justify-center text-left text-13xl
                     text-black font-poppins
                     lg:flex-col lg:items-center lg:justify-center
@@ -14,8 +14,9 @@ const Discounts: NextPage = () => {
         <div className="font-medium inline-block h-12 ml-2.5">This Week at Price Bandit!</div>
         <div className="w-full h-auto overflow-hidden shrink-0 flex flex-row items-center
                         justify-center
-                        lg:h-auto lg:flex-row lg:gap-[3px] lg:items-center lg:justify-center
-                        md:flex-col md:gap-[3px] md:items-center md:justify-center
+                        gap-[10px]
+                        lg:h-auto lg:flex-row lg:gap-[10px] lg:items-center lg:justify-center
+                        md:flex-col md:gap-[10px] md:items-center md:justify-center
                         text-whitesmoke">
           {/* First Card */}
           <DiscountCard

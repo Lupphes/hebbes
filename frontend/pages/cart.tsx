@@ -8,17 +8,22 @@ import Header from "../components/header";
 const Cart: NextPage = () => {
   const router = useRouter();
 
-  const onAboutClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+  const onHomeClick = useCallback(() => {
+      router.push("/");
+    }, [router]);
 
-  const onPremiumClick = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onDiscountsClick = useCallback(() => {
+      router.push("/"); // TODO: change to hot items
+    }, [router]);
 
-  const onAbout1Click = useCallback(() => {
-    router.push("/price-bandit");
-  }, [router]);
+    const onAboutClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
+    const onPremiumClick = useCallback(() => {
+      router.push("/price-bandit");
+    }, [router]);
+
 
   return (
     <div className="relative bg-text-white-op-100 w-full h-[2138px] overflow-hidden">
@@ -26,14 +31,8 @@ const Cart: NextPage = () => {
       <div className="absolute top-[0px] left-[0px] w-[1440px] overflow-hidden flex flex-col items-center justify-start gap-[867px]">
         <Header
           home="Cart"
-          frameWidth="1440px"
-          frameAlignSelf="unset"
-          frameOverflow="hidden"
-          framePosition="unset"
-          frameTop="unset"
-          frameLeft="unset"
-          rectangleIconWidth="1440px"
-          rectangleIconHeight="322px"
+          onHomeClick={onHomeClick}
+          onDiscountsClick={onDiscountsClick}
           onAboutClick={onAboutClick}
           onPremiumClick={onPremiumClick}
         />
