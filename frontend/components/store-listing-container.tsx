@@ -1,15 +1,15 @@
 import type { NextPage } from "next";
 
-interface SingleProductProps {
-    price: string;
-    imageSrc: string;
-  }
+interface singleStore {
+  price: string;
+  imageSrc: string;
+}
   
-  interface SingleProductList{
-    singleProducts: SingleProductProps[];
-  }
+interface itemList{
+  singleStores: singleStore[];
+}
 
-const findIndexOfCheapestProduct = (products: SingleProductProps[]): number => {
+const findIndexOfCheapestProduct = (products: singleStore[]): number => {
     if (products.length === 0) {
         return -1; // Return -1 if the list is empty
     }
@@ -28,15 +28,15 @@ const findIndexOfCheapestProduct = (products: SingleProductProps[]): number => {
     return lowestIndex;
     };
 
-const StoreListingContainer: NextPage<SingleProductList> = ({ singleProducts }) => {
-    const indexOfCheapest = findIndexOfCheapestProduct(singleProducts);
+const StoreListingContainer: NextPage<itemList> = ({ singleStores }) => {
+    const indexOfCheapest = findIndexOfCheapestProduct(singleStores);
 
     return (
         <div className="absolute top-[115px] left-[0px] w-[816px] h-[175px] flex flex-row items-center justify-start gap-[28px] text-center text-smi">
             <div className="relative inline-block w-[57.8px] h-[22.3px] shrink-0">
                 Shops
             </div>
-            {singleProducts.map((product, index) => (
+            {singleStores.map((product: singleStore, index: number) => (
               <div>
                 <div className="relative w-14 h-[116.6px]" key={index}>
       

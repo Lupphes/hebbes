@@ -27,6 +27,53 @@ const Shop3: NextPage = () => {
     router.push("/price-bandit");
   }, [router]);
 
+  interface singleStore {
+    price: string;
+    imageSrc: string;
+  }
+    
+  interface itemList{
+    name: string;
+    singleStores: singleStore[];
+  }
+
+  interface itemsList{
+    items: itemList[];
+  }
+
+
+  const twoItemsTest: itemsList = {
+    items: [
+      {
+        name: "item1",
+        singleStores: [
+          {
+            price: "2.55",
+            imageSrc: "/asgaard-sofa-312@2x.png",
+          },
+          {
+            price: "2.20",
+            imageSrc: "/asgaard-sofa-312@2x.png",
+          },
+        ],
+      },
+      {
+        name: "item2",
+        singleStores: [
+          {
+            price: "3.00",
+            imageSrc: "/another-item-image.png",
+          },
+          {
+            price: "2.50",
+            imageSrc: "/another-item-image.png",
+          },
+        ],
+      },
+    ],
+  };
+
+
   return (
     <div className="relative bg-text-white-op-100 w-full h-[4021px] overflow-hidden">
       <section className="absolute top-[3166px] left-[0px] w-[1440px] overflow-hidden flex flex-col items-center justify-start text-left text-13xl text-black font-poppins">
@@ -145,98 +192,24 @@ const Shop3: NextPage = () => {
             </Button>
           </div>
         </div>
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-323@2x.png"
-          productDimensions="/asgaard-sofa-324@2x.png"
-          productDimensions2="/asgaard-sofa-326@2x.png"
-          productDimensionsText="/asgaard-sofa-328@2x.png"
-          productDimensionsCode="/asgaard-sofa-329@2x.png"
-          productDimensionsCode2="/asgaard-sofa-330@2x.png"
-        />
+        {twoItemsTest.items.map((item: itemList, index: number) => (
+          <div>
+            <ProductRowContainer 
+            name={item.name}
+            singleStores={item.singleStores}
+            />
+            {(index == 5 ? 
+            <div>
+              <AdCard />
+              <AdCard propTop="1041px" />
+              <AdCard propTop="0px" />
+            </div>
+             : null)}
+          </div>
+        ))}
         <AdCard />
         <AdCard propTop="1041px" />
         <AdCard propTop="0px" />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-323@2x.png"
-          productDimensions="/asgaard-sofa-324@2x.png"
-          productDimensions2="/asgaard-sofa-326@2x.png"
-          productDimensionsText="/asgaard-sofa-328@2x.png"
-          productDimensionsCode="/asgaard-sofa-329@2x.png"
-          productDimensionsCode2="/asgaard-sofa-330@2x.png"
-          propTop="321px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-323@2x.png"
-          productDimensions="/asgaard-sofa-324@2x.png"
-          productDimensions2="/asgaard-sofa-326@2x.png"
-          productDimensionsText="/asgaard-sofa-328@2x.png"
-          productDimensionsCode="/asgaard-sofa-329@2x.png"
-          productDimensionsCode2="/asgaard-sofa-330@2x.png"
-          propTop="495px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-323@2x.png"
-          productDimensions="/asgaard-sofa-324@2x.png"
-          productDimensions2="/asgaard-sofa-326@2x.png"
-          productDimensionsText="/asgaard-sofa-328@2x.png"
-          productDimensionsCode="/asgaard-sofa-329@2x.png"
-          productDimensionsCode2="/asgaard-sofa-330@2x.png"
-          propTop="664px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-323@2x.png"
-          productDimensions="/asgaard-sofa-324@2x.png"
-          productDimensions2="/asgaard-sofa-326@2x.png"
-          productDimensionsText="/asgaard-sofa-328@2x.png"
-          productDimensionsCode="/asgaard-sofa-329@2x.png"
-          productDimensionsCode2="/asgaard-sofa-330@2x.png"
-          propTop="838px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-331@2x.png"
-          productDimensions="/asgaard-sofa-332@2x.png"
-          productDimensions2="/asgaard-sofa-333@2x.png"
-          productDimensionsText="/asgaard-sofa-334@2x.png"
-          productDimensionsCode="/asgaard-sofa-335@2x.png"
-          productDimensionsCode2="/asgaard-sofa-336@2x.png"
-          propTop="1191px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-331@2x.png"
-          productDimensions="/asgaard-sofa-332@2x.png"
-          productDimensions2="/asgaard-sofa-333@2x.png"
-          productDimensionsText="/asgaard-sofa-334@2x.png"
-          productDimensionsCode="/asgaard-sofa-335@2x.png"
-          productDimensionsCode2="/asgaard-sofa-336@2x.png"
-          propTop="1365px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-331@2x.png"
-          productDimensions="/asgaard-sofa-332@2x.png"
-          productDimensions2="/asgaard-sofa-333@2x.png"
-          productDimensionsText="/asgaard-sofa-334@2x.png"
-          productDimensionsCode="/asgaard-sofa-335@2x.png"
-          productDimensionsCode2="/asgaard-sofa-336@2x.png"
-          propTop="1539px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-331@2x.png"
-          productDimensions="/asgaard-sofa-332@2x.png"
-          productDimensions2="/asgaard-sofa-333@2x.png"
-          productDimensionsText="/asgaard-sofa-334@2x.png"
-          productDimensionsCode="/asgaard-sofa-335@2x.png"
-          productDimensionsCode2="/asgaard-sofa-336@2x.png"
-          propTop="1708px"
-        />
-        <ProductRowContainer
-          dimensions="/asgaard-sofa-331@2x.png"
-          productDimensions="/asgaard-sofa-332@2x.png"
-          productDimensions2="/asgaard-sofa-333@2x.png"
-          productDimensionsText="/asgaard-sofa-334@2x.png"
-          productDimensionsCode="/asgaard-sofa-335@2x.png"
-          productDimensionsCode2="/asgaard-sofa-336@2x.png"
-          propTop="1882px"
-        />
       </section>
     </div>
   );

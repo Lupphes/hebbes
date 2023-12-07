@@ -134,7 +134,7 @@ const SingleProductContainer: NextPage<SingleProductList> = ({ singleProducts })
             alt=""
             src="/group.svg"
           />
-          <StoreListingContainer singleProducts={singleProducts}/>
+          <StoreListingContainer singleStores={singleProducts}/>
         </div>
       </div>
       <Ad
