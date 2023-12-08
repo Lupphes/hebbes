@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 
-const RegisterForm: NextPage = () => {
+const LoginForm: NextPage = () => {
   return (
     <section className="self-stretch bg-text-white-op-100
                         flex flex-col items-center
@@ -23,7 +23,7 @@ const RegisterForm: NextPage = () => {
           <div className="font-semibold
                           font-semibold font-poppins text-17xl
                           text-center text-black flex">
-            Register
+            Log In
           </div>
           <TextField
             className="[border:none] bg-[transparent]]"
@@ -39,13 +39,16 @@ const RegisterForm: NextPage = () => {
           />
           <FormControlLabel
             className=""
-            label="I agree with the terms and conditions"
+            label="Remember me"
             control={<Checkbox color="success" defaultChecked />}
           />
           <div className="overflow-hidden flex flex-row items-center gap-10">
             <Button className="flex-1" color="success" variant="outlined">
-              Sign Up
+              Log In
             </Button>
+            <a className="[text-decoration:none] flex-1 relative text-left font-light text-[inherit]">
+              Lost Your Password?
+            </a>
           </div>
         </div>
       </div>
@@ -53,4 +56,4 @@ const RegisterForm: NextPage = () => {
   );
 };
 
-export default RegisterForm;
+export default LoginForm;
