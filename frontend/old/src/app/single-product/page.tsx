@@ -18,11 +18,11 @@ const SingleProductPage = () => {
       }];
   
     return (
-        <div className="relative bg-text-white-op-100 w-full h-[1917px] overflow-hidden flex flex-col items-center justify-start gap-[45px]">
-            <div className="w-[1440px] h-[871px] flex flex-col items-center justify-start gap-[81px]">
-            <Ad/>
+        <div className="bg-text-white-op-100 overflow-hidden flex flex-col items-center justify-start gap-[45px]">
+            <div className="flex flex-col items-center justify-start">
+            {/*<Ad/>*/}
             <SingleProduct singleProducts={singleProducts}/>
-            <Ad/>
+            {/*<Ad/>*/}
             </div>
         </div>
     );

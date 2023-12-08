@@ -1,5 +1,7 @@
 import StoreListing from '@/components/StoreListing';
 import type { NextPage } from "next";
+import React, { useState } from 'react';
+import QuantityAdjuster from '../components/QuantityAdjuster';
 
 interface SingleProductProps {
   price: string;
@@ -50,89 +52,74 @@ const SingleProduct: NextPage<SingleProductList> = ({ singleProducts }) => {
   const indexOfCheapest = findIndexOfCheapestProduct(singleProducts);
   const averagePrice = findAveragePrice(singleProducts);
 
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantityChange = (newQuantity: number) => {
+    setQuantity(newQuantity);
+  };
+
   return (
-    <div className="relative w-[1440px] h-[674px] overflow-hidden shrink-0 text-left text-base text-black font-poppins">
-      <div className="absolute top-[0px] left-[0px] bg-text-white-op-100 w-[1440px] h-[616px]" />
-      <div className="absolute top-[174px] left-[99px] h-[500px] flex flex-row items-start justify-start">
-        <div className="w-[423px] h-[500px] flex flex-col items-center justify-start">
-          <div className="relative rounded-3xs bg-darkolivegreen-300 w-[423px] h-[500px]" />
+    <div className="overflow-hidden shrink-0 text-left text-base text-black font-poppins">
+      <div className="flex flex-row items-start justify-start">
+        {/*Image div that is on the left of the rest*/}
+        <div className="items-left justify-start">
           <img
-            className="relative w-[423px] h-[500px] object-cover mt-[-500px]"
+            className="w-[423px] h-[500px] object-cover bg-darkolivegreen-300 rounded-3xs"
             alt=""
             src="/asgaard-sofa-3@2x.png"
           />
         </div>
+        {/*concent of the product*/}
+        <div className="flex flex-col">
+          {/*product name*/}
+          <div className="text-23xl inline-block ">
+            Coca-Cola 1.5L
+          </div>
+          {/*product price overview*/}
+          <div className="flex flex-row items-center justify-start gap-[5px]">
+            {/*best price*/}
+            <div>
+              <div className="font-medium inline-block ">
+                € {singleProducts[indexOfCheapest].price}
+              </div>
+              <div className="font-medium text-darkolivegreen-100 inline-block">
+                Best Price
+              </div>
+              <img
+                className="w-[39px] h-[26px] object-cover"
+                alt=""
+                src={singleProducts[indexOfCheapest].imageSrc}
+              />
+            </div>
+            {/*average price*/}
+            <div className="flex flex-row items-end justify-end gap-[5px]">
+              <div className="font-medium inline-block ">
+                € {averagePrice}
+              </div>
+              <div className="font-medium text-darkolivegreen-100 inline-block">
+                Avg. Price
+              </div>
+            </div>
+          </div>
+          {/*Suggested Stores*/}
+          {/*<StoreListing singleStores={singleProducts}/>*/}
+          {/*quantity*/}
+          <QuantityAdjuster quantity={quantity} onQuantityChange={handleQuantityChange} />
+          {/*description*/}
+          <div className="flex flex-col overflow-hidden text-darkgray">
+            <div className="inline-block">
+              Category: Soft Drinks
+            </div>
+            <div className="inline-block">
+              Tags: Soft Drinks, Coca-Cola
+            </div>
+          </div>
 
-        <div className="relative w-[816px] h-[482px]">
-          <div className="absolute top-[0px] left-[1.3px] w-[791.7px] h-[99px] overflow-hidden text-5xl">
-            <div className="absolute top-[0px] left-[0px] text-23xl inline-block w-[420.5px]">
-              Coca-Cola 1.5L
-            </div>
-            <div className="absolute top-[63px] left-[102.7px] font-medium text-darkolivegreen-100 inline-block w-[123px]">
-              Best Price
-            </div>
-            <img
-              className="absolute top-[68px] left-[245.7px] w-[39px] h-[26px] object-cover"
-              alt=""
-              src={singleProducts[indexOfCheapest].imageSrc}
-            />
-            <div className="absolute top-[63px] left-[0px] font-medium inline-block w-[102.1px]">
-              € {singleProducts[indexOfCheapest].price}
-            </div>
-            <div className="absolute top-[63px] left-[555.7px] font-medium text-darkolivegreen-100 text-right inline-block w-[236px]">
-              Avg Price
-            </div>
-            <div className="absolute top-[63px] left-[453.7px] font-medium text-darkgray text-center inline-block w-[102.1px]">
-              € {averagePrice}
-            </div>
-          </div>
-          <div className="absolute top-[422px] left-[9px] w-[419px] h-[60px] overflow-hidden text-darkgray">
-            <div className="absolute top-[0px] left-[144px] inline-block w-[275px]">
-              Soft Drinks
-            </div>
-            <div className="absolute top-[36px] left-[144px] inline-block w-[275px]">
-              Soft Drinks, Coca-Cola
-            </div>
-            <div className="absolute top-[0px] left-[122.3px] w-[5.4px] h-[60px]">
-              <div className="absolute top-[0px] left-[0px] font-medium inline-block w-[5.4px]">
-                :
-              </div>
-              <div className="absolute top-[36px] left-[0px] font-medium inline-block w-[5.4px]">
-                :
-              </div>
-            </div>
-            <div className="absolute top-[0px] left-[0px] inline-block w-[100.8px]">
-              Category
-            </div>
-            <div className="absolute top-[36px] left-[0px] inline-block w-[52.4px]">
-              Tags
-            </div>
-          </div>
-          <div className="absolute top-[301px] left-[0px] w-[301px] overflow-hidden flex flex-col items-end justify-center text-darkgray">
-            <div className="w-[292px] h-[46px] flex flex-row items-center justify-end gap-[1px]">
-              <div className="relative inline-block w-[198px] shrink-0">
-                Quantity
-              </div>
-              <div className="relative w-[93px] h-[46px] overflow-hidden shrink-0 text-black">
-                <div className="absolute top-[0px] left-[0px] rounded-3xs bg-text-white-op-100 box-border w-[93px] h-[46px] border-[1px] border-solid border-darkgray" />
-                <div className="absolute top-[14.4px] left-[11.3px] inline-block w-[6.8px] h-[17.3px]">
-                  -
-                </div>
-                <div className="absolute top-[14.4px] left-[75.6px] inline-block w-[8.3px] h-[17.3px]">
-                  +
-                </div>
-                <div className="absolute top-[14.4px] left-[44.6px] font-medium inline-block w-[4.5px] h-[17.3px]">
-                  1
-                </div>
-              </div>
-            </div>
-          </div>
           <img
             className="absolute top-[394px] left-[0px] w-[812.9px] h-px"
             alt=""
             src="/group.svg"
           />
-          <StoreListing singleStores={singleProducts}/>
         </div>
       </div>
     </div>
