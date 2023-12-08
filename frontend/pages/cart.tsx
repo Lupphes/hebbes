@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import { useCallback } from "react";
 import { TextField, InputAdornment, Icon, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
-import AdContainer from "../components/ad-container";
+import CartContainer from "../components/cart-container";
 import Header from "../components/header";
 
 const Cart: NextPage = () => {
@@ -12,6 +12,7 @@ const Cart: NextPage = () => {
       router.push("/");
     }, [router]);
 
+    
     const onDiscountsClick = useCallback(() => {
       router.push("/"); // TODO: change to hot items
     }, [router]);
@@ -24,15 +25,75 @@ const Cart: NextPage = () => {
       router.push("/price-bandit");
     }, [router]);
 
+    
+  interface singleStore {
+    price: string;
+    imageSrc: string;
+  }
+    
+  interface itemList{
+    name: string;
+    singleStores: singleStore[];
+  }
+
+  interface cartItem{
+    selectedStoreName: string;
+    quantity: number;
+    itemList: itemList
+  }
+
+  interface cartList{
+    items: cartItem[];
+  }
+
+
+  const shoppingCart: cartList = {
+    items: [
+      {
+       selectedStoreName: "ah",
+       quantity: 3,
+       itemList:   {
+        name: "item1",
+        singleStores: [
+          {
+            price: "2.55",
+            imageSrc: "/asgaard-sofa-312@2x.png",
+          },
+          {
+            price: "2.20",
+            imageSrc: "/asgaard-sofa-312@2x.png",
+          },
+          ],
+        }
+      },
+      {
+        selectedStoreName: "jumbo",
+        quantity: 2,
+        itemList: {
+          name: "item2",
+          singleStores: [
+            {
+              price: "3.00",
+              imageSrc: "/another-item-image.png",
+            },
+            {
+              price: "2.50",
+              imageSrc: "/another-item-image.png",
+            },
+          ],
+        }
+      }
+    ],
+  };
 
   return (
     <div className="relative bg-text-white-op-100 w-full h-[2138px] overflow-hidden">
-      <AdContainer />
+      <CartContainer />
       <div className="absolute top-[0px] left-[0px] w-[1440px] overflow-hidden flex flex-col items-center justify-start gap-[867px]">
         <Header
           home="Cart"
           onHomeClick={onHomeClick}
-          onDiscountsClick={onDiscountsClick}
+          //onDiscountsClick={onDiscountsClick}
           onAboutClick={onAboutClick}
           onPremiumClick={onPremiumClick}
         />
@@ -86,7 +147,7 @@ const Cart: NextPage = () => {
                       </button>
                       <button
                         className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
-                        onClick={onAbout1Click}
+                        //onClick={onAbout1Click}
                       >
                         About
                       </button>
