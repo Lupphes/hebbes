@@ -27,7 +27,7 @@ const Home: NextPage = () => {
 
   return (
     <div className="relative bg-text-white-op-100 w-full overflow-hidden flex flex-col items-center justify-start gap-[81px]">
-      <div className="h-auto overflow-hidden shrink-0 flex flex-col items-center justify-center gap-[41px] text-left text-29xl text-black font-poppins">
+      <div className="h-auto bg-red overflow-hidden shrink-0 flex flex-col items-center justify-center gap-[41px] text-left text-29xl text-black font-poppins">
         <Header
             home="Home"
             onHomeClick={onHomeClick}
