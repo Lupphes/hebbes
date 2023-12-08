@@ -3,6 +3,11 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Explain from '@/components/Explain';
+
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -15,12 +20,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <>
-          <Providers>{children}</Providers>
-        </>
+      <Header
+            home="Home"
+        />
+        <Providers>{children}</Providers>
+      <section className="flex flex-col items-center justify-start">
+        <Explain />
+        <Footer />
+      </section>
       </body>
     </html>
   );
