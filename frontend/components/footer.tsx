@@ -6,7 +6,19 @@ import { useRouter } from "next/router";
 const Footer: NextPage = () => {
   const router = useRouter();
 
+  const onHomeClick = useCallback(() => {
+    router.push("/");
+  }, [router]);
+
+  const onDiscountsClick = useCallback(() => {
+    router.push("/"); // TODO: change to hot items
+  }, [router]);
+
   const onAboutClick = useCallback(() => {
+    router.push("/price-bandit");
+  }, [router]);
+
+  const onPremiumClick = useCallback(() => {
     router.push("/price-bandit");
   }, [router]);
 
@@ -23,11 +35,17 @@ const Footer: NextPage = () => {
         <div className="w-1/4 md:w-[90%] md:py-15 flex flex-col items-start justify-start gap-[40px]">
           <div className="relative py-2 font-medium">Links</div>
           <div className="flex flex-col items-start justify-start gap-[46px]">
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block">
+            <button
+              className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
+              onClick={onHomeClick}
+            >
               Home
             </button>
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block">
-              Items
+            <button
+              className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
+              onClick={onDiscountsClick}
+            >
+              Discounts
             </button>
             <button
               className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
@@ -35,7 +53,10 @@ const Footer: NextPage = () => {
             >
               About
             </button>
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block">
+            <button
+              className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
+              onClick={onPremiumClick}
+            >
               Premium
             </button>
           </div>
@@ -43,13 +64,22 @@ const Footer: NextPage = () => {
         <div className="w-1/4 md:w-[90%] md:py-15 flex flex-col items-start justify-start gap-[40px]">
           <div className="relative py-2 font-medium">Help</div>
           <div className="flex flex-col items-start justify-start gap-[45px] text-black">
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block">
+            <button
+              className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
+              onClick={onAboutClick}
+            >
               How it works?
             </button>
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block">
+            <button
+              className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
+              onClick={onPremiumClick}
+            >
               What is Premium?
             </button>
-            <button className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block">
+            <button
+              className="cursor-pointer [border:none] p-0 bg-[transparent] relative text-base font-medium font-poppins text-black text-left inline-block"
+              onClick={onAboutClick}
+            >
               Privacy Policies
             </button>
           </div>
