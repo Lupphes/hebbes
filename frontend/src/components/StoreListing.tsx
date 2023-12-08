@@ -37,7 +37,7 @@ const StoreListing: NextPage<itemList> = ({ singleStores }) => {
                 Shops
             </div>
             {singleStores.map((product: singleStore, index: number) => (
-              <div>
+              <div key={product.price}>{/*Change this to unique identifier TODO*/}
                 <div className="relative w-14 h-[116.6px]" key={index}>
       
                     <img

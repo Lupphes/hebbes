@@ -82,7 +82,7 @@ const ShopPage = () => {
       <div>
         <Ad/>
         {twoItemsTest.items.map((item: itemList, index: number) => (
-          <div>
+          <div key={item.name}>{/*change to id, something that is unique TODO*/}
             <ProductRowContainer 
             name={item.name}
             singleStores={item.singleStores}
