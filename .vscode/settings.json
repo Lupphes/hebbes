@@ -1,10 +1,20 @@
 {
-  "eslint.workingDirectories": [
-    "./frontend"
-  ],
+  "eslint.workingDirectories": ["./frontend"],
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "python.analysis.typeCheckingMode": "basic",
-  "python.analysis.autoImportCompletions": true
+  "python.analysis.autoImportCompletions": true,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5432,
+      "driver": "PostgreSQL",
+      "name": "timescale",
+      "database": "timescale",
+      "username": "timescale",
+      "password": "WZ3IIub7hj12v0kztf7UEtzsifYKadei"
+    }
+  ]
 }
