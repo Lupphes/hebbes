@@ -20,12 +20,12 @@ const QuantityAdjuster: React.FC<QuantityAdjusterProps> = ({ quantity, onQuantit
 
   return (
     <div className="flex items-center">
-      <button className="px-2 py-1 border border-gray-300" onClick={handleDecrease}>
-        -
+      <button className="h-full w-20 cursor-pointer outline-none py-3" onClick={handleDecrease}>
+        <span className="m-auto text-base">−</span>
       </button>
       <span className="mx-2">{quantity}</span>
-      <button className="px-2 py-1 border border-gray-300" onClick={handleIncrease}>
-        +
+      <button className="h-full w-20 cursor-pointer py-3" onClick={handleIncrease}>
+        <span className="m-auto text-base">+</span>
       </button>
     </div>
   );

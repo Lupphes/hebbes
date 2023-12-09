@@ -3,25 +3,28 @@ import type { NextPage } from "next";
 import React, { useState } from 'react';
 import QuantityAdjuster from '../components/QuantityAdjuster';
 
-interface SingleProductProps {
+interface SinglePriceProps {
   price: string;
   imageSrc: string;
 }
 
-interface SingleProductList{
-  singleProducts: SingleProductProps[];
+interface SingleProductProps {
+  name: string;
+  imageSrc: string;
+  category: string;
+  tags: string[];
 }
 
-const findIndexOfCheapestProduct = (products: SingleProductProps[]): number => {
-  if (products.length === 0) {
+const findIndexOfCheapestProduct = (prices: SinglePriceProps[]): number => {
+  if (prices.length === 0) {
     return -1; // Return -1 if the list is empty
   }
 
   let lowestIndex = 0;
 
-  for (let i = 1; i < products.length; i++) {
-    const lowestPrice = parseFloat(products[lowestIndex].price || "");
-    const currentPrice = parseFloat(products[i].price || "");
+  for (let i = 1; i < prices.length; i++) {
+    const lowestPrice = parseFloat(prices[lowestIndex].price || "");
+    const currentPrice = parseFloat(prices[i].price || "");
 
     if (isNaN(lowestPrice) || currentPrice < lowestPrice) {
       lowestIndex = i;
@@ -31,7 +34,7 @@ const findIndexOfCheapestProduct = (products: SingleProductProps[]): number => {
   return lowestIndex;
 };
 
-const findAveragePrice = (products: SingleProductProps[]): number => {
+const findAveragePrice = (products: SinglePriceProps[]): number => {
   if (products.length === 0) {
     return 0; // or throw an error, depending on your use case
   }
@@ -48,9 +51,15 @@ const findAveragePrice = (products: SingleProductProps[]): number => {
   return average;
 };
 
-const SingleProduct: NextPage<SingleProductList> = ({ singleProducts }) => {
-  const indexOfCheapest = findIndexOfCheapestProduct(singleProducts);
-  const averagePrice = findAveragePrice(singleProducts);
+type SingleComponentProps = {
+  singleProduct: SingleProductProps;
+  singlePrices: SinglePriceProps[];
+};
+
+
+const SingleProduct: NextPage<SingleComponentProps> = ({ singleProduct, singlePrices }) => {
+  const indexOfCheapest = findIndexOfCheapestProduct(singlePrices);
+  const averagePrice = findAveragePrice(singlePrices);
 
   const [quantity, setQuantity] = useState(1);
 
@@ -59,40 +68,40 @@ const SingleProduct: NextPage<SingleProductList> = ({ singleProducts }) => {
   };
 
   return (
-    <div className="overflow-hidden shrink-0 text-left text-base text-black font-poppins">
-      <div className="flex flex-row items-start justify-start">
+    <div className="overflow-hidden shrink-0 text-left text-base text-black font-poppins my-5">
+      <div className="flex flex-row items-start justify-start md:flex-col md:items-center gap-8 w-[95%]">
         {/*Image div that is on the left of the rest*/}
         <div className="items-left justify-start">
           <img
-            className="w-[423px] h-[500px] object-cover bg-darkolivegreen-300 rounded-3xs"
+            className="object-cover bg-darkolivegreen-300 rounded-3xs"
             alt=""
-            src="/asgaard-sofa-3@2x.png"
+            src={singleProduct.imageSrc}
           />
         </div>
         {/*concent of the product*/}
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-8">
           {/*product name*/}
           <div className="text-23xl inline-block ">
-            Coca-Cola 1.5L
+            {singleProduct.name}
           </div>
           {/*product price overview*/}
-          <div className="flex flex-row items-center justify-start gap-[5px]">
+          <div className="flex flex-row items-center justify-between">
             {/*best price*/}
-            <div>
+            <div className="flex flex-row items-start gap-[5px]">
               <div className="font-medium inline-block ">
-                € {singleProducts[indexOfCheapest].price}
+                € {singlePrices[indexOfCheapest].price}
               </div>
               <div className="font-medium text-darkolivegreen-100 inline-block">
                 Best Price
               </div>
               <img
-                className="w-[39px] h-[26px] object-cover"
+                className="w-8 h-8 object-cover"
                 alt=""
-                src={singleProducts[indexOfCheapest].imageSrc}
+                src={singlePrices[indexOfCheapest].imageSrc}
               />
             </div>
             {/*average price*/}
-            <div className="flex flex-row items-end justify-end gap-[5px]">
+            <div className="flex flex-row items-end gap-[5px]">
               <div className="font-medium inline-block ">
                 € {averagePrice}
               </div>
@@ -102,24 +111,18 @@ const SingleProduct: NextPage<SingleProductList> = ({ singleProducts }) => {
             </div>
           </div>
           {/*Suggested Stores*/}
-          {/*<StoreListing singleStores={singleProducts}/>*/}
+          <StoreListing singleStores={singlePrices}/>
           {/*quantity*/}
           <QuantityAdjuster quantity={quantity} onQuantityChange={handleQuantityChange} />
           {/*description*/}
           <div className="flex flex-col overflow-hidden text-darkgray">
             <div className="inline-block">
-              Category: Soft Drinks
+              Category: {singleProduct.category}
             </div>
             <div className="inline-block">
-              Tags: Soft Drinks, Coca-Cola
+              Tags: {singleProduct.tags.join(", ")}
             </div>
           </div>
-
-          <img
-            className="absolute top-[394px] left-[0px] w-[812.9px] h-px"
-            alt=""
-            src="/group.svg"
-          />
         </div>
       </div>
     </div>
