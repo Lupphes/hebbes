@@ -24,14 +24,16 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-      <Header
-            home="Home"
+      <div className="font-poppins">
+        <Header
+          title="Price Bandit"
         />
         <Providers>{children}</Providers>
-      <section className="flex flex-col items-center justify-start">
-        <Explain />
-        <Footer />
-      </section>
+        <section className="flex flex-col items-center justify-start">
+          <Explain />
+          <Footer />
+        </section>
+      </div>
       </body>
     </html>
   );
