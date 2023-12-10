@@ -12,7 +12,7 @@ interface itemList{
   singleStores: singleStore[];
 }
 
-const ProductRow: NextPage<itemList> = ({ singleStores }) => {
+const ProductRow: NextPage<{item: Item}> = ({ item }) => {
   return (
     <div
       className="absolute top-[147px] left-[0px] w-[1212px] overflow-hidden flex flex-col items-start justify-center text-center text-lg text-black font-poppins"
@@ -27,7 +27,7 @@ const ProductRow: NextPage<itemList> = ({ singleStores }) => {
             />
             <div className="w-[121px] h-[167px] overflow-hidden shrink-0 flex flex-col items-center justify-center gap-[12px]">
               <a className="[text-decoration:none] relative text-[inherit] inline-block w-[115px] h-[25.7px] shrink-0">
-                Coca Cola 1.5L
+                {item.name}
               </a>
               <img
                 className="relative w-[43.6px] h-[29.3px] object-cover"
@@ -38,7 +38,7 @@ const ProductRow: NextPage<itemList> = ({ singleStores }) => {
           </div>
         </div>
         <StoreListingContainer 
-          singleStores={singleStores}
+          item={item}
         />
       </div>
     </div>
