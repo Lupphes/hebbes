@@ -4,38 +4,42 @@ import React, { useState } from 'react';
 import QuantityAdjuster from '../components/QuantityAdjuster';
 import AH from "@/resources/AH.jpg";
 
-const findIndexOfCheapestStore = (stores: ItemInfo[]): number => {
-  if (stores.length === 0) {
-      return -1; // Return -1 if the list is empty
+const findIndexOfCheapestStore = (stores: { [key: string]: ItemInfo }): string => {
+  const keys = Object.keys(stores);
+  if (keys.length === 0) {
+    return ''; // Return null if the object is empty
   }
-  let lowestIndex = 0;
-  for (let i = 1; i < stores.length; i++) {
-      const lowestPrice = stores[lowestIndex].price;
-      const currentPrice = stores[i].price;
-
-      if (lowestPrice || currentPrice < lowestPrice) {
-          lowestIndex = i;
-      }
+  let lowestKey = keys[0];
+  for (let i = 1; i < keys.length; i++) {
+    const lowestPrice = stores[lowestKey].price;
+    const currentPrice = stores[keys[i]].price;
+    if (lowestPrice === null || (currentPrice !== null && currentPrice < lowestPrice)) {
+      lowestKey = keys[i];
+    }
   }
-  return lowestIndex;
-  };
+  return lowestKey;
+};
 
 
-const findAveragePrice = (stores: ItemInfo[]): number => {
-  if (stores.length === 0) {
+const findAveragePrice = (stores: { [key: string]: ItemInfo }): number => {
+  const keys = Object.keys(stores);
+  if (keys.length === 0) {
     return 0; // or throw an error, depending on your use case
   }
   let sum = 0;
-  for(let i = 0; i < stores.length; i++){
-      sum = stores[i].price + sum;
+  for (let i = 0; i < keys.length; i++) {
+    sum = stores[keys[i]].price + sum;
   };
   // Calculate the average
-  const average = sum / stores.length;
+  const average = sum / keys.length;
   return average;
-  };
+};
 
-const SingleProduct: NextPage<{item: Item}> = ({ item }) => {
+const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
   const [quantity, setQuantity] = useState(1);
+  console.log(item)
+  console.log(item.item_info)
+  const cheapestIndex = findIndexOfCheapestStore(item.item_info);
 
   const handleQuantityChange = (newQuantity: number) => {
     setQuantity(newQuantity);
@@ -49,7 +53,7 @@ const SingleProduct: NextPage<{item: Item}> = ({ item }) => {
           <img
             className="object-cover bg-darkolivegreen-300 rounded-3xs"
             alt=""
-            src= {AH.src}
+            src={AH.src}
           />{/*singleProduct.imageSrc*/}
         </div>
         {/*concent of the product*/}
@@ -63,7 +67,7 @@ const SingleProduct: NextPage<{item: Item}> = ({ item }) => {
             {/*best price*/}
             <div className="flex flex-row items-start gap-[5px]">
               <div className="font-medium inline-block ">
-                € {item.item_infos && item.item_infos[findIndexOfCheapestStore(item.item_infos)].price}
+                € {item.item_info && item.item_info[findIndexOfCheapestStore(item.item_info)].price}
               </div>
               <div className="font-medium text-darkolivegreen-100 inline-block">
                 Best Price
@@ -71,13 +75,16 @@ const SingleProduct: NextPage<{item: Item}> = ({ item }) => {
               <img
                 className="w-8 h-8 object-cover"
                 alt=""
-                src= {AH.src}
+                src={AH.src}
               />{/*item.item_infos[indexOfCheapest].store_id TODO: should be picture of shop*/}
             </div>
             {/*average price*/}
             <div className="flex flex-row items-end gap-[5px]">
               <div className="font-medium inline-block ">
-                € {item.item_infos && findAveragePrice(item.item_infos)}
+                <div>
+                  {item && item.brand}
+                </div>
+                € {item.item_info && findAveragePrice(item.item_info)}
               </div>
               <div className="font-medium text-darkolivegreen-100 inline-block">
                 Avg. Price
@@ -85,7 +92,7 @@ const SingleProduct: NextPage<{item: Item}> = ({ item }) => {
             </div>
           </div>
           {/*Suggested Stores*/}
-          <StoreListing item={item}/>
+          <StoreListing item={item} />
           {/*quantity*/}
           <QuantityAdjuster quantity={quantity} onQuantityChange={handleQuantityChange} />
           {/*description*/}

@@ -11,7 +11,7 @@ interface Item {
     measurements_label: string;
 
     picture?: Picture | null;
-    item_infos?: ItemInfo[];
+    item_info: { [key: string]: ItemInfo };
     stores?: Store[];
     categories?: Category[];
 }
