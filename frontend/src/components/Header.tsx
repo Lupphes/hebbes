@@ -23,23 +23,6 @@ type HeaderType = {
 const Header: NextPage<HeaderType> = ({
   title,
 }) => {
-  const router = useRouter();
-
-  const onHomeClick = useCallback(() => {
-    router.push("/");
-  }, [router]);
-
-  const onDiscountsClick = useCallback(() => {
-    router.push("/"); // TODO: change to hot items
-  }, [router]);
-
-  const onAboutClick = useCallback(() => {
-    router.push("/about");
-  }, [router]);
-
-  const onPremiumClick = useCallback(() => {
-    router.push("/about");
-  }, [router]);
 
   return (
     <div className="flex flex-col items-center text-29xl font-poppins">
@@ -51,7 +34,7 @@ const Header: NextPage<HeaderType> = ({
             className=""
             color="success"
             variant="outlined"
-            onClick={onHomeClick}
+            href="/"
           >
             Home
           </Button>
@@ -59,7 +42,7 @@ const Header: NextPage<HeaderType> = ({
             className=""
             color="success"
             variant="outlined"
-            onClick={onDiscountsClick}
+            href="/"
           >
             Discounts
           </Button>
@@ -67,7 +50,7 @@ const Header: NextPage<HeaderType> = ({
             className=""
             color="success"
             variant="outlined"
-            onClick={onAboutClick}
+            href="/about"
           >
             About
           </Button>
@@ -75,7 +58,7 @@ const Header: NextPage<HeaderType> = ({
             className=""
             color="success"
             variant="outlined"
-            onClick={onPremiumClick}
+            href="/about"
           >
             Premium
           </Button>
