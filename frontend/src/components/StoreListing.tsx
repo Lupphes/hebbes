@@ -26,12 +26,12 @@ const findIndexOfCheapestStore = (stores: { [key: string]: ItemInfo }): string |
 const StoreListing: NextPage<{ item: Item }> = ({ item }) => {
 
   return (
-    <div className="flex flex-row snap-x items-center justify-start gap-7 text-center text-smi">
-      <div className="snap-start inline-block shrink-0">Shops</div>
+    <div className="flex flex-row items-center justify-start md:justify-center gap-7 text-center text-smi">
+      <div className="overflow-x-auto flex flex-row">
       {item && item.item_info && Object.keys(item.item_info).map((key) => {
         const store = item.item_info[key];
         return (
-          <div key={store.price} className="snap-start flex flex-col place-items-center gap-4">
+          <div key={store.price} className="flex flex-col place-items-center gap-4">
             <div className="rounded-8xs w-12 h-10 bg-darkolivegreen-300 place-items-center" key={key}>
               <img className="w-8 h-8" alt="" src= { store.id == 1 ? AH.src : AH.src} />
             </div>
@@ -47,6 +47,7 @@ const StoreListing: NextPage<{ item: Item }> = ({ item }) => {
           </div>
         );
       })}
+      </div>
     </div>
   );
 };
