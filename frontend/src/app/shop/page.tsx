@@ -34,6 +34,15 @@ const ShopPage = () => {
     fetchItems();
   }, [skip, limit]);
 
+  const [page, setPage] = useState(1);
+  const pageDownClick = () => {
+    setPage((prevPage) => Math.max(1, prevPage - 1));
+  };
+
+  const pageUpClick = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
   return (
     <div className="flex flex-col justify-start bg-text-white-op-100 p-10 w-[80%]">
       <div className="flex flex-col gap-10">
@@ -56,26 +65,28 @@ const ShopPage = () => {
             )
           }
         <Ad/>
-      </div>
-      {/*
-        Pagination html
-        <div className="absolute top-[2251px] left-[385px] w-[442px] overflow-hidden flex flex-col items-end justify-center">
-          <div className="self-stretch flex flex-row items-center justify-between md:flex-row md:gap-[38px] md:items-start md:justify-start">
+        <div className="overflow-hidden flex flex-col items-end justify-center">
+          <div className="self-stretch flex flex-row items-center justify-between md:flex-row md:gap-[38px] md:items-start md:justify-center">
+          {page > 1 ? ( 
+            <Button sx={{ width: 100 }} color="success" variant="outlined" onClick={pageDownClick}>
+              Previous
+            </Button>) : null}                
+            {page > 1 ? ( 
+            <Button sx={{ width: 60 }} color="success" variant="outlined" onClick={pageDownClick}>
+              {page-1}
+            </Button>) : null}            
             <Button sx={{ width: 60 }} color="success" variant="contained">
-              1
+            {page}
             </Button>
-            <Button sx={{ width: 60 }} color="success" variant="outlined">
-              2
+            <Button sx={{ width: 60 }} color="success" variant="outlined" onClick={pageUpClick}>
+              {page+1}
             </Button>
-            <Button sx={{ width: 60 }} color="primary" variant="outlined">
-              3
-            </Button>
-            <Button sx={{ width: 98 }} color="success" variant="outlined">
+            <Button sx={{ width: 100 }} color="success" variant="outlined" onClick={pageUpClick}>
               Next
             </Button>
           </div>
         </div>
-        */}
+      </div>
     </div>
   );
 };
