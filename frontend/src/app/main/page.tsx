@@ -1,5 +1,4 @@
 'use client';
-import Navbar from '@/components/Navbar';
 import Category from '@/components/Category';
 import { redirect } from 'next/navigation';
 
@@ -15,9 +14,8 @@ const MainPage = () => {
   }, []);
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-      <Navbar />
       <h2 className='text-2xl font-bold text-gray-900'>
-        Welcome to Price Bandit Project!
+        Welcome to Price Bandit!
       </h2>
       <Category />
       <Product />
