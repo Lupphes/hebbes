@@ -37,11 +37,7 @@ const SingleProductPage = () => {
                 />
               ) : (
               <p>Api connection missing.</p>
-              )}
-              <div>
-                {items && items[0].item_info && items[0].item_info["ah"].price}
-              </div>
-              
+              )}              
               {/*<Ad/>*/}
           </div>
       </div>

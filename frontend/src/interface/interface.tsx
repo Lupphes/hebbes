@@ -10,7 +10,7 @@ interface Item {
     measurements_amount: string;
     measurements_label: string;
 
-    picture?: Picture | null;
+    picture_link: Picture | null;
     item_info: { [key: string]: ItemInfo };
     stores?: Store[];
     categories?: Category[];
@@ -22,7 +22,7 @@ interface Picture {
     category_id: number | null;
     width: number | null;
     height: number | null;
-    url: string | null;
+    url: string | undefined;
 
     item?: Item | null;
     category?: Category | null;

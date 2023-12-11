@@ -14,7 +14,7 @@ import Ad from '@/components/Ad';
 import React, { useState, useEffect } from 'react';
 
 const ShopPage = () => {
-    const [items, setItems] = useState<Item[]>(null);
+    const [items, setItems] = useState<Item[]>([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
       const fetchItems = async () => {
@@ -34,7 +34,7 @@ const ShopPage = () => {
   return (
     <div className="flex flex-col justify-start bg-text-white-op-100 p-10 w-[80%]">
       <div className="flex flex-col gap-10">
-        {/*<Ad/>*/}
+        <Ad/>
           {loading ? (
             <p> Loading... </p>
             ) : items ? (

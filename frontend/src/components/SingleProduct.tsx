@@ -37,8 +37,6 @@ const findAveragePrice = (stores: { [key: string]: ItemInfo }): number => {
 
 const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
   const [quantity, setQuantity] = useState(1);
-  console.log(item)
-  console.log(item.item_info)
   const cheapestIndex = findIndexOfCheapestStore(item.item_info);
 
   const handleQuantityChange = (newQuantity: number) => {
@@ -46,6 +44,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
   };
 
   return (
+    item && item.picture_link ? (
     <div className="overflow-hidden shrink-0 text-left text-base text-black font-poppins my-5">
       <div className="flex flex-row items-start justify-start md:flex-col md:items-center gap-8 w-[95%]">
         {/*Image div that is on the left of the rest*/}
@@ -53,7 +52,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
           <img
             className="object-cover bg-darkolivegreen-300 rounded-3xs"
             alt=""
-            src={AH.src}
+            src= {item.picture_link.url}
           />{/*singleProduct.imageSrc*/}
         </div>
         {/*concent of the product*/}
@@ -75,7 +74,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
               <img
                 className="w-8 h-8 object-cover"
                 alt=""
-                src={AH.src}
+                src={item.item_info[cheapestIndex].id == 1 ? AH.src : AH.src}
               />{/*item.item_infos[indexOfCheapest].store_id TODO: should be picture of shop*/}
             </div>
             {/*average price*/}
@@ -107,6 +106,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
         </div>
       </div>
     </div>
+    ) : (<p>Loading...</p>)
   );
 };
 
