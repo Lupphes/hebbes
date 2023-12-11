@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import React, { useState } from 'react';
 import QuantityAdjuster from '../components/QuantityAdjuster';
 import AH from "@/resources/AH.jpg";
+import JMB from "@/resources/JMB.jpg";
 
 const findIndexOfCheapestStore = (stores: { [key: string]: ItemInfo }): string => {
   const keys = Object.keys(stores);
@@ -74,7 +75,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
               <img
                 className="w-8 h-8 object-cover"
                 alt=""
-                src={item.item_info[cheapestIndex].id == 1 ? AH.src : AH.src}
+                src={item.item_info[cheapestIndex].id == 1 ? AH.src : JMB.src}
               />{/*item.item_infos[indexOfCheapest].store_id TODO: should be picture of shop*/}
             </div>
             {/*average price*/}
