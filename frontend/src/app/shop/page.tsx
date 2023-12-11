@@ -14,22 +14,25 @@ import Ad from '@/components/Ad';
 import React, { useState, useEffect } from 'react';
 
 const ShopPage = () => {
-    const [items, setItems] = useState<Item[]>([]);
-    const [loading, setLoading] = useState(true);
-    useEffect(() => {
-      const fetchItems = async () => {
-        try {
-          const response = await fetch('http://localhost:5000/db/items');
-          const result = await response.json();
-          setItems(result);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchItems();
-    }, []);
+  const skip = 0;
+  const limit = 20;
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const url = `http://localhost:5000/db/items?limit=${limit}&skip=${skip}`;
+        const response = await fetch(url);
+        const result = await response.json();
+        setItems(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchItems();
+  }, [skip, limit]);
 
   return (
     <div className="flex flex-col justify-start bg-text-white-op-100 p-10 w-[80%]">
@@ -42,7 +45,7 @@ const ShopPage = () => {
               <div key={item.id}>{/*change to id, something that is unique TODO*/}
                 <p>{item.id}</p>
                 <ProductRowContainer item={item}/>
-                {(index == 5 ? 
+                {((index % 5) === 0 && index != 0 ? 
                   <div>
                     <Ad/>
                   </div>
