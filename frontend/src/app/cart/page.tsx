@@ -66,7 +66,7 @@ const CartPage = () => {
   }, []);
 
   return (
-    <div className="absolute top-[480px] left-[97px] w-[1243.5px] flex flex-col items-center justify-center gap-[60px] text-left text-base text-black font-poppins">
+    <div className="flex flex-col items-center gap-10 w-[80%] font-poppins py-10">
       <Ad />
       {loading ?
         (

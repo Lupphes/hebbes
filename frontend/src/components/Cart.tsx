@@ -45,90 +45,89 @@ const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adju
   }
 
     return (
-        <div className="self-stretch overflow-hidden flex flex-col items-center justify-center">
-          <div className="w-[1243.5px] flex flex-row items-start justify-between h-auto gap-[30px] hover:flex hover:w-[1243.5px] hover:h-auto hover:flex-row hover:gap-[30px] hover:items-start hover:justify-between lg:flex-col lg:gap-[30px] lg:items-start lg:justify-start md:flex-col md:gap-[30px] md:items-start md:justify-start sm:flex-col sm:gap-[30px] sm:items-start sm:justify-start">
-            <div className="relative w-[820.5px] h-[308px]">
-              <div className=" w-[820.5px] overflow-hidden flex flex-col items-start justify-center">
-                <table className="self-stretch">
-                  <tbody>
-                  {
-                    items.map((item: CartItem, index: number) => 
-                    (
-                        <CartRow key={item.id} item={item} result={result}/>
-                    ))
-                  }
-                  </tbody>
-                </table>
-              </div>
-              <div className="absolute top-[0px] left-[0px] w-[820.5px] overflow-hidden flex flex-col items-end justify-center">
-                <div className="self-stretch relative bg-silver h-[55px] overflow-hidden shrink-0">
-                  <div className="absolute top-[15px] left-[141.5px] font-medium">
+        <div className="flex flex-row md:flex-col items-center justify-center">
+          {/*table*/}
+          <div className="w-3/4 md:w-[80%] flex flex-col items-center">
+            <table className="table-fixed items-center">
+              <thead className="bg-darkolivegreen-300">
+                <tr className="items-center justify-between text-black">
+                  <th className="font-medium">
                     Product
-                  </div>
-                  <div className="absolute top-[15px] left-[298px] font-medium">
+                  </th>
+                  <th className="font-medium">
                     Store
-                  </div>
-                  <div className="absolute top-[15px] left-[411px] font-medium">
+                  </th>
+                  <th className="font-medium">
                     Price
-                  </div>
-                  <div className="absolute top-[15px] left-[488px] font-medium">
+                  </th>
+                  <th className="font-medium">
                     Avg. Price
-                  </div>
-                  <div className="absolute top-[15px] left-[675px] font-medium">
-                    Subtotal
-                  </div>
-                  <div className="absolute top-[15px] left-[579px] font-medium">
+                  </th>
+                  <th className="font-medium">
                     Quantity
-                  </div>
-                </div>
+                  </th>
+                  <th className="font-medium">
+                    Subtotal
+                  </th>
+                  <th className="font-medium">
+                    Remove
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              {
+                items.map((item: CartItem, index: number) =>
+                (
+                    <CartRow key={item.id} item={item} result={result}/>
+                ))
+              }
+              </tbody>
+            </table>
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-black">
+                * Calculated based on average price of the products you selected
+              </p>
+              <p className="text-black">
+                ** Calculated based on the difference between the average price and the prices you selected
+              </p>
+            </div>
+          </div>
+          {/*final cart info */}
+          <div className="w-1/4 md:w-[80%] bg-silver flex flex-col items-center justify-start box-border gap-8 text-12xl">
+            <div className="relative font-semibold">Cart Totals</div>
+            <div className="justify-between">
+              <div className="text-left">Select store</div>
+              <div className="items-right">
+                <select className="w-32 h-8 rounded-8xs border-[1px] border-solid border-darkgray">
+                  <option value="AH">Albert Heijn</option>
+                  <option value="JMB">Jumbo</option>
+                </select>
               </div>
-              <div className="absolute top-[342px] left-[3.5px] w-[813.5px] overflow-hidden flex flex-col items-start justify-center text-darkgray">
-                <div className="self-stretch relative whitespace-pre-wrap">
-                  <p className="m-0">
-                    * Calculated based on average price of the products you
-                    selected
-                  </p>
-                  <p className="m-0">
-                    ** Calculated based on the difference between the average
-                    price and the prices you selected
-                  </p>
-                </div>
+
+            </div>
+            <div className="justify-between">
+              <div className="text-left">Avg. Subtotal*</div>
+              <div className="text-darkolivegreen-100 text-right">
+                € -
               </div>
             </div>
-            <div className="bg-silver w-[393px] flex flex-col items-center justify-start py-[15px] px-[75px] box-border gap-[42px] text-13xl">
-              <div className="w-[243px] overflow-hidden flex flex-col items-center justify-start gap-[4px]">
-                <div className="self-stretch overflow-hidden flex flex-col items-center justify-center gap-[61px]">
-                  <div className="self-stretch overflow-hidden flex flex-col items-start justify-center">
-                    <div className="relative font-semibold">Cart Totals</div>
-                  </div>
-                  <div className="self-stretch overflow-hidden flex flex-col items-center justify-start gap-[3px] text-base">
-                    <div className="self-stretch overflow-hidden flex flex-row items-center justify-between">
-                      <div className="relative font-medium">Avg. Subtotal*</div>
-                      <div className="relative text-darkolivegreen-100 text-right">
-                        € -
-                      </div>
-                    </div>
-                    <div className="self-stretch overflow-hidden flex flex-row items-center justify-between">
-                      <div className="relative font-medium">Est. Savings**</div>
-                      <div className="relative text-red text-right">€ {result ? result.highestSum-result.lowestSum : 0}</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="self-stretch overflow-hidden flex flex-row items-start justify-between text-base">
-                  <div className="relative font-medium">Final Total</div>
-                  <div className="relative text-xl font-medium text-darkolivegreen-200">
-                    € {result ? result.lowestSum : "Loading.."}
-                  </div>
-                </div>
-              </div>
-              {/* <Button
-                className="[align-self:start] h-[59px] ml-2.5"
-                color="success"
-                variant="outlined"
-              >
-                Check Out
-              </Button>*/}
+            <div className="justify-between">
+              <div className="text-left">Est. Savings**</div>
+              <div className="text-red text-right">€ {result ? result.highestSum-result.lowestSum : 0}</div>
             </div>
+            <div className="justify-between">
+              <div className="font-medium text-left">Final Total</div>
+              <div className="text-darkolivegreen-200 text-right">
+                € {result ? Math.round(result.lowestSum * 100) / 100 : "Loading.."}
+              </div>
+            </div>
+            {/* <Button
+              className="[align-self:start] h-[59px] ml-2.5"
+              color="success"
+              variant="outlined"
+            >
+              Check Out
+            </Button>*/}
           </div>
         </div>
     );
