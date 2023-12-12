@@ -55,7 +55,7 @@ const ShopPage = () => {
             <p> Loading... </p>
             ) : items ? (
             items.map((item: Item, index: number) => (
-              <div key={item.id}>{/*change to id, something that is unique TODO*/}
+              <div key={item.id}>
                 <ProductRowContainer item={item}/>
                 {((index % 5) === 0 && index != 0 ? 
                   <div>

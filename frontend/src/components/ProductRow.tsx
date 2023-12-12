@@ -2,16 +2,6 @@ import type { NextPage } from "next";
 import { useMemo, type CSSProperties } from "react";
 import StoreListingContainer from "@/components/StoreListing";
 
-interface singleStore {
-  price: string;
-  imageSrc: string;
-}
-  
-interface itemList{
-  name: string;
-  singleStores: singleStore[];
-}
-
 const ProductRow: NextPage<{item: Item}> = ({ item }) => {
   return (
     <div className="flex flex-row md:flex-col text-center text-lg text-black font-poppins gap-7">

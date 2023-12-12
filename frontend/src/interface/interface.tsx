@@ -57,3 +57,13 @@ interface Category {
     pictures: Picture[];
     items: Item[];
 }
+
+//Interfaces for the cart
+interface ItemInfoSum {
+    sum: number;
+    itemIdPricesList: Array<[number, number]>; // Tuple array with item id and price
+  }
+  
+  interface SumByItemInfoKey {
+    [key: string]: ItemInfoSum;
+  }

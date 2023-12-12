@@ -33,7 +33,7 @@ const StoreListing: NextPage<{ item: Item }> = ({ item }) => {
         return (
           <div key={store.price} className="flex flex-col place-items-center gap-4">
             <div className="rounded-8xs w-12 h-10 bg-darkolivegreen-300 place-items-center" key={key}>
-              <img className="w-8 h-8" alt="" src= { store.id == 1 ? AH.src : JMB.src} />
+              <img className="w-8 h-8" alt="" src= { store.store_id === 1 ? AH.src : JMB.src} />
             </div>
             <div className="text-smi text-black flex">
               {store.price ? `€ ${store.price}` : null}
