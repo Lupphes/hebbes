@@ -6,6 +6,7 @@ from sqlalchemy import JSON, String, Integer, Float, null
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from models.item_store import item_store_association
+
 if TYPE_CHECKING:
     from .item import Item
 

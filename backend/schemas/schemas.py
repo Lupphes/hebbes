@@ -61,22 +61,29 @@ class ItemNested(BaseModel):
     description: str
     picture: Optional[PictureSchema]
 
+
 class StoreSchema(BaseModel):
     id: int = Field(description="The unique identifier of the store")
     name: str
     store_link: Optional[str]
     items: List[ItemNested] = []
+
     class Config:
         orm_mode = True
+
+
 class ItemInfoSchema(BaseModel):
     id: int
     item_id: Optional[int]
     store_id: Optional[int]
     product_link: str
-    price: float
+    price: Optional[float]
     discount_info: List[Optional[dict]]
+
     class Config:
         orm_mode = True
+
+
 class ItemSchema(BaseModel):
     id: int
     name: str
@@ -90,6 +97,7 @@ class ItemSchema(BaseModel):
     picture_link: Optional[PictureSchema]
     categories: List[CategorySchema]
     item_info: Dict[str, ItemInfoSchema]
+
     class Config:
         from_attributes = True
         orm_mode = True

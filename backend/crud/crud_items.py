@@ -1,5 +1,6 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload, aliased
+from sqlalchemy import func
 import json
 
 from models import Category, Store, Item, Picture, ItemInfo
@@ -18,7 +19,7 @@ def get_items(
         joinedload(Item.picture),
         joinedload(Item.categories).joinedload(Category.pictures),
         joinedload(Item.item_infos),
-        joinedload(Item.stores)
+        joinedload(Item.stores),
     )
 
     if id is not None:
@@ -63,6 +64,9 @@ def populate_tables(db: Session):
             measurements_amount=item_data["measurements"]["amount"],
             measurements_label=item_data["measurements"]["label"],
             categories=category_hierarchy if category_hierarchy else [],
+            search_vector=func.to_tsvector(
+                "dutch", item_data["name"] + " " + item_data["brand"]
+            ),
         )
 
         # Add Picture instances to Item
@@ -79,9 +83,14 @@ def populate_tables(db: Session):
 
         # Add Store instances to Item
         for store_name, store_data in item_data["stores"].items():
-            price = (
-                float(store_data["price"]) if store_data["price"] != "null" else None
-            )
+            try:
+                price = (
+                    float(store_data["price"])
+                    if store_data["price"] != "null"
+                    else None
+                )
+            except ValueError:
+                price = None
             store = db.query(Store).filter_by(name=store_name).first()
             if store is None:
                 store = Store(

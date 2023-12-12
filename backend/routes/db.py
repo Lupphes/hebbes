@@ -3,6 +3,8 @@ from fastapi.encoders import jsonable_encoder
 
 from typing import List, Optional
 from sqlalchemy.orm import Session, joinedload
+from sqlalchemy_searchable import search
+from models.item import Item
 from schemas.schemas import (
     ItemInfoSchema,
     ItemSchema,
@@ -40,7 +42,8 @@ def read_items(
     for item in items:
         item_info_dict = {}
         for info in item.item_infos:
-            store_name = db.query(Store).filter(Store.id == info.store_id).first().name
+            store = db.query(Store).filter(Store.id == info.store_id).first()
+            store_name = store.name if store else "Unknown Store"
             item_info_dict[store_name] = ItemInfoSchema(
                 id=info.id,
                 item_id=info.item_id,
@@ -96,7 +99,7 @@ def read_items(
             ]
             if item.categories
             else [],
-            item_info=item_info_dict
+            item_info=item_info_dict,
         )
         items_response.append(item_schema)
     return items_response
@@ -147,14 +150,116 @@ def read_stores(
     db: Session = Depends(get_db),
 ):
     if id is not None:
-        stores = db.query(Store).filter(Store.id == id).options(joinedload(Store.items)).offset(skip).limit(limit).all()
+        stores = (
+            db.query(Store)
+            .filter(Store.id == id)
+            .options(joinedload(Store.items))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
     else:
-        stores = db.query(Store).options(joinedload(Store.items)).offset(skip).limit(limit).all()
+        stores = (
+            db.query(Store)
+            .options(joinedload(Store.items))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
     for store in stores:
         store.items = store.items[:20]
     return stores
 
 
 @router.get("/search")
-def search(db: Session = Depends(get_db)):
-    return True
+def search_database(
+    query: str,
+    id: Optional[int] = None,
+    category_id: Optional[int] = None,
+    store_id: Optional[int] = None,
+    skip: int = 0,
+    limit: int = 20,
+    db: Session = Depends(get_db),
+):
+    query_object = db.query(Item)
+
+    if query:
+        query_object = search(query_object, query, sort=True)
+
+    if id:
+        query_object = query_object.filter(Item.id == id)
+    if category_id:
+        query_object = query_object.join(Item.categories).filter(
+            Category.id == category_id
+        )
+    if store_id:
+        query_object = query_object.join(Item.stores).filter(Store.id == store_id)
+
+    # Pagination
+    items = query_object.offset(skip).limit(limit).all()
+
+    items_response = []
+    for item in items:
+        item_info_dict = {}
+        for info in item.item_infos:
+            store = db.query(Store).filter(Store.id == info.store_id).first()
+            store_name = store.name if store else "Unknown Store"
+            item_info_dict[store_name] = ItemInfoSchema(
+                id=info.id,
+                item_id=info.item_id,
+                store_id=info.store_id,
+                product_link=info.product_link,
+                price=info.price,
+                discount_info=info.discount_info,
+            )
+
+        item_schema = ItemSchema(
+            id=item.id,
+            name=item.name,
+            brand=item.brand,
+            description=item.description,
+            gln=item.gln,
+            gtin=item.gtin,
+            measurements_units=item.measurements_units,
+            measurements_amount=item.measurements_amount,
+            measurements_label=item.measurements_label,
+            picture_link=PictureSchema(
+                id=item.picture.id,
+                item_id=item.picture.item_id,
+                category_id=item.picture.category_id,
+                width=item.picture.width
+                if item.picture and item.picture.width is not None
+                else 0,
+                height=item.picture.height
+                if item.picture and item.picture.height is not None
+                else 0,
+                url=item.picture.url
+                if item.picture and isinstance(item.picture.url, str)
+                else "",
+            ),
+            categories=[
+                CategorySchema(
+                    id=cat.id,
+                    category_id=cat.category_id,
+                    name=cat.name,
+                    parent_id=cat.parent_id,
+                    pictures=[
+                        PictureSchema(
+                            id=picture.id,
+                            item_id=picture.item_id,
+                            category_id=picture.category_id,
+                            width=picture.width,
+                            height=picture.height,
+                            url=picture.url,
+                        )
+                        for picture in cat.pictures
+                    ],
+                )
+                for cat in item.categories
+            ]
+            if item.categories
+            else [],
+            item_info=item_info_dict,
+        )
+        items_response.append(item_schema)
+    return items_response
