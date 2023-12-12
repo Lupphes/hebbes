@@ -1,12 +1,6 @@
 import type { NextPage } from "next";
 import CartRow from '@/components/CartRow';
 
-interface LowestHighest {
-  lowestKey: string;
-  lowestSum: number;
-  highestSum: number;
-}
-
 const findKeyWithLowestSum = (adjustedSumByItemInfoKey: SumByItemInfoKey): LowestHighest => {
   let lowestKey: string = "";
   let lowestSum: number = 0;
@@ -39,9 +33,10 @@ const findKeyWithLowestSum = (adjustedSumByItemInfoKey: SumByItemInfoKey): Lowes
   return item
 };
 
-const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjustedSum:SumByItemInfoKey}> = ({ items, sumByItemInfoKey, adjustedSum}) => {
+const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adjustedSum:SumByItemInfoKey}> = ({ items, sumByItemInfoKey, adjustedSum}) => {
   const result: LowestHighest = findKeyWithLowestSum(adjustedSum);
   const itemInfoKeys = Object.keys(sumByItemInfoKey);
+
   if(itemInfoKeys.length == 1)
   {
     result.lowestSum = sumByItemInfoKey[itemInfoKeys[0]].sum;
@@ -57,9 +52,9 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
                 <table className="self-stretch">
                   <tbody>
                   {
-                    items.map((item: Item, index: number) => 
+                    items.map((item: CartItem, index: number) => 
                     (
-                        <CartRow key={item.id} item={item}/>
+                        <CartRow key={item.id} item={item} result={result}/>
                     ))
                   }
                   </tbody>

@@ -4,7 +4,7 @@ import Cart from '@/components/Cart';
 
 import React, { useState, useEffect } from 'react';
 
-const calculateSumByItemInfoKey = (items: Item[]): SumByItemInfoKey => {
+const calculateSumByItemInfoKey = (items: CartItem[]): SumByItemInfoKey => {
   const sumByItemInfoKey: SumByItemInfoKey = {};
   if (items) {
     items.forEach((item) => {
@@ -47,7 +47,7 @@ const adjustSumForCommonIds = (sumByItemInfoKey: SumByItemInfoKey): SumByItemInf
 };
 
 const CartPage = () => {
-  const [items, setItems] = useState<Item[] | null>([]);
+  const [items, setItems] = useState<CartItem[] | null>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchItems = async () => {
