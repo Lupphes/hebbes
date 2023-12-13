@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import AH from "@/resources/AH.jpg";
 import JMB from "@/resources/JMB.jpg";
+import { useRouter } from "next/navigation";
 
 const findAveragePrice = (stores: { [key: string]: ItemInfo }): number => {
     const keys = Object.keys(stores);
@@ -18,12 +19,16 @@ const findAveragePrice = (stores: { [key: string]: ItemInfo }): number => {
 
 const CartRow: NextPage<{item: CartItem, result: LowestHighest}> = ({ item, result}) => {
     const keysArray = Object.keys(item.item_info);
-
+    const router = useRouter();
+    const ClickableProductRow = (itemId : number) => {
+        // Handle the click event here, e.g., navigate to a new page, open a modal, etc.
+        router.push(`/single-product?id=${itemId}`);
+      };
 
     return (
     <tr className="items-center">
         {/*product*/}
-        <td className="items-center">
+        <td onClick={() => ClickableProductRow(item.id)} className="items-center">
             <div className="flex flex-row box-border">
                 <img
                 className="w-24 h-24"

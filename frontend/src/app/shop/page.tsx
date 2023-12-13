@@ -8,8 +8,7 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import { useRouter } from "next/navigation";
-import ProductRowContainer from "@/components/ProductRow";
+import ProductRow from "@/components/ProductRow";
 import Ad from '@/components/Ad';
 import React, { useState, useEffect } from 'react';
 
@@ -25,9 +24,12 @@ const ShopPage = () => {
   };
 
   const pageUpClick = () => {
-    setPage((prevPage) => prevPage + 1);
+    if(items)
+    {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
-
+ 
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchItems = async () => {
@@ -56,7 +58,7 @@ const ShopPage = () => {
             ) : items ? (
             items.map((item: Item, index: number) => (
               <div key={item.id}>
-                <ProductRowContainer item={item}/>
+                <ProductRow item={item}/>
                 {((index % 5) === 0 && index != 0 ? 
                   <div>
                     <Ad/>
