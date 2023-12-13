@@ -19,6 +19,7 @@ class ItemInfo(Base):
     product_link: Mapped[str] = mapped_column(String(255), nullable=True)
     price: Mapped[float] = mapped_column(Float, nullable=True)
     discount_info: Mapped[List[Optional[dict]]] = mapped_column(JSON)
+
     item: Mapped["Item"] = relationship("Item", back_populates="item_infos")
     store: Mapped["Store"] = relationship(
         "Store", backref=backref("item_infos", uselist=True, cascade="delete,all")

@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
 class Item(Base):
     __tablename__ = "item"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(255))
     brand: Mapped[str] = mapped_column(String(50))

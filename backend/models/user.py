@@ -9,6 +9,7 @@ from sqlalchemy.orm import mapped_column, Mapped
 
 class User(Base):
     __tablename__ = "user"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     emai: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     password: Mapped[str] = mapped_column(String(256))

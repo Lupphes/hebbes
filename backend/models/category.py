@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
 class Category(Base):
     __tablename__ = "category"
+
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     category_id: Mapped[int] = mapped_column(Integer, nullable=True, unique=True)
 

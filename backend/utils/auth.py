@@ -1,14 +1,31 @@
 import os
-from fastapi import HTTPException, Header
 
-from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
-from utils.misc import blacklisted_tokens
+from datetime import datetime, timedelta
+
+from fastapi import HTTPException, Header
 
 from jose import jwt
 from jose.exceptions import JWTError
 
+from db.jwt_secret import generate_and_retrieve_rsa_keys_serialized
+from utils.helpers import blacklisted_tokens
 
-def get_current_user(authorization: str = Header()):
+
+def create_access_token(email: str, expires_delta: int) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=expires_delta)
+    expire_timestamp = int(expire.timestamp())
+
+    private_key, _ = generate_and_retrieve_rsa_keys_serialized()
+    to_encode = {"sub": email, "exp": expire_timestamp}
+    encoded_jwt = jwt.encode(
+        to_encode,
+        private_key,
+        algorithm=os.environ.get("JWT_ALGORITHM", "RS256"),
+    )
+    return encoded_jwt
+
+
+def validate_user_auth(authorization: str = Header()):
     if authorization is None:
         raise HTTPException(status_code=401, detail="Missing authorization header")
     try:
