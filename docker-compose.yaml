@@ -61,7 +61,7 @@ services:
 
   # TimescaleDB container
   timescaledb:
-    image: timescale/timescaledb-ha:pg15-latest
+    image: timescale/timescaledb:latest-pg15
     container_name: timescaledb
     # restart: unless-stopped
     networks:
@@ -75,7 +75,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - ${VOLUMES_PATH}/timescaledb/:/home/postgres/pgdata/data
+      - ${VOLUMES_PATH}/timescaledb:/var/lib/postgresql/data
     ports:
       - 5432:5432
     depends_on:

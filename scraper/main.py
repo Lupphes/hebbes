@@ -16,7 +16,7 @@ from scrapers import (
 )
 
 
-def main(scrape=True, data_folder="./data"):
+def main(scrape=False, data_folder="./data"):
     if scrape:
         AHScraper().run()
         ALDIScraper().run()
@@ -41,6 +41,6 @@ def main(scrape=True, data_folder="./data"):
 if __name__ == "__main__":
     print("Hello Scraper!")
     main(
-        scrape=True, data_folder="./data"
+        scrape=False, data_folder="./data"
     )  # Set to True to scrape, False to use downloaded data
     print("Main scraping done!")

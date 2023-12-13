@@ -1,14 +1,20 @@
-from typing import Union
 from fastapi import APIRouter
+from schemas.response_schema import ResponseSchema
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=ResponseSchema)
 def read_root():
-    return {"Hello": "World"}
+    """
+    Handles requests to the root ("/") URL.
 
+    When the root URL of the API is accessed with a GET request, this function will be invoked.
 
-@router.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    Returns:
+        ResponseSchema: A response schema object containing a message.
+    """
+
+    return ResponseSchema.success_response(
+        data={"Price": "Bandit"}, message="Welcome to Price Bandit API"
+    )
