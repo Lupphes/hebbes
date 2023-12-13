@@ -16,11 +16,11 @@ const Footer: NextPage = () => {
   }, [router]);
 
   const onAboutClick = useCallback(() => {
-    router.push("/price-bandit");
+    router.push("/about");
   }, [router]);
 
   const onPremiumClick = useCallback(() => {
-    router.push("/price-bandit");
+    router.push("/about");
   }, [router]);
 
   return (

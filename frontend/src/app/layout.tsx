@@ -24,9 +24,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={inter.className}>
       <div className="font-poppins">
-        <Header
-          title="Price Bandit"
-        />
+        <Header title="Price Bandit"/>
         <div className="flex flex-col items-center">
           <Providers>{children}</Providers>
         </div>
