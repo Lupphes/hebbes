@@ -23,5 +23,4 @@ class UserSchema(UserBaseSchema):
     created_at: Optional[datetime] = Field(description="User creation time")
 
     class Config:
-        orm_mode = True
         from_attributes = True
