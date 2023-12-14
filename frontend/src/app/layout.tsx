@@ -21,12 +21,13 @@ export default function RootLayout({
 }) {
   
   return (
+    <Providers>
     <html lang='en'>
       <body className={inter.className}>
       <div className="font-poppins">
         <Header title="Price Bandit"/>
         <div className="flex flex-col items-center">
-          <Providers>{children}</Providers>
+          {children}
         </div>
         <section className="flex flex-col items-center justify-start">
           <Explain />
@@ -35,5 +36,6 @@ export default function RootLayout({
       </div>
       </body>
     </html>
+    </Providers>
   );
 }

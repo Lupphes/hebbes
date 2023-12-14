@@ -1,10 +1,12 @@
 'use client';
 import Ad from '@/components/Ad';
 import Cart from '@/components/Cart';
+import { selectCartItems } from '@/redux/features/cart/cartSlice';
 
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-const calculateSumByItemInfoKey = (items: CartItem[]): SumByItemInfoKey => {
+const calculateSumByItemInfoKey = (items: Item[]): SumByItemInfoKey => {
   const sumByItemInfoKey: SumByItemInfoKey = {};
   if (items) {
     items.forEach((item) => {
@@ -46,10 +48,11 @@ const adjustSumForCommonIds = (sumByItemInfoKey: SumByItemInfoKey): SumByItemInf
   return adjustedSumByItemInfoKey;
 };
 
+
 const CartPage = () => {
-  const [items, setItems] = useState<CartItem[] | null>([]);
+  //const [items, setItems] = useState<Item[] | null>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  /*useEffect(() => {
     const fetchItems = async () => {
       try {
         const url = `http://localhost:5000/db/items?limit=5&skip=5`;
@@ -63,12 +66,15 @@ const CartPage = () => {
       }
     };
     fetchItems();
-  }, []);
+  }, []);*/
+
+  const items : Item[] = useSelector(selectCartItems);
+  console.log(items);
 
   return (
     <div className="flex flex-col items-center gap-10 w-[80%] font-poppins py-10">
       <Ad />
-      {loading ?
+      {!items ?
         (
           <p> Loading... </p>
         ) : items ? (
