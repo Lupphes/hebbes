@@ -5,6 +5,7 @@ interface Item {
     description: string;
     gln: string;
     gtin: string;
+    cartQuantity: number;
 
     measurements_units: string;
     measurements_amount: string;
@@ -73,24 +74,3 @@ interface ItemInfoSum {
     lowestSum: number;
     highestSum: number;
   }
-
-//
-
-interface CartItem {
-    id: number;
-    name: string;
-    brand: string;
-    description: string;
-    gln: string;
-    gtin: string;
-    cartQuantity: number;
-
-    measurements_units: string;
-    measurements_amount: string;
-    measurements_label: string;
-
-    picture_link: Picture | null;
-    item_info: { [key: string]: ItemInfo };
-    stores?: Store[];
-    categories?: Category[];
-}
