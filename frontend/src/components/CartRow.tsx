@@ -31,7 +31,7 @@ const CartRow: NextPage<{item: CartItem, result: LowestHighest}> = ({ item, resu
         <td onClick={() => ClickableProductRow(item.id)} className="items-center">
             <div className="flex flex-row box-border">
                 <img
-                className="w-24 h-24"
+                className="w-24 h-24 sm:w-20 sm:h-20"
                 alt=""
                 src={item.picture_link ? item.picture_link.url : "/"}
                 />

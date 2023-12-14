@@ -47,8 +47,8 @@ const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adju
     return (
         <div className="flex flex-row md:flex-col items-center justify-center">
           {/*table*/}
-          <div className="w-3/4 flex flex-col items-center md:overflow-x-auto border-md">
-            <table className="table-fixed items-center md:min-w-full ">
+          <div className="w-3/4 md:w-[90%] flex flex-col items-center md:overflow-x-auto border-md md:pl-4 sm:pl-2">
+            <table className="table-fixed items-center md:min-w-full sm:min-w-full md:overflow-x-auto sm:text-[10px]">
               <thead className="bg-darkolivegreen-300">
                 <tr className="items-center justify-between text-black">
                   <th className="font-medium">
@@ -64,13 +64,13 @@ const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adju
                     Avg. Price
                   </th>
                   <th className="font-medium">
-                    Quantity
+                    #
                   </th>
                   <th className="font-medium">
-                    Subtotal
+                    Total
                   </th>
                   <th className="font-medium">
-                    Remove
+                    Del
                   </th>
                 </tr>
               </thead>
