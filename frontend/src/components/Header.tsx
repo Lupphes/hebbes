@@ -4,16 +4,12 @@ import { useMemo, type CSSProperties } from "react";
 import {
   Button,
   TextField,
-  InputAdornment,
-  Icon,
-  IconButton,
 } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import HeaderBackground from "@/resources/HeaderBackground.png";
 import HeaderLogo from "@/resources/HeaderLogo.png";
-
 
 type HeaderType = {
   title?: string;
@@ -23,6 +19,13 @@ type HeaderType = {
 const Header: NextPage<HeaderType> = ({
   title,
 }) => {
+  const router = useRouter();
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const query = event.target.elements.search.value;
+    router.push(`/shop/?query=${query}`);
+  };
 
   return (
     <div className="flex flex-col items-center text-29xl font-poppins">
@@ -63,12 +66,25 @@ const Header: NextPage<HeaderType> = ({
             Premium
           </Button>
         </div>
-        <TextField
-          className="[border:none] bg-[transparent] flex-initial w-full md:justify-center"
-          color="success"
-          label="Product Searched"
-          variant="outlined"
-        />
+        <form onSubmit={handleSearch}>
+          <TextField
+            className="[border:none] bg-[transparent] flex-initial w-full md:justify-center"
+            color="success"
+            label="Product Searched"
+            variant="outlined"
+            id="search"
+            InputProps={{
+              endAdornment: (
+                <button type="submit" className="bg-transparent border-none p-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+                </button>
+              ),
+            }}
+            name="search"
+          />
+        </form>
         <div className="flex flex-row flex-none items-center content-center md:justify-center gap-x-5">
           <a href="/cart">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="green" className="h-8">

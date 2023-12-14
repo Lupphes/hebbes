@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   Button,
 } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 interface CategoryItem {
   id: number;
@@ -37,6 +38,16 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
     setShowCategories(true);
   };
 
+  const router = useRouter();
+
+  const handleSearchCategories = (event) => {
+    event.preventDefault();
+    console.log(event.target.name)
+    const category_id = event.target.name;
+    console.log(category_id);
+    router.push(`/shop/?category_id=${category_id}`);
+  }
+
   return (
     <div>
       <Button onClick={handleShowCategories}
@@ -48,9 +59,9 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
       {showCategories && (
         <div className="flex overflow-x-auto">
           {data.data.map((category) => (
-            <div key={category.id} className="mx-4">
-              <img src={category.pictures[0].url} alt={category.name} className="w-32 h-32 object-cover mb-2" />
-              <p className="text-center">{category.name}</p>
+            <div name={category.id} className="mx-4" onClick={handleSearchCategories}>
+              <img name={category.id} src={category.pictures[0].url} alt={category.name} className="w-32 h-32 object-cover mb-2" />
+              <a name={category.id} className="text-center w-full">{category.name}</a>
             </div>
           ))}
         </div>

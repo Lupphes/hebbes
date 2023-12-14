@@ -1,11 +1,5 @@
 'use client';
-import type { NextPage } from "next";
-import { useCallback } from "react";
 import {
-  TextField,
-  InputAdornment,
-  Icon,
-  IconButton,
   Button,
 } from "@mui/material";
 import ProductRow from "@/components/ProductRow";
@@ -13,11 +7,18 @@ import Ad from '@/components/Ad';
 import React, { useState, useEffect } from 'react';
 import CategoryList from "@/components/CategoryList";
 import catJson from '@/mock_data/cat.json';
+import { useSearchParams } from "next/navigation";
 
 const ShopPage = () => {
+  const params = useSearchParams();
+  const [query, setQuery] = useState(params.get("query"));
+  const [category_id, setCategoryId] = useState(params.get("category_id"));
+
   let skip = 0;
   let limit = 20;
-  // const [items, setItems] = useState<Item[]>([]);
+
+  const [errorMsg, setErrorMsg] = useState(null);
+
   const [items, setItems] = useState<Item[] | null>([]);
   const itemLimit = 20
   const [page, setPage] = useState(1);
@@ -33,15 +34,40 @@ const ShopPage = () => {
   };
  
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    setQuery(params.get("query"));
+    setCategoryId(params.get("category_id"));
+
     const fetchItems = async () => {
       try {
         limit = page * itemLimit
         skip = limit - itemLimit
-        const url = `http://localhost:5000/db/items?limit=${limit}&skip=${skip}`;
+
+        let url = `http://localhost:5000/db/search?`
+
+        if(!query && category_id){ // Checks if not query and category_id -> search in category
+          url = `http://localhost:5000/db/items?category_id=${category_id}`
+          // setSubCategory(category_id);
+        }
+        else if(query) // Checks if query -> search for item name
+        {
+          url += `query=${query}&`
+        }
+        else if(category_id) // Checks if query -> search for item name and category
+        {
+          url += `category_id=${category_id}&`
+        }
+
+        url += `&limit=${limit}&skip=${skip}`;
         const response = await fetch(url);
-        const result = await response.json();
-        setItems(result);
+        const result = await response.json(); // TODO: type response
+        if (!result.success)
+        {
+          setItems(null)
+          setErrorMsg(result.message)
+        }
+        setItems(result.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -49,7 +75,12 @@ const ShopPage = () => {
       }
     };
     fetchItems();
-  }, [page]);
+  }, [page, query, category_id]);
+
+  useEffect(() => {
+    setQuery(params.get("query"));
+    setCategoryId(params.get("category_id"));
+  }, [params]);
 
   return (
     <div className="flex flex-col justify-start bg-text-white-op-100 p-10 w-[80%]">
@@ -68,8 +99,10 @@ const ShopPage = () => {
                   </div>
                 : null)}
               </div>  )
-            )) : (
-              <p>Api connection missing.</p>
+            )) : errorMsg ? (
+              <p>{errorMsg}</p>
+            ) : (
+              <p> Api connection missing. </p>
             )
           }
         <Ad/>
