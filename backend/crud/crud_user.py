@@ -2,7 +2,15 @@ from sqlalchemy.orm import Session
 import bcrypt
 
 from models.user import User
+<<<<<<< HEAD
 from schemas.schemas import UserCreateSchema
+=======
+<<<<<<<< HEAD:backend/crud/crud_user.py
+from schemas import UserCreateSchema
+========
+from schemas.schemas import UserCreateSchema
+>>>>>>>> master:backend/crud/crud.py
+>>>>>>> master
 
 
 def get_user(db: Session, user_id: int):
