@@ -1,7 +1,9 @@
+'use client';
 import type { NextPage } from "next";
 import AH from "@/resources/AH.jpg";
 import JMB from "@/resources/JMB.jpg";
 import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from 'react';
 
 const findAveragePrice = (stores: { [key: string]: ItemInfo }): number => {
     const keys = Object.keys(stores);
@@ -25,18 +27,21 @@ const CartRow: NextPage<{item: Item, result: LowestHighest}> = ({ item, result})
         router.push(`/single-product?id=${itemId}`);
     };
 
-    let cartItems : Item[] = [];
-    if (typeof window !== 'undefined') {
-        const localCart = localStorage.getItem('cart')
-        if (localCart)
-        {
-            cartItems = JSON.parse(localCart);
+    const [cartItems, setCartItems] = useState<Item[]>([]);
+
+    useEffect(() => {
+        // Check if running on the client side
+        if (typeof window !== 'undefined') {
+          const localCart = localStorage.getItem('cart');
+          if (localCart) {
+            setCartItems(JSON.parse(localCart));
+          } else {
+            // Initialize cartItems if not found in localStorage
+            localStorage.setItem('cart', JSON.stringify([]));
+            setCartItems([]);
+          }
         }
-        else if(!localCart)
-        {
-            localStorage.setItem('cart', JSON.stringify(cartItems));
-        }
-    };
+      }, []);
 
     const ClickAbleRemoveCartItem = (item: Item) => {
         const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);

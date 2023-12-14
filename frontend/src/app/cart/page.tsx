@@ -47,18 +47,20 @@ const adjustSumForCommonIds = (sumByItemInfoKey: SumByItemInfoKey): SumByItemInf
 };
 
 const CartPage = () => {
-  let cartItems : Item[] = [];
-  if (typeof window !== 'undefined') {
-    const localCart = localStorage.getItem('cart')
-    if (localCart)
-    {
-    cartItems = JSON.parse(localCart);
+  const [cartItems, setCartItems] = useState<Item[]>([]);
+  useEffect(() => {
+    // Check if running on the client side
+    if (typeof window !== 'undefined') {
+      const localCart = localStorage.getItem('cart');
+      if (localCart) {
+        setCartItems(JSON.parse(localCart));
+      } else {
+        // Initialize cartItems if not found in localStorage
+        localStorage.setItem('cart', JSON.stringify([]));
+        setCartItems([]);
+      }
     }
-    else if(!localCart)
-    {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-    }
-  };
+  }, []);
 
   const ClickAbleRemoveCartItem = (item: Item) => {
     const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
@@ -79,7 +81,11 @@ const CartPage = () => {
           sumByItemInfoKey={calculateSumByItemInfoKey(cartItems)} 
           adjustedSum={adjustSumForCommonIds(calculateSumByItemInfoKey(cartItems))} />
         ) : (
-          <p>Api connection missing.</p>
+          <tr>
+            <td>
+              Api connection missing.
+            </td>
+          </tr>
         )}
       <Ad />
     </div>
