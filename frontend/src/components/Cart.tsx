@@ -47,8 +47,8 @@ const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adju
     return (
         <div className="flex flex-row md:flex-col items-center justify-center">
           {/*table*/}
-          <div className="w-3/4 md:w-[80%] flex flex-col items-center">
-            <table className="table-fixed items-center">
+          <div className="w-3/4 flex flex-col items-center md:overflow-x-auto border-md">
+            <table className="table-fixed items-center md:min-w-full ">
               <thead className="bg-darkolivegreen-300">
                 <tr className="items-center justify-between text-black">
                   <th className="font-medium">
@@ -93,7 +93,7 @@ const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adju
             </div>
           </div>
           {/*final cart info */}
-          <div className="w-1/4 md:w-[80%] bg-silver flex flex-col items-center justify-start box-border gap-8 text-12xl">
+          <div className="w-1/4 md:w-[80%] bg-silver flex flex-col items-center justify-start gap-8 text-12xl rounded-md">
             <div className="relative font-semibold">Cart Totals</div>
             <div className="justify-between">
               <div className="text-left">Select store</div>

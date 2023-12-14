@@ -44,7 +44,7 @@ const Header: NextPage<HeaderType> = ({
             variant="outlined"
             href="/"
           >
-            Discounts
+            Categories
           </Button>
           <Button
             className=""

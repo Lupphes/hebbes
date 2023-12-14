@@ -2,8 +2,7 @@ import type { NextPage } from "next";
 
 const Explain: NextPage = () => {
   return (
-    <div className="relative
-                    flex flex-row md:flex-col px-[10%] md:px-[5%] py-[10%] md:py-[5%]
+    <div className="flex flex-row md:flex-col px-[10%] md:px-[5%] py-[10%] md:py-[5%]
                     gap-[5%] md:gap-[5%]
                     text-center text-13xl text-black
                     font-poppins bg-darkolivegreen-100
