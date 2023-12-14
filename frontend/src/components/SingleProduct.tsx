@@ -133,7 +133,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
               Category: {item.categories && item.categories[0].name}
             </div>
             <div className="inline-block">
-              Tags: {item.description}
+              Description: {item.description}
             </div>
           </div>
         </div>

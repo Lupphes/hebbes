@@ -16,13 +16,15 @@ const SingleProductPage = () => {
   
   const [items, setItem] = useState<Item[] | null>(null);
   const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
   useEffect(() => {
     const fetchItem = async () => {
       try {
         const url = `http://localhost:5000/db/items?id=${itemId}`;
         const response = await fetch(url);
         const result = await response.json();
-        setItem(result);
+        setItem(result.data);
+        setSuccess(result.success)
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -38,12 +40,12 @@ const SingleProductPage = () => {
         {/*<Ad/>*/}
         {loading ? (
           <p> Loading... </p>
-        ) : items ? (
+        ) : success && items ? (
           <SingleProduct
             item={items[0]}
           />
         ) : (
-          <p>Api connection missing.</p>
+          <p>Api failure.</p>
         )}
         {/*<Ad/>*/}
       </div>
