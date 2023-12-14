@@ -42,9 +42,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
 
   const handleSearchCategories = (event) => {
     event.preventDefault();
-    console.log(event.target.name)
     const category_id = event.target.name;
-    console.log(category_id);
     router.push(`/shop/?category_id=${category_id}`);
   }
 

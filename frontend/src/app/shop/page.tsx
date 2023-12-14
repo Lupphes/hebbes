@@ -35,6 +35,8 @@ const ShopPage = () => {
  
   const [loading, setLoading] = useState(true);
 
+  const [category, setCategory] = useState(catJson);
+
   useEffect(() => {
     setQuery(params.get("query"));
     setCategoryId(params.get("category_id"));
@@ -74,7 +76,32 @@ const ShopPage = () => {
         setLoading(false);
       }
     };
+
+    const fetchCategories = async () => {
+      setQuery(params.get("query"));
+      setCategoryId(params.get("category_id"));
+
+      if(category_id)
+      {
+        try {
+          const response = await fetch(`http://localhost:5000/db/subcategories/${category_id}`);
+          const result = await response.json(); // TODO: type response
+          if (!result.success)
+          {
+            setErrorMsg(result.message)
+          }
+          setCategory(result);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
+
+
     fetchItems();
+    fetchCategories();
   }, [page, query, category_id]);
 
   useEffect(() => {
@@ -85,7 +112,7 @@ const ShopPage = () => {
   return (
     <div className="flex flex-col justify-start bg-text-white-op-100 p-10 w-[80%]">
       <div className="flex flex-col gap-10">
-        <CategoryList data={catJson}/>
+        <CategoryList data={category}/>
         <Ad/>
           {loading ? (
             <p> Loading... </p>
