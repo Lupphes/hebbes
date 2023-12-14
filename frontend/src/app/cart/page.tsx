@@ -4,7 +4,7 @@ import Cart from '@/components/Cart';
 
 import React, { useState, useEffect } from 'react';
 
-const calculateSumByItemInfoKey = (items: CartItem[]): SumByItemInfoKey => {
+const calculateSumByItemInfoKey = (items: Item[]): SumByItemInfoKey => {
   const sumByItemInfoKey: SumByItemInfoKey = {};
   if (items) {
     items.forEach((item) => {
@@ -47,9 +47,9 @@ const adjustSumForCommonIds = (sumByItemInfoKey: SumByItemInfoKey): SumByItemInf
 };
 
 const CartPage = () => {
-  const [items, setItems] = useState<CartItem[] | null>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  //const [items, setItems] = useState<Item[] | null>([]);
+  //const [loading, setLoading] = useState(true);
+  /*useEffect(() => {
     const fetchItems = async () => {
       try {
         const url = `http://localhost:5000/db/items?limit=5&skip=5`;
@@ -63,16 +63,27 @@ const CartPage = () => {
       }
     };
     fetchItems();
-  }, []);
+  }, []);*/
+
+  let cartItems : Item[] = [];
+  const localCart = localStorage.getItem('cart')
+  if (localCart)
+  {
+    //localStorage.setItem('cart', JSON.stringify(cart));
+    cartItems = JSON.parse(localCart);
+    console.log(cartItems)
+  }
+  else if(!localCart)
+  {
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+  }
 
   return (
     <div className="flex flex-col items-center gap-10 w-[80%] font-poppins py-10">
       <Ad />
-      {loading ?
+      {cartItems ?
         (
-          <p> Loading... </p>
-        ) : items ? (
-          <Cart items={items} sumByItemInfoKey={calculateSumByItemInfoKey(items)} adjustedSum={adjustSumForCommonIds(calculateSumByItemInfoKey(items))} />
+          <Cart items={cartItems} sumByItemInfoKey={calculateSumByItemInfoKey(cartItems)} adjustedSum={adjustSumForCommonIds(calculateSumByItemInfoKey(cartItems))} />
         ) : (
           <p>Api connection missing.</p>
         )}
