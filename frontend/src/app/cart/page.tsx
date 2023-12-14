@@ -1,7 +1,7 @@
 'use client';
 import Ad from '@/components/Ad';
 import Cart from '@/components/Cart';
-import localStorage from 'localStorage';
+
 import React, { useState, useEffect } from 'react';
 
 const calculateSumByItemInfoKey = (items: Item[]): SumByItemInfoKey => {
