@@ -11,6 +11,8 @@ import {
 import ProductRow from "@/components/ProductRow";
 import Ad from '@/components/Ad';
 import React, { useState, useEffect } from 'react';
+import CategoryList from "@/components/CategoryList";
+import catJson from '@/mock_data/cat.json';
 
 const ShopPage = () => {
   let skip = 0;
@@ -52,23 +54,24 @@ const ShopPage = () => {
   return (
     <div className="flex flex-col justify-start bg-text-white-op-100 p-10 w-[80%]">
       <div className="flex flex-col gap-10">
+        <CategoryList data={catJson}/>
         <Ad/>
-          {/*{loading ? (*/}
-          {/*  <p> Loading... </p>*/}
-          {/*  ) : items ? (*/}
-          {/*  items.map((item: Item, index: number) => (*/}
-          {/*    <div key={item.id}>*/}
-          {/*      <ProductRow item={item}/>*/}
-          {/*      {((index % 5) === 0 && index != 0 ? */}
-          {/*        <div>*/}
-          {/*          <Ad/>*/}
-          {/*        </div>*/}
-          {/*      : null)}*/}
-          {/*    </div>  )*/}
-          {/*  )) : (*/}
-          {/*    <p>Api connection missing.</p>*/}
-          {/*  )*/}
-          {/*}*/}
+          {loading ? (
+            <p> Loading... </p>
+            ) : items ? (
+            items.map((item: Item, index: number) => (
+              <div key={item.id}>
+                <ProductRow item={item}/>
+                {((index % 5) === 0 && index != 0 ?
+                  <div>
+                    <Ad/>
+                  </div>
+                : null)}
+              </div>  )
+            )) : (
+              <p>Api connection missing.</p>
+            )
+          }
         <Ad/>
         <div className="overflow-hidden flex flex-col items-end justify-center">
           <div className="self-stretch flex flex-row items-center justify-between md:flex-row md:gap-[38px] md:items-start md:justify-center">
