@@ -47,43 +47,37 @@ const adjustSumForCommonIds = (sumByItemInfoKey: SumByItemInfoKey): SumByItemInf
 };
 
 const CartPage = () => {
-  //const [items, setItems] = useState<Item[] | null>([]);
-  //const [loading, setLoading] = useState(true);
-  /*useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const url = `http://localhost:5000/db/items?limit=5&skip=5`;
-        const response = await fetch(url);
-        const result = await response.json();
-        setItems(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchItems();
-  }, []);*/
-
   let cartItems : Item[] = [];
-  const localCart = localStorage.getItem('cart')
-  if (localCart)
-  {
-    //localStorage.setItem('cart', JSON.stringify(cart));
+  if (typeof window !== 'undefined') {
+    const localCart = localStorage.getItem('cart')
+    if (localCart)
+    {
     cartItems = JSON.parse(localCart);
-    console.log(cartItems)
-  }
-  else if(!localCart)
-  {
+    }
+    else if(!localCart)
+    {
     localStorage.setItem('cart', JSON.stringify(cartItems));
-  }
+    }
+  };
+
+  const ClickAbleRemoveCartItem = (item: Item) => {
+    const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+    if (itemIndex !== -1) {
+        cartItems.splice(itemIndex, 1);
+    }
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+    console.log()
+  };
 
   return (
     <div className="flex flex-col items-center gap-10 w-[80%] font-poppins py-10">
       <Ad />
       {cartItems ?
         (
-          <Cart items={cartItems} sumByItemInfoKey={calculateSumByItemInfoKey(cartItems)} adjustedSum={adjustSumForCommonIds(calculateSumByItemInfoKey(cartItems))} />
+          <Cart 
+          items={cartItems} 
+          sumByItemInfoKey={calculateSumByItemInfoKey(cartItems)} 
+          adjustedSum={adjustSumForCommonIds(calculateSumByItemInfoKey(cartItems))} />
         ) : (
           <p>Api connection missing.</p>
         )}

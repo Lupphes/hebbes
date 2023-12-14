@@ -22,7 +22,6 @@ const findKeyWithLowestSum = (adjustedSumByItemInfoKey: SumByItemInfoKey): Lowes
     }
     if (sum > highestSum){
       highestSum= sum
-
     }
   });
     const item: LowestHighest = {
@@ -33,7 +32,7 @@ const findKeyWithLowestSum = (adjustedSumByItemInfoKey: SumByItemInfoKey): Lowes
   return item
 };
 
-const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adjustedSum:SumByItemInfoKey}> = ({ items, sumByItemInfoKey, adjustedSum}) => {
+const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjustedSum:SumByItemInfoKey}> = ({ items, sumByItemInfoKey, adjustedSum}) => {
   const result: LowestHighest = findKeyWithLowestSum(adjustedSum);
   const itemInfoKeys = Object.keys(sumByItemInfoKey);
 
@@ -75,11 +74,11 @@ const Cart: NextPage<{items: CartItem[], sumByItemInfoKey:SumByItemInfoKey, adju
                 </tr>
               </thead>
               <tbody>
-              {
-                items.map((item: CartItem, index: number) =>
+              {(items.length > 0) ?
+                items.map((item: Item, index: number) =>
                 (
                     <CartRow key={item.id} item={item} result={result}/>
-                ))
+                )) : <p>No items in cart yet...</p>
               }
               </tbody>
             </table>
