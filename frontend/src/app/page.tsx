@@ -13,7 +13,7 @@ const MainPage = () => {
       <h3 className='text-2xl font-bold text-gray-900'>
         Find the best deals on your favorite products in the Netherlands.
       </h3>
-      <CategoriesGrid data={catJson} />
+      <CategoriesGrid data={catJson}/>
     </main>
   );
 };
