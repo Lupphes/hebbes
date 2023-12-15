@@ -1,6 +1,7 @@
 'use client';
 import type { NextPage } from "next";
 import CartRow from '@/components/CartRow';
+import React, { useState, useEffect } from 'react';
 
 const findKeyWithLowestSum = (adjustedSumByItemInfoKey: SumByItemInfoKey): LowestHighest => {
   let lowestKey: string = "";
@@ -44,6 +45,11 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
     result.lowestKey = itemInfoKeys[0];
   }
 
+  const [selectedStore, setSelectedStore] = useState<string | undefined>();
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedStore(event.target.value);
+  };
+
   return (
       <div className="flex flex-row md:flex-col items-center justify-center">
         {/*table*/}
@@ -78,7 +84,7 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
             {(items.length > 0) ?
               items.map((item: Item, index: number) =>
               (
-                  <CartRow key={item.id} item={item} result={result}/>
+                  <CartRow key={item.id} item={item} result={result} selectedStore={selectedStore}/>
               )) : <tr><td>No items in cart yet...</td></tr>
             }
             </tbody>
@@ -98,9 +104,9 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
           <div className="justify-between">
             <div className="text-left">Select store</div>
             <div className="items-right">
-              <select className="w-32 h-8 rounded-8xs border-[1px] border-solid border-darkgray">
-                <option value="AH">Albert Heijn</option>
-                <option value="JMB">Jumbo</option>
+              <select onChange={handleSelectChange} className="w-32 h-8 rounded-8xs border-[1px] border-solid border-darkgray">
+                <option value="ah">Albert Heijn</option>
+                <option value="jmb">Jumbo</option>
               </select>
             </div>
 
@@ -118,7 +124,7 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
           <div className="justify-between">
             <div className="font-medium text-left">Final Total</div>
             <div className="text-darkolivegreen-200 text-right">
-              € {result ? Math.round(result.lowestSum * 100) / 100 : "Loading.."}
+              € {selectedStore && sumByItemInfoKey[selectedStore] ? (sumByItemInfoKey[selectedStore].sum) : result.lowestKey && sumByItemInfoKey[result.lowestKey] ? (Math.round(sumByItemInfoKey[result.lowestKey].sum * 100) / 100) : "Loading..."}
             </div>
           </div>
           {/* <Button
