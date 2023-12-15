@@ -57,7 +57,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
       {showCategories && (
         <div className="flex overflow-x-auto">
           {data.data.map((category) => (
-            <div name={category.id} className="mx-4" onClick={handleSearchCategories}>
+            <div key={category.id} name={category.id} className="mx-4" onClick={handleSearchCategories}>
               <img name={category.id} src={category.pictures[0].url} alt={category.name} className="w-32 h-32 object-cover mb-2" />
               <a name={category.id} className="text-center w-full">{category.name}</a>
             </div>

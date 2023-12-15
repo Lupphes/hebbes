@@ -74,3 +74,10 @@ interface ItemInfoSum {
     lowestSum: number;
     highestSum: number;
   }
+
+//Needed for the category
+  interface CategoryResponse {
+    data: Category[];
+    message: string;
+    success: boolean;
+  }
