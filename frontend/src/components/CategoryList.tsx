@@ -40,9 +40,9 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
 
   const router = useRouter();
 
-  const handleSearchCategories = (event) => {
+  const handleSearchCategories = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
-    const category_id = event.target.name;
+    const category_id = event.currentTarget.getAttribute('data-name');
     router.push(`/shop/?category_id=${category_id}`);
   }
 
@@ -57,9 +57,9 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
       {showCategories && (
         <div className="flex overflow-x-auto">
           {data.data.map((category) => (
-            <div key={category.id} name={category.id} className="mx-4" onClick={handleSearchCategories}>
-              <img name={category.id} src={category.pictures[0].url} alt={category.name} className="w-32 h-32 object-cover mb-2" />
-              <a name={category.id} className="text-center w-full">{category.name}</a>
+            <div key={category.id} data-name={category.id} className="mx-4" onClick={handleSearchCategories}>
+              <img data-name={category.id} src={category.pictures[0].url} alt={category.name} className="w-32 h-32 object-cover mb-2" />
+              <a data-name={category.id} className="text-center w-full">{category.name}</a>
             </div>
           ))}
         </div>

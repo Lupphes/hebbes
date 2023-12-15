@@ -21,9 +21,12 @@ const Header: NextPage<HeaderType> = ({
 }) => {
   const router = useRouter();
 
-  const handleSearch = (event) => {
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const query = event.target.elements.search.value;
+    const searchInput = (
+      event.target as HTMLFormElement
+    ).elements.namedItem('search') as HTMLInputElement | null;
+    const query = searchInput?.value;
     router.push(`/shop/?query=${query}`);
   };
 
