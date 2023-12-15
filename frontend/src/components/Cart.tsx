@@ -34,9 +34,9 @@ const findKeyWithLowestSum = (adjustedSumByItemInfoKey: SumByItemInfoKey): Lowes
 };
 
 const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjustedSum:SumByItemInfoKey}> = ({ items, sumByItemInfoKey, adjustedSum}) => {
+  
   const result: LowestHighest = findKeyWithLowestSum(adjustedSum);
   const itemInfoKeys = Object.keys(sumByItemInfoKey);
-
   if(itemInfoKeys.length == 1)
   {
     result.lowestSum = sumByItemInfoKey[itemInfoKeys[0]].sum;

@@ -26,23 +26,24 @@ const calculateSumByItemInfoKey = (items: Item[]): SumByItemInfoKey => {
 
 const adjustSumForCommonIds = (sumByItemInfoKey: SumByItemInfoKey): SumByItemInfoKey => {
   // Calculate the common item IDs
-  const commonItemIds = Object.keys(sumByItemInfoKey)
-    .map((key) => sumByItemInfoKey[key].itemIdPricesList.map(([id]) => id))
-    .reduce((commonIds, ids) => (commonIds ? commonIds.filter((id) => ids.includes(id)) : ids), []);
-
-  // Adjust the sum for each key considering only common item IDs
   const adjustedSumByItemInfoKey: SumByItemInfoKey = {};
-  Object.keys(sumByItemInfoKey).forEach((key) => {
-    adjustedSumByItemInfoKey[key] = {
-      sum: sumByItemInfoKey[key].itemIdPricesList
-        .filter(([id]) => commonItemIds.includes(id))
-        .reduce((total, [, price]) => total + price, 0),
-      itemIdPricesList: sumByItemInfoKey[key].itemIdPricesList.filter(([id]) =>
-        commonItemIds.includes(id)
-      ),
-    };
-  });
-
+  if (Object.keys(sumByItemInfoKey).length > 1){
+    const commonItemIds = Object.values(sumByItemInfoKey)
+    .map((info) => info.itemIdPricesList.map(([id]) => id))
+    .reduce((commonIds, ids) => (commonIds ? commonIds.filter((id) => ids.includes(id)) : ids));
+  
+    // Adjust the sum for each key considering only common item IDs
+    Object.keys(sumByItemInfoKey).forEach((key) => {
+      adjustedSumByItemInfoKey[key] = {
+        sum: sumByItemInfoKey[key].itemIdPricesList
+          .filter(([id]) => commonItemIds.includes(id))
+          .reduce((total, [, price]) => total + price, 0),
+        itemIdPricesList: sumByItemInfoKey[key].itemIdPricesList.filter(([id]) =>
+          commonItemIds.includes(id)
+        ),
+      };
+    });
+  }
   return adjustedSumByItemInfoKey;
 };
 
@@ -62,24 +63,21 @@ const CartPage = () => {
     }
   }, []);
 
-  const ClickAbleRemoveCartItem = (item: Item) => {
-    const itemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
-    if (itemIndex !== -1) {
-        cartItems.splice(itemIndex, 1);
-    }
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-    console.log()
-  };
+  const sumByStore = calculateSumByItemInfoKey(cartItems)
+  let sumByCommon : SumByItemInfoKey = {};
+  if (sumByStore){
+    sumByCommon = adjustSumForCommonIds(sumByStore);
+  }
 
   return (
     <div className="flex flex-col items-center gap-10 w-[80%] font-poppins py-10">
       <Ad />
-      {cartItems ?
+      {cartItems && sumByCommon?
         (
           <Cart 
           items={cartItems} 
-          sumByItemInfoKey={calculateSumByItemInfoKey(cartItems)} 
-          adjustedSum={adjustSumForCommonIds(calculateSumByItemInfoKey(cartItems))} />
+          sumByItemInfoKey={sumByStore} 
+          adjustedSum={sumByCommon} />
         ) : (
           <tr>
             <td>
