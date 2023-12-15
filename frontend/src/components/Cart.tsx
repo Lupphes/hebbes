@@ -91,10 +91,10 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
           </table>
           <div className="flex flex-col items-center justify-center">
             <p className="text-black">
-              * Calculated based on average price of the products you selected
+              * Calculated based on the difference between the prices and the cheapest store selected by price bandit
             </p>
             <p className="text-black">
-              ** Calculated based on the difference between the average price and the prices you selected
+              ** Final total of items that are available in store specified behind items
             </p>
           </div>
         </div>
@@ -111,18 +111,19 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
             </div>
 
           </div>
-          <div className="justify-between">
+          {/* <div className="justify-between">
             <div className="text-left">Avg. Subtotal*</div>
             <div className="text-darkolivegreen-100 text-right">
               € -
             </div>
-          </div>
+          </div>*/}
+          
           <div className="justify-between">
-            <div className="text-left">Est. Savings**</div>
+            <div className="text-left">Est. Savings*</div>
             <div className="text-red text-right">€ {result && !selectedStore ? result.highestSum-result.lowestSum : "-"}</div>
           </div>
           <div className="justify-between">
-            <div className="font-medium text-left">Final Total</div>
+            <div className="font-medium text-left">Final Total**</div>
             <div className="text-darkolivegreen-200 text-right">
               € {selectedStore && sumByItemInfoKey[selectedStore] ? (sumByItemInfoKey[selectedStore].sum) : result.lowestKey && sumByItemInfoKey[result.lowestKey] ? (Math.round(sumByItemInfoKey[result.lowestKey].sum * 100) / 100) : "Loading..."}
             </div>
