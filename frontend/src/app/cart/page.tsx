@@ -16,7 +16,7 @@ const calculateSumByItemInfoKey = (items: Item[]): SumByItemInfoKey => {
             itemIdPricesList: [],
           };
         }
-        sumByItemInfoKey[key].sum += item.item_info[key].price;
+        sumByItemInfoKey[key].sum += item.item_info[key].price * item.cartQuantity;
         sumByItemInfoKey[key].itemIdPricesList.push([item.id, item.item_info[key].price]);
       });
     });

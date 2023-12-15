@@ -52,9 +52,6 @@ const CartRow: NextPage<{item: Item, result: LowestHighest, selectedStore: strin
         window.location.reload();
     };
 
-    console.log(result)
-    console.log(selectedStore)
-
     return (
     selectedStore ? (
         <tr className="items-center">
