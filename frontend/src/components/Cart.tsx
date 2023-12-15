@@ -119,7 +119,7 @@ const Cart: NextPage<{items: Item[], sumByItemInfoKey:SumByItemInfoKey, adjusted
           </div>
           <div className="justify-between">
             <div className="text-left">Est. Savings**</div>
-            <div className="text-red text-right">€ {result ? result.highestSum-result.lowestSum : 0}</div>
+            <div className="text-red text-right">€ {result && !selectedStore ? result.highestSum-result.lowestSum : "-"}</div>
           </div>
           <div className="justify-between">
             <div className="font-medium text-left">Final Total</div>
