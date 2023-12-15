@@ -1,9 +1,9 @@
 import StoreListing from '@/components/StoreListing';
 import type { NextPage } from "next";
-import React, { useState } from 'react';
 import QuantityAdjuster from '../components/QuantityAdjuster';
 import AH from "@/resources/AH.jpg";
 import JMB from "@/resources/JMB.jpg";
+import React, { useState, useEffect } from 'react';
 
 const findIndexOfCheapestStore = (stores: { [key: string]: ItemInfo }): string => {
   const keys = Object.keys(stores);
@@ -58,19 +58,20 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   };
 
-  let cartItems : Item[] = [];
-  if (typeof window !== 'undefined') {
-  const localCart = localStorage.getItem('cart')
-    if (localCart)
-    {
-      //localStorage.setItem('cart', JSON.stringify(cart));
-      cartItems = JSON.parse(localCart);
-    }
-    else if(!localCart)
-    {
-      localStorage.setItem('cart', JSON.stringify(cartItems));
-    }
-  };
+  const [cartItems, setCartItems] = useState<Item[]>([]);
+  useEffect(() => {
+      // Check if running on the client side
+      if (typeof window !== 'undefined') {
+        const localCart = localStorage.getItem('cart');
+        if (localCart) {
+          setCartItems(JSON.parse(localCart));
+        } else {
+          // Initialize cartItems if not found in localStorage
+          localStorage.setItem('cart', JSON.stringify([]));
+          setCartItems([]);
+        }
+      }
+    }, []);
 
   return (
     item && item.picture_link ? (

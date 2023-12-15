@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import { useMemo, type CSSProperties } from "react";
 import StoreListingContainer from "@/components/StoreListing";
 import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from 'react';
 
 const ProductRow: NextPage<{item: Item}> = ({ item }) => {
   const router = useRouter();
@@ -10,32 +11,40 @@ const ProductRow: NextPage<{item: Item}> = ({ item }) => {
     router.push(`/single-product?id=${itemId}`);
   };
 
+  const [cartItems, setCartItems] = useState<Item[]>([]);
+  useEffect(() => {
+      // Check if running on the client side
+      if (typeof window !== 'undefined') {
+        const localCart = localStorage.getItem('cart');
+        if (localCart) {
+          setCartItems(JSON.parse(localCart));
+        } else {
+          // Initialize cartItems if not found in localStorage
+          localStorage.setItem('cart', JSON.stringify([]));
+          setCartItems([]);
+        }
+      }
+    }, []);
+
   const ClickAbleBasket = (item: Item) => {
-    const existingItemIndex = cartItems.findIndex(cartItem => cartItem.id === item.id);
+    let localCart = localStorage.getItem('cart');
+    let localCartItems : Item[] = [];
+    if (localCart) {
+      localCartItems = JSON.parse(localCart);
+    }
+    const existingItemIndex = localCartItems.findIndex(cartItem => cartItem.id === item.id);
   
     if (existingItemIndex !== -1) {
       // Item already in cart, increase quantity
-      cartItems[existingItemIndex].cartQuantity += 1;
+      localCartItems[existingItemIndex].cartQuantity += 1;
     } else {
       // Item not in cart, add it
       item.cartQuantity = 1;
-      cartItems.push(item);
+      localCartItems.push(item);
     }
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-    console.log(cartItems)
+    localStorage.setItem('cart', JSON.stringify(localCartItems));
+    setCartItems(localCartItems)
   };
-
-  let cartItems : Item[] = [];
-  const localCart = localStorage.getItem('cart')
-  if (localCart)
-  {
-    //localStorage.setItem('cart', JSON.stringify(cart));
-    cartItems = JSON.parse(localCart);
-  }
-  else if(!localCart)
-  {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
-  }
 
   return (
     <div className="flex flex-row sm:flex-col text-center text-lg text-black font-poppins gap-7">
