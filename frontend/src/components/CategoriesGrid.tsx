@@ -48,7 +48,7 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({ data }) => {
       {
         <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
           {data.data.map((category) => (
-            <div data-name={category.id} key={category.id} className="mb-4" onClick={handleSearchCategories}>
+            <div data-name={category.id} key={category.id} className="mb-4 cursor-pointer" onClick={handleSearchCategories}>
               <img data-name={category.id} src={category.pictures[0].url} alt={category.name} className="w-full h-48 object-cover mb-2" />
               <p data-name={category.id} className="text-center">{category.name}</p>
             </div>
