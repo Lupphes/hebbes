@@ -20,7 +20,8 @@ const SingleProductPage = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const url = `http://localhost:5000/db/items?id=${itemId}`;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const url = `${apiUrl}/db/items?id=${itemId}`;
         const response = await fetch(url);
         const result = await response.json();
         setItem(result.data);

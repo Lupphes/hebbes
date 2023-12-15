@@ -13,6 +13,7 @@ const ShopPage = () => {
   const params = useSearchParams();
   const [query, setQuery] = useState(params.get("query"));
   const [category_id, setCategoryId] = useState(params.get("category_id"));
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   let skip = 0;
   let limit = 20;
@@ -45,11 +46,11 @@ const ShopPage = () => {
       try {
         limit = page * itemLimit
         skip = limit - itemLimit
-
-        let url = `http://localhost:5000/db/search?`
+        
+        let url = `${apiUrl}/db/search?`
 
         if(!query && category_id){ // Checks if not query and category_id -> search in category
-          url = `http://localhost:5000/db/items?category_id=${category_id}`
+          url = `${apiUrl}/db/items?category_id=${category_id}`
           // setSubCategory(category_id);
         }
         else if(query) // Checks if query -> search for item name
@@ -84,7 +85,7 @@ const ShopPage = () => {
       if(category_id)
       {
         try {
-          const response = await fetch(`http://localhost:5000/db/subcategories/${category_id}`);
+          const response = await fetch(`${apiUrl}/db/subcategories/${category_id}`);
           const result = await response.json(); // TODO: type response
           if (!result.success)
           {
