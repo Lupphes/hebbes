@@ -27,7 +27,7 @@ const Login = () => {
     try {
       await dispatch(loginUser(user))
         .unwrap()
-        .then(() => router.push('/main'));
+        .then(() => router.push('/'));
     } catch (err) {
       if (err instanceof Error) {
         setErrorMsg(err.message);
