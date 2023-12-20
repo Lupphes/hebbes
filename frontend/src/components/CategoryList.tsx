@@ -1,25 +1,71 @@
-import { categories } from '@/mock_data/category';
-import Image from 'next/image';
+// components/CategoriesList.tsx
+import React, { useState } from 'react';
+import {
+  Button,
+} from "@mui/material";
+import { useRouter } from "next/navigation";
 
-export default function CategoryList() {
-  return (
-    <ul role='list' className='divide-y divide-gray-100'>
-      {categories.map((category) => (
-        <li key={category.name} className='flex justify-between gap-x-6 py-5'>
-          <div className='flex min-w-0 gap-x-4'>
-            <Image
-              className='h-12 w-12 flex-none rounded-full bg-gray-50'
-              src={category.imageUrl}
-              alt=''
-            />
-            <div className='min-w-0 flex-auto'>
-              <p className='text-sm font-semibold leading-6 text-gray-900'>
-                {category.name}
-              </p>
-            </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
+interface CategoryItem {
+  id: number;
+  category_id: number;
+  name: string;
+  parent_id: number | null;
+  subcategories: CategoryItem[];
+  pictures: PictureCategory[];
 }
+
+interface PictureCategory {
+  id: number;
+  item_id: number | null;
+  category_id: number;
+  width: number;
+  height: number;
+  url: string;
+}
+
+interface CategoriesListProps {
+  data: {
+    data: CategoryItem[];
+    message: string;
+    success: boolean;
+  };
+}
+
+const CategoriesList: React.FC<CategoriesListProps> = ({ data }) => {
+  const [showCategories, setShowCategories] = useState(false);
+
+  const handleShowCategories = () => {
+    setShowCategories(true);
+  };
+
+  const router = useRouter();
+
+  const handleSearchCategories = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.preventDefault();
+    const category_id = event.currentTarget.getAttribute('data-name');
+    router.push(`/shop/?category_id=${category_id}`);
+  }
+
+  return (
+    <div>
+      <Button onClick={handleShowCategories}
+              className=""
+              color="success"
+              variant="outlined">
+        Show Categories
+      </Button>
+      {showCategories && (
+        <div className="flex overflow-x-auto">
+          {data.data.map((category) => (
+            <div key={category.id} data-name={category.id} className="mx-4 cursor-pointer" onClick={handleSearchCategories}>
+              <img data-name={category.id} src={category.pictures[0].url} alt={category.name} className="w-32 h-32 object-cover mb-2" />
+              <a data-name={category.id} className="text-center w-full">{category.name}</a>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CategoriesList;

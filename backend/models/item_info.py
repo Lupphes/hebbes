@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     from .store import Store
     from .item import Item
 
-
 class ItemInfo(Base):
     __tablename__ = "item_info"
 

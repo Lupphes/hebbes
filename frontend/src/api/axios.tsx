@@ -5,8 +5,10 @@ if (typeof window !== 'undefined') {
   token = localStorage.getItem('access_token');
 }
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000', // Replace with your API's base URL
+  baseURL: `${apiUrl}`, // Replace with your API's base URL
   withCredentials: true,
   headers: {
     Authorization: 'Bearer ' + token,

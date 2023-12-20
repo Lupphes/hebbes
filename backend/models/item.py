@@ -25,6 +25,7 @@ class Item(Base):
     description: Mapped[str] = mapped_column(String)
     gln: Mapped[str] = mapped_column(String(14))
     gtin: Mapped[str] = mapped_column(String(14))
+
     search_vector = mapped_column(TSVectorType("name", "brand"))
 
     measurements_units: Mapped[str] = mapped_column(String)

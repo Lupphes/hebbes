@@ -55,6 +55,5 @@ def create_app() -> FastAPI:
 
     return app
 
-
 configure_logging()
 price_bandit = create_app()

@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 
 class Picture(Base):
     __tablename__ = "picture"
-
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     item_id: Mapped[Optional[int]] = mapped_column(
         Integer, ForeignKey("item.id"), nullable=True
@@ -24,6 +23,7 @@ class Picture(Base):
     url: Mapped[str] = mapped_column(String, nullable=True)
 
     item: Mapped[Optional["Item"]] = relationship("Item", back_populates="picture")
+
     category: Mapped[Optional["Category"]] = relationship(
         "Category", back_populates="pictures"
     )

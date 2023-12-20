@@ -163,3 +163,5 @@ cython_debug/
 jwt_private_key.pem
 jwt_public_key.pem
 *.pem
+.env.template
+*.template

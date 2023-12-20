@@ -25,6 +25,7 @@ def create_access_token(email: str, expires_delta: int) -> str:
     return encoded_jwt
 
 
+
 def validate_user_auth(authorization: str = Header()):
     if authorization is None:
         raise HTTPException(status_code=401, detail="Missing authorization header")

@@ -6,6 +6,7 @@ router = APIRouter()
 
 @router.get("/", response_model=ResponseSchema)
 def read_root():
+
     """
     Handles requests to the root ("/") URL.
 
