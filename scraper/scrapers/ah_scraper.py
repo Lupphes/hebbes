@@ -195,7 +195,7 @@ class AHScraper(BaseScraper):
         product_info = product["productCard"]
         return {
             "name": product_info.get("title", "null"),
-            "piture_links": product_info.get("images", "null"),
+            "picture_links": product_info.get("images", "null"),
             "brand": product_info.get("brand", "null"),
             "measurements": {
                 "units": product.get("measurements", {})
@@ -249,7 +249,7 @@ class AHScraper(BaseScraper):
             "id": category.get("id", "null"),
             "name": category.get("name", "null"),
             "label": category.get("slugifiedName", "null"),
-            "piture_links": category.get("images", "null"),
+            "picture_links": category.get("images", "null"),
         }
 
         if not subcategory:

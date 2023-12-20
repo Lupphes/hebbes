@@ -76,16 +76,22 @@ def get_items(
             category_alias.id.in_(category_id)
         )
 
-    # Filtering by store IDs
     if store_id:
-        store_alias = aliased(Store)
-        query_object = query_object.join(store_alias, Item.stores).filter(
-            store_alias.id.in_(store_id)
+        # Create a subquery for each store ID
+        for sid in store_id:
+            store_alias = aliased(Store)
+            query_object = query_object.join(store_alias, Item.stores).filter(
+                store_alias.id == sid
+            )
+
+    try:
+        items = query_object.offset(skip).limit(limit).all()
+
+        formatted_items = format_item_response(items, db)
+    except Exception as e:
+        return ResponseSchema.error_response(
+            data=[], message=f"Could not format the data: {e}"
         )
-
-    items = query_object.offset(skip).limit(limit).all()
-
-    formatted_items = format_item_response(items, db)
 
     if not items:
         return ResponseSchema.success_response(data=[], message="No items found.")
@@ -108,7 +114,7 @@ def populate_tables(db: Session):
     Returns:
         bool: True if the operation is successful, False otherwise.
     """
-    file_path = "mock_data/merged_product.json"
+    file_path = "mock_data/merged_products.json"
     category_tree_path = "mock_data/category_tree_full.json"
 
     with open(file_path, "r") as file:
@@ -118,14 +124,25 @@ def populate_tables(db: Session):
         category_tree = json.load(file)
 
     for item_data in data:
-        # Build Category Hierarchy
-        category_hierarchy = create_category_objects(
-            item_data["category"]["category_path"], category_tree, db
-        )
+        # Check if 'category_path' is present and not None
+        if (
+            "category_path" in item_data["category"]
+            and item_data["category"]["category_path"] is not None
+        ):
+            # If 'category_path' exists, use it to build the category hierarchy
+            category_hierarchy = create_category_objects(
+                item_data["category"]["category_path"], category_tree, db
+            )
+        else:
+            # If 'category_path' does not exist, assign to 'Uncategorized' category
+            category_hierarchy = create_category_objects(
+                ["Uncategorized"], category_tree, db
+            )
+
         # Create Item instance
         new_item = Item(
-            name=item_data["name"],
-            brand=item_data["brand"],
+            name=item_data["name"][:255],
+            brand=item_data["brand"][:50],
             description=item_data["description"],
             gln=item_data["gln"],
             gtin=item_data["gtin"],
@@ -139,12 +156,13 @@ def populate_tables(db: Session):
         )
 
         # Add Picture instances to Item
-        pictures = item_data.get("piture_links", [])
-        if len(pictures) >= 3:
+        pictures = item_data.get("picture_links", [])
+        if pictures:
+            last_picture = pictures[-1]
             new_picture_link = Picture(
-                width=pictures[3]["width"],
-                height=pictures[3]["height"],
-                url=pictures[3]["url"],
+                width=last_picture["width"],
+                height=last_picture["height"],
+                url=last_picture["url"],
             )
             new_item.picture = new_picture_link
 
@@ -153,13 +171,13 @@ def populate_tables(db: Session):
         # Add Store instances to Item
         for store_name, store_data in item_data["stores"].items():
             try:
-                price = (
-                    float(store_data["price"])
-                    if store_data["price"] != "null"
-                    else None
-                )
+                if store_data["price"] is not None and store_data["price"] != "null":
+                    price = float(store_data["price"])
+                else:
+                    price = None
             except ValueError:
                 price = None
+
             store = db.query(Store).filter_by(name=store_name).first()
             if store is None:
                 store = Store(
@@ -212,20 +230,25 @@ def format_item_response(items: List[Item], db: Session) -> List[ItemSchema]:
             )
 
         # Create picture schema
-        picture_schema = PictureSchema(
-            id=item.picture.id,
-            item_id=item.picture.item_id,
-            category_id=item.picture.category_id,
-            width=item.picture.width
-            if item.picture and item.picture.width is not None
-            else 0,
-            height=item.picture.height
-            if item.picture and item.picture.height is not None
-            else 0,
-            url=item.picture.url
-            if item.picture and isinstance(item.picture.url, str)
-            else "",
-        )
+        if item.picture:
+            picture_schema = PictureSchema(
+                id=item.picture.id,
+                item_id=item.picture.item_id,
+                category_id=item.picture.category_id,
+                width=item.picture.width
+                if item.picture and item.picture.width is not None
+                else 0,
+                height=item.picture.height
+                if item.picture and item.picture.height is not None
+                else 0,
+                url=item.picture.url
+                if item.picture and isinstance(item.picture.url, str)
+                else "",
+            )
+        else:
+            picture_schema = PictureSchema(
+                id=None, item_id=None, category_id=None, width=0, height=0, url=""
+            )
 
         # Create category schemas
         category_schemas = (

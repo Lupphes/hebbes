@@ -1,7 +1,5 @@
 from models import Category, Picture
 
-UNCATEGORIZED_ID = 9999  # Assuming 9999 as the ID for 'Uncategorized'
-
 
 def find_category_by_id(categories_dict, target_id):
     # Iterate over top-level categories
@@ -26,6 +24,15 @@ def create_category_objects(ids, category_tree, db):
     if not ids:
         # If no ids provided, return an empty list
         return []
+    if ids == ["Uncategorized"]:
+        uncategorized_category = (
+            db.query(Category).filter_by(name="Uncategorized").first()
+        )
+        if uncategorized_category is None:
+            uncategorized_category = Category(name="Uncategorized", parent_id=None)
+            db.add(uncategorized_category)
+            db.commit()
+        return [uncategorized_category]
 
     category_objects = []
     current_category = None
@@ -39,7 +46,6 @@ def create_category_objects(ids, category_tree, db):
                 category = Category(
                     category_id=category_data["id"], name=category_data["name"]
                 )
-                print("category ", category)
 
                 images = category_data.get("images", [])
                 new_pic = None
