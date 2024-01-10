@@ -91,10 +91,10 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
       </div>
 
       {/* Content of the product */}
-      <div className='flex w-full flex-col gap-4'>
+      <div className='flex w-full flex-col gap-4 text-center sm:text-left'>
         {/* Product name */}
         <div className='flex flex-col'>
-          <span className='md:text-2xl text-xl font-semibold'>
+          <span className='text-xl font-semibold md:text-2xl'>
             {item && item.name}
           </span>
           <span className='text-md md:text-md'>{item && item.brand}</span>
@@ -102,20 +102,24 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
         </div>
 
         {/* Product price overview */}
-        <div className='flex flex-row items-start justify-center gap-2 md:justify-start '>
+        <div className='flex flex-row items-start justify-center gap-2 sm:justify-start '>
           {/* Average price */}
           <div className='text-lg font-medium md:text-xl'>
-            <span>€ {item.item_info && findAveragePrice(item.item_info)}</span>
+            <span>
+              € {item.item_info && findAveragePrice(item.item_info).toFixed(2)}
+            </span>
           </div>
           <div className='font-medium text-green-600'>Avg. Price</div>
         </div>
         {/* Best price */}
-        <div className='flex flex-row items-center justify-center gap-2 md:justify-start'>
+        <div className='flex flex-row items-center justify-center gap-2 sm:justify-start'>
           <div className='text-lg font-medium md:text-xl'>
             <span>
               €{' '}
               {item.item_info &&
-                item.item_info[findIndexOfCheapestStore(item.item_info)].price}
+                item.item_info[
+                  findIndexOfCheapestStore(item.item_info)
+                ].price.toFixed(2)}
             </span>
           </div>
           <div className='font-medium text-green-600'>Best Price</div>
@@ -129,7 +133,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
         {/* Suggested Stores */}
         <StoreListing item={item} />
 
-        <div className='flex gap-5'>
+        <div className='flex items-center justify-center gap-2 gap-5 sm:justify-start'>
           {/* Quantity adjuster */}
           <QuantityAdjuster
             quantity={quantity}
@@ -146,8 +150,8 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
         </div>
 
         {/* Description */}
-        <div className='text-gray-700 flex flex-col overflow-hidden text-sm md:text-base'>
-          <div>Description: {item.description}</div>
+        <div className='text-gray-700 flex max-w-screen-md flex-col overflow-hidden text-sm md:text-base'>
+          Description: {item.description}
         </div>
       </div>
     </div>

@@ -30,7 +30,7 @@ const findIndexOfCheapestStore = (stores: {
 
 const StoreListing: NextPage<{ item: Item }> = ({ item }) => {
   return (
-    <div className='flex flex-row items-center justify-center gap-7 text-center text-smi md:justify-start'>
+    <div className='text-smi flex flex-row items-center justify-center gap-7 text-center sm:justify-start'>
       <div className='flex flex-row'>
         {item &&
           item.item_info &&
@@ -51,10 +51,10 @@ const StoreListing: NextPage<{ item: Item }> = ({ item }) => {
                     src={store.store_id === 1 ? AH.src : JMB.src}
                   />
                 </div>
-                <div className='flex text-smi text-black'>
+                <div className='text-smi flex text-black'>
                   {store.price ? `€ ${store.price}` : null}
                 </div>
-                <div className='flex text-2xs text-darkolivegreen-100'>
+                <div className='text-2xs flex text-darkolivegreen-100'>
                   {key === findIndexOfCheapestStore(item.item_info)
                     ? `Cheapest`
                     : null}

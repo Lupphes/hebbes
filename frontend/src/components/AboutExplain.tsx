@@ -1,11 +1,10 @@
 import type { NextPage } from 'next';
 
 const AboutExplain: NextPage = () => {
-
   return (
     <section className='flex flex-col items-center p-5 text-center font-poppins text-black md:p-10'>
       <div className='flex flex-col items-center gap-4 md:gap-6'>
-        <div className='text-2xl md:text-3xl lg:text-4xl my-3 font-medium md:my-5'>
+        <div className='my-3 text-2xl font-medium md:my-5 md:text-3xl lg:text-4xl'>
           How it works?
         </div>
         <div className='flex flex-col items-center gap-4 md:flex-row md:gap-6'>
@@ -71,7 +70,7 @@ const AboutExplain: NextPage = () => {
         </div>
       </div>
       <div className='flex flex-col items-center gap-4 md:gap-6'>
-        <div className='text-2xl md:text-3xl lg:text-4xl my-3 font-medium md:my-5'>
+        <div className='my-3 text-2xl font-medium md:my-5 md:text-3xl lg:text-4xl'>
           Premium Features
         </div>
         <div className='flex flex-col items-center gap-4 md:flex-row md:gap-6'>

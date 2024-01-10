@@ -2,10 +2,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch } from '@/redux/store';
-import { RootState } from '@/redux/store';
-import CircularProgress from '@mui/material/CircularProgress';
 interface Category {
   id: number;
   category_id: number;
@@ -45,7 +41,7 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({ data }) => {
 
   return (
     <div>
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-4 sm:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-4'>
         {data.data.map((category) => (
           <div
             data-name={category.id}

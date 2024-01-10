@@ -1,9 +1,6 @@
 'use client';
 import type { NextPage } from 'next';
-import { useMemo, type CSSProperties } from 'react';
-import { useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useCallback } from 'react';
 import HeaderBackground from '@/resources/HeaderBackground.png';
 import HeaderLogo from '@/resources/HeaderLogo.png';
 import {
@@ -12,18 +9,12 @@ import {
   IconButton,
   Drawer,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Menu,
   MenuItem,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { useState } from 'react';
 
-import Link from 'next/link';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useDispatch, useSelector } from 'react-redux/es/exports';
 import { logOut } from '@/redux/features/auth/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -142,6 +133,7 @@ const Header: NextPage<HeaderType> = ({ title }) => {
       <header className='my-3 md:flex-row md:gap-7'>
         <div className='flex w-full flex-row items-center justify-between md:flex-row md:gap-7'>
           <IconButton
+            sx={{ display: { md: 'none' } }}
             color='inherit'
             aria-label='open drawer'
             edge='start'
@@ -206,32 +198,76 @@ const Header: NextPage<HeaderType> = ({ title }) => {
           </form>
 
           {/* Icons for cart and login, visible on larger screens */}
-          <a href='/cart'>
-            <AddShoppingCartIcon fontSize='large' />
-          </a>
-          {token ? (
-            <>
-              <Button onClick={handleExpandUser}>
-                <AccountCircleIcon fontSize='large' />
-              </Button>
-              <Menu
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleRetractUser}
+          <div className='hidden flex-row items-center gap-x-5 sm:flex'>
+            <a href='/cart'>
+              {/* Shopping Cart Icon */}
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={1.5}
+                stroke='green'
+                className='h-8'
               >
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </>
-          ) : (
-            <Link
-              href='/login'
-              className='mr-4 font-semibold'
-              style={{ fontSize: 'medium' }}
-            >
-              Login
-            </Link>
-          )}
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+                />
+              </svg>
+            </a>
+
+            {token ? (
+              <>
+                <Button onClick={handleExpandUser}>
+                  {/* User/Login Icon */}
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='green'
+                    className='h-8'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z'
+                    />
+                  </svg>
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleRetractUser}
+                >
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </>
+            ) : (
+              <a
+                href='/login'
+                className='mr-4 font-semibold'
+                style={{ fontSize: 'medium' }}
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='green'
+                  className='h-8'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z'
+                  />
+                </svg>
+              </a>
+            )}
+          </div>
         </div>
       </header>
       {/* Rest of your component, including background and title */}
