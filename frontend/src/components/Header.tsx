@@ -63,7 +63,7 @@ const Header: NextPage<HeaderType> = ({ title }) => {
     setMenuOpen(false);
   };
 
-  const handleExpandUser = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleExpandUser: React.MouseEventHandler<HTMLDivElement> = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleRetractUser = () => {
@@ -219,23 +219,19 @@ const Header: NextPage<HeaderType> = ({ title }) => {
 
             {token ? (
               <>
-                <Button onClick={handleExpandUser}>
+                <div onClick={handleExpandUser}>
                   {/* User/Login Icon */}
+
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={1.5}
                     stroke='green'
-                    className='h-8'
+                    fill='green'
+                    viewBox='0 0 448 512'
+                    className='h-6'
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z'
-                    />
+                    <path d='M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z' />
                   </svg>
-                </Button>
+                </div>
                 <Menu
                   anchorEl={anchorEl}
                   keepMounted
@@ -246,11 +242,8 @@ const Header: NextPage<HeaderType> = ({ title }) => {
                 </Menu>
               </>
             ) : (
-              <a
-                href='/login'
-                className='mr-4 font-semibold'
-                style={{ fontSize: 'medium' }}
-              >
+              <a href='/login' className='mr-5' style={{ fontSize: 'medium' }}>
+                {' '}
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
