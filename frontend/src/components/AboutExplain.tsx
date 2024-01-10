@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
 
 const AboutExplain: NextPage = () => {
+
   return (
     <section className='flex flex-col items-center p-5 text-center font-poppins text-black md:p-10'>
       <div className='flex flex-col items-center gap-4 md:gap-6'>

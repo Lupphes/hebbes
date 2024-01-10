@@ -43,7 +43,7 @@ export const loginUser = createAsyncThunk<LoggedIn, Partial<User>>(
   async (user) => {
     try {
       const response = await api.post('/auth/login', user);
-      return response.data;
+      return response.data.data;
     } catch (err) {
       throw Error('Error calling logging in');
     }

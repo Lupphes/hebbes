@@ -20,12 +20,16 @@ export default function RootLayout({
     <html lang='en'>
       <body className=''>
         <div className='font-poppins'>
-          <Header title='Price Bandit' />
-          <Providers>{children}</Providers>
-          <section className='flex flex-col items-center justify-start'>
-            <Explain />
-            <Footer />
-          </section>
+          <Providers>
+            <Header title='Price Bandit' />
+            <div className='flex flex-col items-center'>
+              {children}
+              <section className='flex flex-col items-center justify-start'>
+                <Explain />
+                <Footer />
+              </section>
+            </div>
+          </Providers>
         </div>
       </body>
     </html>
