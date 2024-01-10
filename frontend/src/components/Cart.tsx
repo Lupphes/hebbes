@@ -49,6 +49,17 @@ const Cart: NextPage<{
 
   // Calculate estimated savings
   const estimatedSavings = result ? result.highestSum - result.lowestSum : 0;
+  const finalTotalAH = items.reduce((total, item) => {
+    return item.item_info['ah']
+      ? total + item.item_info['ah'].price * item.cartQuantity
+      : total;
+  }, 0);
+
+  const finalTotalJMB = items.reduce((total, item) => {
+    return item.item_info['jmb']
+      ? total + item.item_info['jmb'].price * item.cartQuantity
+      : total;
+  }, 0);
   const finalTotal = items.reduce((total, item) => {
     const storePrice = item.item_info[selectedStore]
       ? item.item_info[selectedStore].price
@@ -73,7 +84,7 @@ const Cart: NextPage<{
       )}
 
       {/* Cart totals and options */}
-      <div className='w-full rounded-md bg-silver p-4 lg:w-1/4 md:w-1/2'>
+      <div className='w-full rounded-md bg-silver p-4 '>
         {/* Select Store */}
         <div className='mb-4 flex items-center justify-between'>
           <span>Select store:</span>
@@ -95,11 +106,21 @@ const Cart: NextPage<{
         </div>
         <div className='flex items-center justify-between'>
           <span>Final Total**:</span>
-          <span className='text-green-600'>€ {finalTotal.toFixed(2)}</span>
+          <span className='text-green-800'>€ {finalTotal.toFixed(2)}</span>
+        </div>
+
+        {/* Final Totals for AH and JMB */}
+        <div className='mt-8 flex items-center justify-between'>
+          <span>Final Total AH:</span>
+          <span className='text-green-800'>€ {finalTotalAH.toFixed(2)}</span>
+        </div>
+        <div className='flex items-center justify-between'>
+          <span>Final Total JMB:</span>
+          <span className='text-green-800'>€ {finalTotalJMB.toFixed(2)}</span>
         </div>
       </div>
 
-      <div className='text-xs text-gray-600 mt-4 w-full'>
+      <div className='text-gray-600 mt-4 w-full text-xs'>
         <p>
           * Calculated based on the difference between the prices and the
           cheapest store selected by price bandit.

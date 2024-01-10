@@ -32,7 +32,7 @@ const Footer = () => {
                 About
               </button>
               <button
-                onClick={() => navigate('/premium')}
+                onClick={() => navigate('/about')}
                 className='text-gray-600 rounded-lg font-medium'
               >
                 Premium
@@ -43,13 +43,13 @@ const Footer = () => {
             <p className='text-gray-700 mb-4 font-medium'>Help</p>
             <div className='flex flex-col gap-4'>
               <button
-                onClick={() => navigate('/how-it-works')}
+                onClick={() => navigate('/about')}
                 className='text-gray-600 rounded-lg font-medium'
               >
                 How it works?
               </button>
               <button
-                onClick={() => navigate('/privacy-policy')}
+                onClick={() => navigate('/about')}
                 className='text-gray-600 rounded-lg font-medium'
               >
                 Privacy Policies
