@@ -35,34 +35,6 @@ const config: Config = {
         '3xs': '10px',
       },
     },
-    fontSize: {
-      base: '16px',
-      sm: '14px',
-      xl: '20px',
-      '13xl': '32px',
-      '29xl': '48px',
-      '17xl': '36px',
-      smi: '13px',
-      '2xs': '11px',
-      '5xl': '24px',
-      '23xl': '42px',
-      lg: '18px',
-      inherit: 'inherit',
-    },
-    screens: {
-      lg: {
-        max: '1200px',
-      },
-      md: {
-        max: '960px',
-      },
-      sm: {
-        max: '420px',
-      },
-      defaultlg: '1024px',
-      defaultmd: '768px',
-      defaultsm: '640px',
-    },
   },
   corePlugins: {
     preflight: false,

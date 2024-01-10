@@ -1,9 +1,9 @@
 const Ad = () => {
-    return (
-        <div className="h-50 w-full text-17xl items-center text-text-white-op-100 font-nunito bg-darkolivegreen-100">
-            <b className="">Place your ad here</b>
-        </div>
-    );
-  };
+  return (
+    <div className='border-gray-200 text-4xl lg:text-6xl flex h-1/2 w-full items-center justify-center rounded-lg border bg-darkolivegreen-100 p-4 font-nunito text-white shadow-lg md:text-5xl'>
+      <b>Place your ad here</b>
+    </div>
+  );
+};
 
 export default Ad;

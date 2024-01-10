@@ -10,10 +10,10 @@ const Footer = () => {
 
   return (
     <footer className='w-full bg-slate-800 text-base text-white'>
-      <div className='mx-10'>
-        {/* Adjust grid layout for responsiveness */}
-        <div className='grid grid-cols-3 gap-8 md:grid-cols-1'>
-          <div className='text-center lg:text-left'>
+      <div className='mx-4 sm:mx-10'>
+        {/* Responsive grid layout */}
+        <div className='grid grid-cols-1 gap-8 py-8 md:grid-cols-3'>
+          <div className='text-center md:text-left'>
             <p className='text-gray-600'>Nijmegen, the Netherlands</p>
           </div>
           <div>
@@ -57,9 +57,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className='border-gray-300 mt-8 border-t text-center'>
-          <p className='text-gray-600 mt-4'>
-            2023 Price Bandit. All rights reserved
+        <div className='border-gray-300 border-t text-center'>
+          <p className='text-gray-600 mb-4 mt-4'>
+            © 2023 Price Bandit. All rights reserved
           </p>
         </div>
       </div>

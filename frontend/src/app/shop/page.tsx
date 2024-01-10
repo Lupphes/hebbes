@@ -127,32 +127,36 @@ const ShopPage = () => {
         )}
 
         <Ad />
-        <div className='mx-10 flex flex-row items-center gap-10 py-10 font-poppins'>
-          {page > 1 ? (
-            <Button
-              sx={{ width: 100 }}
-              color='success'
-              variant='outlined'
-              onClick={pageDownClick}
-            >
-              Previous
-            </Button>
-          ) : null}
-          {page > 1 ? (
-            <Button
-              sx={{ width: 60 }}
-              color='success'
-              variant='outlined'
-              onClick={pageDownClick}
-            >
-              {page - 1}
-            </Button>
-          ) : null}
-          <Button sx={{ width: 60 }} color='success' variant='contained'>
+        <div className='mx-2 flex flex-col items-center justify-center gap-2 py-5 font-poppins sm:mx-10 sm:flex-row sm:flex-row sm:gap-10'>
+          {page > 1 && (
+            <>
+              <Button
+                sx={{ width: '100%', sm: { width: 100 } }}
+                color='success'
+                variant='outlined'
+                onClick={pageDownClick}
+              >
+                Previous
+              </Button>
+              <Button
+                sx={{ width: '100%', sm: { width: 60 } }}
+                color='success'
+                variant='outlined'
+                onClick={pageDownClick}
+              >
+                {page - 1}
+              </Button>
+            </>
+          )}
+          <Button
+            sx={{ width: '100%', sm: { width: 60 } }}
+            color='success'
+            variant='contained'
+          >
             {page}
           </Button>
           <Button
-            sx={{ width: 60 }}
+            sx={{ width: '100%', sm: { width: 60 } }}
             color='success'
             variant='outlined'
             onClick={pageUpClick}
@@ -160,7 +164,7 @@ const ShopPage = () => {
             {page + 1}
           </Button>
           <Button
-            sx={{ width: 100 }}
+            sx={{ width: '100%', sm: { width: 100 } }}
             color='success'
             variant='outlined'
             onClick={pageUpClick}

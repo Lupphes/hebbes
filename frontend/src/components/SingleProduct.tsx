@@ -80,7 +80,7 @@ const SingleProduct: NextPage<{ item: Item }> = ({ item }) => {
   }, []);
 
   return item && item.picture_link ? (
-    <div className='defaultsm:flex-row my-5 flex w-full flex-col items-center justify-start gap-4 px-4'>
+    <div className='my-5 flex w-full flex-col items-center justify-start gap-4 px-4 sm:flex-row'>
       {/* Image div */}
       <div className='w-full max-w-xs flex-shrink-0'>
         <img
