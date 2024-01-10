@@ -14,7 +14,7 @@ const MainPage = () => {
   return (
     <main className='flex flex-col items-center justify-between p-5 font-poppins'>
       <h2 className='text-2xl text-gray-900 font-bold'>
-        Welcome to Price Bandit, {user?.email}!
+        Welcome to Price Bandit {user?.email ? `, ${user.email}` : ''}!
       </h2>
       <h3 className='text-2xl text-gray-900 font-bold'>
         Find the best deals on your favorite products in the Netherlands.
