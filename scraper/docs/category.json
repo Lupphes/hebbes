@@ -3,7 +3,7 @@
     "id": 6401,
     "name": "Aardappel, groente, fruit",
     "label": "aardappel-groente-fruit",
-    "piture_links": [
+    "picture_links": [
       {
         "height": 400,
         "width": 600,
@@ -15,7 +15,7 @@
         "id": 1125,
         "name": "Groente",
         "label": "groente",
-        "piture_links": [
+        "picture_links": [
           {
             "height": 48,
             "width": 48,
@@ -52,7 +52,7 @@
             "id": 5897,
             "name": "Komkommer, tomaat, avocado",
             "label": "komkommer-tomaat-avocado",
-            "piture_links": [
+            "picture_links": [
               {
                 "height": 48,
                 "width": 48,
