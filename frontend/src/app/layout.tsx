@@ -5,7 +5,6 @@ import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Explain from '@/components/Explain';
-import { CircularProgress } from '@mui/material';
 
 export const metadata: Metadata = {
   title: 'Price Bandit',

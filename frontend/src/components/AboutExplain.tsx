@@ -1,33 +1,24 @@
 import type { NextPage } from 'next';
 
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/redux/store';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
-import CircularProgress from '@mui/material/CircularProgress';
-
 const AboutExplain: NextPage = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector((state: RootState) => state.loading);
 
   return (
-    <section className='relative flex flex-col items-center text-center font-poppins text-29xl text-black'>
-      {loading ? <CircularProgress /> : null}
-
-      <div className='flex flex-col items-center gap-[21px]'>
-        <div className='my-5 font-medium'>How it works?</div>
-        <div className='flex shrink-0 flex-row items-center gap-[38px] text-13xl md:flex-col'>
-          <div className='flex h-[300px] w-[300px] flex-col items-center gap-[24px]'>
+    <section className='flex flex-col items-center p-5 text-center font-poppins text-black md:p-10'>
+      <div className='flex flex-col items-center gap-4 md:gap-6'>
+        <div className='text-2xl md:text-3xl lg:text-4xl my-3 font-medium md:my-5'>
+          How it works?
+        </div>
+        <div className='flex flex-col items-center gap-4 md:flex-row md:gap-6'>
+          <div className='flex h-[300px] w-[300px] flex-col items-center gap-4'>
             <div className='relative font-medium'>We scrape the web</div>
-            <div className='ml-[15px] box-border flex shrink-0 flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300 bg-cover bg-[top] bg-no-repeat px-3 py-0'>
+            <div className='flex flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='h-[200px] w-[200px]'
+                className='w-[200px]transform h-[200px] scale-75'
               >
                 <path
                   strokeLinecap='round'
@@ -37,18 +28,18 @@ const AboutExplain: NextPage = () => {
               </svg>
             </div>
           </div>
-          <div className='flex h-[300px] w-[300px] flex-col items-center gap-[24px]'>
+          <div className='flex h-[300px] w-[300px] flex-col items-center gap-4'>
             <div className='relative font-medium'>
               You search for the product
             </div>
-            <div className='ml-[15px] box-border flex shrink-0 flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300 bg-cover bg-[top] bg-no-repeat px-3 py-0'>
+            <div className='flex flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='h-[200px] w-[200px]'
+                className='h-[200px] w-[200px] scale-75 transform'
               >
                 <path
                   strokeLinecap='round'
@@ -58,16 +49,16 @@ const AboutExplain: NextPage = () => {
               </svg>
             </div>
           </div>
-          <div className='flex h-[300px] w-[300px] flex-col items-center gap-[24px]'>
+          <div className='flex h-[300px] w-[300px] flex-col items-center gap-4'>
             <div className='relative font-medium'>We help save you money</div>
-            <div className='ml-[15px] box-border flex shrink-0 flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300 bg-cover bg-[top] bg-no-repeat px-3 py-0'>
+            <div className='flex flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='h-[200px] w-[200px]'
+                className='h-[200px] w-[200px] scale-75 transform'
               >
                 <path
                   strokeLinecap='round'
@@ -79,19 +70,21 @@ const AboutExplain: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className='flex flex-col items-center gap-[21px]'>
-        <div className='my-5 font-medium'>Premium Features</div>
-        <div className='flex shrink-0 flex-row items-center gap-[38px] text-13xl md:flex-col'>
-          <div className='flex h-[300px] w-[300px] flex-col items-center gap-[24px]'>
+      <div className='flex flex-col items-center gap-4 md:gap-6'>
+        <div className='text-2xl md:text-3xl lg:text-4xl my-3 font-medium md:my-5'>
+          Premium Features
+        </div>
+        <div className='flex flex-col items-center gap-4 md:flex-row md:gap-6'>
+          <div className='flex h-[300px] w-[300px] flex-col items-center gap-4'>
             <div className='relative font-medium'>Auto Fill List</div>
-            <div className='ml-[15px] flex shrink-0 flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300 bg-cover bg-[top] bg-no-repeat px-3 py-0'>
+            <div className='flex flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='h-[200px] w-[200px]'
+                className='w-[200px]transform h-[200px] scale-75'
               >
                 <path
                   strokeLinecap='round'
@@ -101,16 +94,16 @@ const AboutExplain: NextPage = () => {
               </svg>
             </div>
           </div>
-          <div className='flex h-[300px] w-[300px] flex-col items-center gap-[24px]'>
+          <div className='flex h-[300px] w-[300px] flex-col items-center gap-4'>
             <div className='relative font-medium'>Price History</div>
-            <div className='ml-[15px] box-border flex shrink-0 flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300 bg-cover bg-[top] bg-no-repeat px-3 py-0'>
+            <div className='flex flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='h-[200px] w-[200px]'
+                className='h-[200px] w-[200px] scale-75 transform'
               >
                 <path
                   strokeLinecap='round'
@@ -120,16 +113,16 @@ const AboutExplain: NextPage = () => {
               </svg>
             </div>
           </div>
-          <div className='flex h-[300px] w-[300px] flex-col items-center gap-[24px]'>
+          <div className='flex h-[300px] w-[300px] flex-col items-center gap-4'>
             <div className='relative font-medium'>Coming Soon</div>
-            <div className='ml-[15px] box-border flex shrink-0 flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300 bg-cover bg-[top] bg-no-repeat px-3 py-0'>
+            <div className='flex flex-col items-start justify-center overflow-hidden rounded-full bg-darkolivegreen-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='h-[200px] w-[200px]'
+                className='h-[200px] w-[200px] scale-75 transform'
               >
                 <path
                   strokeLinecap='round'

@@ -1,5 +1,5 @@
 // components/CategoriesGrid.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,14 +33,6 @@ interface CategoriesGridProps {
 }
 
 const CategoriesGrid: React.FC<CategoriesGridProps> = ({ data }) => {
-  const [showCategories, setShowCategories] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector((state: RootState) => state.loading);
-
-  const handleShowCategories = () => {
-    setShowCategories(true);
-  };
-
   const router = useRouter();
 
   const handleSearchCategories = (
@@ -53,30 +45,26 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({ data }) => {
 
   return (
     <div>
-      {loading ? <CircularProgress /> : null}
-
-      {
-        <div className='grid grid-cols-3 gap-4 md:grid-cols-2 sm:grid-cols-1'>
-          {data.data.map((category) => (
-            <div
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-4 sm:grid-cols-3'>
+        {data.data.map((category) => (
+          <div
+            data-name={category.id}
+            key={category.id}
+            className='mb-4 cursor-pointer'
+            onClick={handleSearchCategories}
+          >
+            <img
               data-name={category.id}
-              key={category.id}
-              className='mb-4 cursor-pointer'
-              onClick={handleSearchCategories}
-            >
-              <img
-                data-name={category.id}
-                src={category.pictures[0].url}
-                alt={category.name}
-                className='mb-2 h-48 w-full object-cover'
-              />
-              <p data-name={category.id} className='text-center'>
-                {category.name}
-              </p>
-            </div>
-          ))}
-        </div>
-      }
+              src={category.pictures[0].url}
+              alt={category.name}
+              className='mb-2 h-48 w-full object-cover'
+            />
+            <p data-name={category.id} className='text-center'>
+              {category.name}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
