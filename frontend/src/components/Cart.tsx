@@ -120,6 +120,82 @@ const Cart: NextPage<{
         </div>
       </div>
 
+      {/* Price Breakdown Section with Enhanced Styling */}
+      <div className='mt-4 w-full rounded-md bg-blue-100 p-4 shadow'>
+        {/* Breakdown for Albert Heijn */}
+        <div className='mb-4'>
+          <h3 className='mb-2 text-lg font-bold text-blue-700'>
+            Breakdown for Albert Heijn:
+          </h3>
+          {items.map(
+            (item) =>
+              item.item_info['ah'] && (
+                <p key={item.id} className='text-sm'>
+                  {item.name}:{' '}
+                  <span className='text-blue-600'>
+                    €{item.item_info['ah'].price.toFixed(2)}
+                  </span>{' '}
+                  x {item.cartQuantity} ={' '}
+                  <span className='font-semibold'>
+                    €
+                    {(item.item_info['ah'].price * item.cartQuantity).toFixed(
+                      2
+                    )}
+                  </span>
+                </p>
+              )
+          )}
+          <p className='font-bold text-blue-800'>
+            Total: €{finalTotalAH.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Breakdown for Jumbo */}
+        <div className='mb-4'>
+          <h3 className='mb-2 text-lg font-bold text-green-700'>
+            Breakdown for Jumbo:
+          </h3>
+          {items.map(
+            (item) =>
+              item.item_info['jmb'] && (
+                <p key={item.id} className='text-sm'>
+                  {item.name}:{' '}
+                  <span className='text-green-600'>
+                    €{item.item_info['jmb'].price.toFixed(2)}
+                  </span>{' '}
+                  x {item.cartQuantity} ={' '}
+                  <span className='font-semibold'>
+                    €
+                    {(item.item_info['jmb'].price * item.cartQuantity).toFixed(
+                      2
+                    )}
+                  </span>
+                </p>
+              )
+          )}
+          <p className='font-bold text-green-800'>
+            Total: €{finalTotalJMB.toFixed(2)}
+          </p>
+        </div>
+
+        {/* Savings Breakdown */}
+        <div className='mb-4'>
+          <h3 className='text-red-700 mb-2 text-lg font-bold'>
+            Estimated Savings:
+          </h3>
+          <p>
+            Savings:{' '}
+            <span className='text-blue-600'>€{finalTotalAH.toFixed(2)}</span>{' '}
+            (AH) -{' '}
+            <span className='text-green-600'>€{finalTotalJMB.toFixed(2)}</span>{' '}
+            (JMB) ={' '}
+            <span className='text-red-800 font-semibold'>
+              €{estimatedSavings.toFixed(2)}
+            </span>
+          </p>
+        </div>
+      </div>
+
       <div className='text-gray-600 mt-4 w-full text-xs'>
         <p>
           * Calculated based on the difference between the prices and the

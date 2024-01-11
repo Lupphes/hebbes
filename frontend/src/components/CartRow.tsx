@@ -101,11 +101,13 @@ const CartRow: FC<CartRowProps> = ({ item, result, selectedStore }) => {
       </div>
 
       {/* Price */}
-      <div className='text-black'>€ {item.item_info[storeToUse]?.price}</div>
+      <div className='text-black'>
+        € {item.item_info[storeToUse]?.price.toFixed(2)}
+      </div>
 
       {/* Average Price */}
       <div className='text-gray'>
-        € {Math.round(findAveragePrice(item.item_info) * 100) / 100}
+        € {((findAveragePrice(item.item_info) * 100) / 100).toFixed(2)}
       </div>
 
       {/* Quantity */}
@@ -119,7 +121,7 @@ const CartRow: FC<CartRowProps> = ({ item, result, selectedStore }) => {
 
       {/* Subtotal */}
       <div className='text-black'>
-        € {item.item_info[storeToUse]?.price * item.cartQuantity}
+        € {(item.item_info[storeToUse]?.price * item.cartQuantity).toFixed(2)}
       </div>
 
       {/* Delete Button */}
