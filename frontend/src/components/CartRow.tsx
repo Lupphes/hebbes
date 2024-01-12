@@ -83,14 +83,19 @@ const CartRow: FC<CartRowProps> = ({
   const price = item.item_info[storeKey]?.price;
 
   return (
-    <div className='flex w-full flex-row items-center justify-between space-x-1 rounded-lg bg-white p-2 shadow-md md:p-4'>
-      <div onClick={() => router.push(`/single-product?id=${item.id}`)}>
+    <div className='flex w-full flex-col items-center justify-between space-y-2 rounded-lg bg-white p-2 shadow-md sm:flex-row sm:space-x-1 sm:space-y-0 md:p-4'>
+      <div
+        className='cursor-pointer'
+        onClick={() => router.push(`/single-product?id=${item.id}`)}
+      >
         <img
           src={cartItem.picture_link?.url || '/default-image.jpg'}
           alt={cartItem.name}
-          className='mr-4 h-24 w-24 rounded-md'
+          className='h-24 w-24 rounded-md object-cover sm:mr-4'
         />
-        <div className='text-black'>{cartItem.name}</div>
+        <div className='w-24 text-center text-black sm:text-left'>
+          {cartItem.name}
+        </div>
       </div>
 
       <select

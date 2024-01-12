@@ -146,7 +146,7 @@ const Cart: NextPage<{ items: Item[] }> = ({ items }) => {
   };
 
   return (
-    <div className='mb-4 flex flex-col items-center justify-center gap-4 rounded-lg bg-white p-5 shadow-md'>
+    <div className='mb-4 flex flex-col items-center justify-center gap-4 rounded-lg bg-white p-4 shadow-md sm:p-6 md:p-8'>
       {/* Items */}
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
@@ -160,43 +160,51 @@ const Cart: NextPage<{ items: Item[] }> = ({ items }) => {
           />
         ))
       ) : (
-        <div className='text-center'>No items in cart yet...</div>
+        <div className='text-center text-sm sm:text-base'>
+          No items in cart yet...
+        </div>
       )}
 
       {/* Totals and Savings */}
-      <div className='w-full rounded-md bg-silver p-4'>
-        <div className='mb-4 flex items-center justify-between'>
-          <span>Est. Savings*:</span>
-          <span className='text-red'>€{finalTotals.savings.toFixed(2)}</span>
+      <div className=' mb-4 w-full gap-4 rounded-lg bg-silver p-4 shadow-md'>
+        <div className='mb-4 flex flex-col items-center justify-between sm:flex-row'>
+          <span className='text-base sm:text-lg'>Est. Savings*:</span>
+          <span className='text-lg text-red sm:text-xl'>
+            €{finalTotals.savings.toFixed(2)}
+          </span>
         </div>
-        <div className='flex items-center justify-between'>
-          <span>Final Total**:</span>
-          <span className='text-green-800'>
+        <div className='flex flex-col items-center justify-between sm:flex-row'>
+          <span className='text-base sm:text-lg'>Final Total**:</span>
+          <span className='text-lg text-green-800 sm:text-xl'>
             €{finalTotals.total.toFixed(2)}
           </span>
         </div>
-        <div className='mt-8 flex items-center justify-between'>
-          <span>Final Total AH:</span>
-          <span className='text-green-800'>€{finalTotals.AH.toFixed(2)}</span>
+        <div className='flex flex-col items-center justify-between sm:flex-row'>
+          <span className='text-base sm:text-lg'>Final Total AH:</span>
+          <span className='text-lg text-green-800 sm:text-xl'>
+            €{finalTotals.AH.toFixed(2)}
+          </span>
         </div>
-        <div className='flex items-center justify-between'>
-          <span>Final Total JMB:</span>
-          <span className='text-green-800'>€{finalTotals.JMB.toFixed(2)}</span>
+        <div className='flex flex-col items-center justify-between sm:flex-row'>
+          <span className='text-base sm:text-lg'>Final Total JMB:</span>
+          <span className='text-lg text-green-800 sm:text-xl'>
+            €{finalTotals.JMB.toFixed(2)}
+          </span>
         </div>
       </div>
 
       {/* Price Breakdown Section with Enhanced Styling */}
-      <div className='mt-4 w-full rounded-md bg-blue-100 p-4 shadow'>
+      <div className='mt-4 w-full rounded-lg bg-blue-100 p-4 shadow-md sm:p-6 md:p-8'>
         {/* Breakdown for Albert Heijn */}
         {finalTotals.AH > 0 && (
-          <div className='mb-4'>
-            <h3 className='mb-2 text-lg font-bold text-blue-700'>
+          <div className='mb-6'>
+            <h3 className='mb-3 text-lg font-bold text-blue-700 sm:text-xl'>
               Breakdown for Albert Heijn:
             </h3>
             {cartItems.map((item) => {
               if (item.item_info['ah'] && selectedStores[item.id] === 1) {
                 return (
-                  <p key={item.id} className='text-sm'>
+                  <p key={item.id} className='text-base sm:text-lg'>
                     {item.name}: €{item.item_info['ah'].price.toFixed(2)} x{' '}
                     {item.cartQuantity} = €
                     {(item.item_info['ah'].price * item.cartQuantity).toFixed(
@@ -207,7 +215,7 @@ const Cart: NextPage<{ items: Item[] }> = ({ items }) => {
               }
               return null;
             })}
-            <p className='font-bold text-blue-800'>
+            <p className='text-lg font-bold text-blue-800 sm:text-xl'>
               Total: €{finalTotals.AH.toFixed(2)}
             </p>
           </div>
@@ -215,14 +223,14 @@ const Cart: NextPage<{ items: Item[] }> = ({ items }) => {
 
         {/* Breakdown for Jumbo */}
         {finalTotals.JMB > 0 && (
-          <div className='mb-4'>
-            <h3 className='mb-2 text-lg font-bold text-green-700'>
+          <div className='mb-6'>
+            <h3 className='mb-3 text-lg font-bold text-green-700 sm:text-xl'>
               Breakdown for Jumbo:
             </h3>
             {cartItems.map((item) => {
               if (item.item_info['jmb'] && selectedStores[item.id] === 2) {
                 return (
-                  <p key={item.id} className='text-sm'>
+                  <p key={item.id} className='text-base sm:text-lg'>
                     {item.name}: €{item.item_info['jmb'].price.toFixed(2)}x{' '}
                     {item.cartQuantity} = €
                     {(item.item_info['jmb'].price * item.cartQuantity).toFixed(
@@ -233,26 +241,26 @@ const Cart: NextPage<{ items: Item[] }> = ({ items }) => {
               }
               return null;
             })}
-            <p className='font-bold text-green-800'>
+            <p className='text-lg font-bold text-green-800 sm:text-xl'>
               Total: €{finalTotals.JMB.toFixed(2)}
             </p>
           </div>
         )}
 
         {/* Savings Breakdown */}
-        {finalTotals.JMB > 0 && (
-          <div className='mb-4'>
-            <h3 className='text-red-700 mb-2 text-lg font-bold'>
+        {finalTotals.savings > 0 && (
+          <div className='mb-6'>
+            <h3 className='text-red-700 mb-3 text-lg font-bold sm:text-xl'>
               Your Estimated Savings:
             </h3>
-            <p>
+            <p className='text-base sm:text-lg'>
               Cheaper by €{finalTotals.savingsActual.toFixed(2)} by shopping at
               selected stores
             </p>
           </div>
         )}
 
-        <div className='text-gray-600 mt-4 w-full text-xs'>
+        <div className='text-gray-600 mt-4 w-full text-sm sm:text-base'>
           <p>
             * Calculated based on the difference between the prices and the
             cheapest store selected by Price Bandit.

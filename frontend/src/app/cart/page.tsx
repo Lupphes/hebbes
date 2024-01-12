@@ -81,11 +81,7 @@ const CartPage = () => {
     <div className='flex flex-col items-center gap-10 py-10 font-poppins'>
       <Ad />
       {cartItems && sumByCommon ? (
-        <Cart
-          items={cartItems}
-          sumByItemInfoKey={sumByStore}
-          adjustedSum={sumByCommon}
-        />
+        <Cart items={cartItems} />
       ) : (
         <tr>
           <td>Api connection missing.</td>
