@@ -1,20 +1,16 @@
 import React, { FC, useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-import AH from '@/resources/AH.jpg';
-import JMB from '@/resources/JMB.jpg';
 
 interface CartRowProps {
   item: Item;
-  result: any;
-  selectedStore: string;
+  selectedStore: number;
+  onStoreChange: (itemId: number, storeId: number) => void;
+  onItemUpdate: (updatedItem: Item) => void; // new prop
+  onItemDelete?: (itemId: number) => void;
 }
 
-const findAveragePrice = (itemInfo: { [key: string]: ItemInfo }): number => {
+function findAveragePrice(itemInfo: { [key: string]: ItemInfo }): number {
   const keys = Object.keys(itemInfo);
-  if (keys.length === 0) {
-    return 0;
-  }
   let sum = 0;
   let count = 0;
   for (const key of keys) {
@@ -24,111 +20,110 @@ const findAveragePrice = (itemInfo: { [key: string]: ItemInfo }): number => {
     }
   }
   return count === 0 ? 0 : sum / count;
-};
+}
 
-const CartRow: FC<CartRowProps> = ({ item, result, selectedStore }) => {
+const CartRow: FC<CartRowProps> = ({
+  item,
+  selectedStore,
+  onStoreChange,
+  onItemUpdate,
+  onItemDelete,
+}) => {
   const router = useRouter();
-  const [cartItems, setCartItems] = useState<Item[]>([]);
+  const [cartItem, setCartItem] = useState<Item>(item);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const localCart = localStorage.getItem('cart');
-      if (localCart) {
-        setCartItems(JSON.parse(localCart));
-      } else {
-        localStorage.setItem('cart', JSON.stringify([]));
-        setCartItems([]);
-      }
-    }
-  }, []);
+    const localCart = localStorage.getItem('cart');
+    const cartItems = localCart ? JSON.parse(localCart) : [];
+    const foundItem = cartItems.find((ci: Item) => ci.id === item.id);
+    setCartItem(foundItem || item);
+  }, [item]);
 
-  const ClickableProductRow = (itemId: number) => {
-    router.push(`/single-product?id=${itemId}`);
+  useEffect(() => {
+    setCartItem(item);
+  }, [item]);
+
+  const handleStoreChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const newStoreId = parseInt(event.target.value);
+    onStoreChange(item.id, newStoreId);
+    const updatedItem = { ...item, selectedStore: newStoreId };
+    onItemUpdate(updatedItem);
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value.replace(/[^0-9]/g, '');
-    const existingItemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.id === item.id
+  const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newQuantity = Math.max(1, parseInt(event.target.value)); // Ensure quantity is at least 1
+    const updatedItem = { ...item, cartQuantity: newQuantity };
+    onItemUpdate(updatedItem);
+
+    // Update the item in local storage
+    const localCart = localStorage.getItem('cart');
+    let cartItemsInStorage: Item[] = localCart ? JSON.parse(localCart) : [];
+    cartItemsInStorage = cartItemsInStorage.map((ci) =>
+      ci.id === item.id ? { ...ci, cartQuantity: newQuantity } : ci
     );
-    if (
-      newValue &&
-      existingItemIndex !== -1 &&
-      parseInt(newValue) !== cartItems[existingItemIndex].cartQuantity
-    ) {
-      cartItems[existingItemIndex].cartQuantity = parseInt(newValue);
-      localStorage.setItem('cart', JSON.stringify(cartItems));
-      window.location.reload();
+    localStorage.setItem('cart', JSON.stringify(cartItemsInStorage));
+  };
+
+  const handleDelete = () => {
+    if (onItemDelete) {
+      onItemDelete(item.id);
     }
   };
 
-  const ClickAbleRemoveCartItem = (item: Item) => {
-    const itemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.id === item.id
-    );
-    if (itemIndex !== -1) {
-      cartItems.splice(itemIndex, 1);
-      localStorage.setItem('cart', JSON.stringify(cartItems));
-      window.location.reload();
-    }
+  const formatPrice = (price: number | undefined) => {
+    return price ? price.toFixed(2) : '0.00';
   };
 
-  const keysArray = Object.keys(item.item_info);
-  const selectedStoreInfo = item.item_info[selectedStore];
-  const storeToUse = selectedStoreInfo ? selectedStore : keysArray[0];
-  const storeImageSrc =
-    item.item_info[storeToUse]?.store_id === 1
-      ? AH.src
-      : item.item_info[storeToUse]?.store_id === 2
-      ? JMB.src
-      : '/'; // default image if none available
+  const subtotal = (price: number, quantity: number) => {
+    return formatPrice(price * quantity);
+  };
+
+  const availableStores = Object.keys(item.item_info);
+  const storeKey = selectedStore === 1 ? 'ah' : 'jmb';
+  const price = item.item_info[storeKey]?.price;
 
   return (
     <div className='flex w-full flex-row items-center justify-between space-x-1 rounded-lg bg-white p-2 shadow-md md:p-4'>
-      {/* Product Image and Name */}
-      <div onClick={() => ClickableProductRow(item.id)}>
+      <div onClick={() => router.push(`/single-product?id=${item.id}`)}>
         <img
-          className='mr-4 h-24 w-24 rounded-md sm:h-20 sm:w-20'
-          alt={item.name}
-          src={item.picture_link ? item.picture_link.url : '/'}
+          src={cartItem.picture_link?.url || '/default-image.jpg'}
+          alt={cartItem.name}
+          className='mr-4 h-24 w-24 rounded-md'
         />
-        <div className='text-black'>{item.name}</div>
+        <div className='text-black'>{cartItem.name}</div>
       </div>
 
-      {/* Store */}
-      <div>
-        <img className='h-10 w-12 rounded-md' alt='Store' src={storeImageSrc} />
-      </div>
+      <select
+        value={selectedStore}
+        onChange={handleStoreChange}
+        className='border-gray-300 h-8 rounded border p-1'
+      >
+        {availableStores.map((store) => (
+          <option key={store} value={store === 'ah' ? 1 : 2}>
+            {store === 'ah' ? 'Albert Heijn' : 'Jumbo'}
+          </option>
+        ))}
+      </select>
 
-      {/* Price */}
-      <div className='text-black'>
-        € {item.item_info[storeToUse]?.price.toFixed(2)}
-      </div>
+      <div className='text-black'>€ {formatPrice(price)}</div>
 
-      {/* Average Price */}
       <div className='text-gray'>
-        € {((findAveragePrice(item.item_info) * 100) / 100).toFixed(2)}
+        €{formatPrice(findAveragePrice(cartItem.item_info))}
       </div>
 
-      {/* Quantity */}
       <input
-        className='box-border h-8 w-8 justify-center rounded-md border-[1px] border-solid border-darkgray bg-transparent text-base'
-        placeholder={item.cartQuantity.toString()}
-        type='text'
-        pattern='[0-9]*'
-        onBlur={handleInputChange}
+        className='box-border h-8 w-12 justify-center rounded-md border-[1px] border-solid border-darkgray bg-transparent text-base'
+        type='number'
+        value={cartItem.cartQuantity}
+        onChange={handleQuantityChange}
       />
 
-      {/* Subtotal */}
       <div className='text-black'>
-        € {(item.item_info[storeToUse]?.price * item.cartQuantity).toFixed(2)}
+        €{formatPrice(price * cartItem.cartQuantity)}
       </div>
 
       {/* Delete Button */}
-      <div
-        onClick={() => ClickAbleRemoveCartItem(item)}
-        className='cursor-pointer'
-      >
+      <div onClick={handleDelete} className='cursor-pointer'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           fill='none'
