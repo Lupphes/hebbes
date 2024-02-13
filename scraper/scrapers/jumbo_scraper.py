@@ -79,7 +79,7 @@ class JumboScraper(BaseScraper):
         match = re.search(r"-([^-\s]+)$", product_url)
         return match.group(1) if match else None
 
-    def build_product_data(self, product):
+    def build_product_data(self, product, product_url):
         """Utility function to construct product data from raw product."""
         image_url = (
             product["product"]["data"]
@@ -94,9 +94,21 @@ class JumboScraper(BaseScraper):
         gtin = gtin_matches.group(1) if gtin_matches else "Unknown GTIN"
 
         product_info = product["product"]["data"]
+        price_value = (
+            product_info.get("prices", {}).get("price", {}).get("amount", "null")
+        )
+
+        if price_value != "null":
+            try:
+                price = float(price_value) / 100
+            except ValueError:
+                price = None
+        else:
+            price = None
+
         return {
             "name": product_info.get("title", "null"),
-            "piture_links": product_info.get("imageInfo", "null"),
+            "picture_links": product_info.get("imageInfo", {}).get("primaryView", []),
             "brand": product_info.get("brandInfo", {}).get("brandDescription", "null"),
             "measurements": {
                 "units": "null",
@@ -116,11 +128,8 @@ class JumboScraper(BaseScraper):
             "stores": {
                 self.SHORT_NAME: {
                     "webshopId": product_info.get("id", "null"),
-                    "link": "null",
-                    "price": product_info.get("prices", {})
-                    .get("price", {})
-                    .get("amount", "null"),
-                    "discount_info": [],
+                    "link": product_url,
+                    "price": price,
                 }
             },
         }
@@ -249,9 +258,8 @@ class JumboScraper(BaseScraper):
             "id": category.get("catId", "null"),
             "name": category.get("title", "null").lower().replace(" ", "-"),
             "label": category.get("title", "null"),
-            "piture_links": [
-                category.get("backgroundImageUrl", "null"),
-                category.get("foregroundImageUrl", "null"),
+            "picture_links": [
+                category.get("backgroundImageUrl", []).get("primaryView", [])
             ],
         }
 
@@ -311,7 +319,7 @@ class JumboScraper(BaseScraper):
                     print(f"Failed to retrieve details for product ID: {id}")
                     continue
 
-                product_data = self.build_product_data(product)
+                product_data = self.build_product_data(product, product_url)
                 products.append(product_data)
 
             self.save_content_to_file(products, self.product_filename)
