@@ -8,6 +8,7 @@ from sqlalchemy_searchable import search
 from models import Category, Store, Item, Picture, ItemInfo
 from utils.build_category import create_category_objects
 
+
 from schemas import (
     ItemInfoSchema,
     ItemSchema,
@@ -133,6 +134,7 @@ def populate_tables(db: Session):
             measurements_amount=item_data["measurements"]["amount"],
             measurements_label=item_data["measurements"]["label"],
             categories=category_hierarchy if category_hierarchy else [],
+
             search_vector=func.to_tsvector(
                 "dutch", item_data["name"] + " " + item_data["brand"]
             ),
